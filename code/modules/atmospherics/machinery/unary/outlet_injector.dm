@@ -29,13 +29,15 @@
 				icon_state = "[level == 1 && istype(loc, /turf/simulated) ? "h" : "" ]off"
 		else
 			icon_state = "exposed"
-			on = 0
 
 		return
 
 	process()
 		..()
 		injecting = 0
+
+		if(isnull(node))
+			on = FALSE
 
 		if(!on)
 			return 0
