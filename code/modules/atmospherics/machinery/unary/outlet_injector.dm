@@ -121,5 +121,3 @@
 				icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]off"
 		else
 			icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]exposed"
-			on = 0
-		return
