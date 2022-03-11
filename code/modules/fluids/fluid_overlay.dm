@@ -20,7 +20,7 @@ INIT_TYPE(/mob/living)
 //nah, i dont care anemore
 ///mob/living/carbon/human/update_clothing()
 //	if ( clothing_dirty & (C_SUIT|C_BACK|C_HEAD) )
-//		SPAWN_DBG(0) src.create_submerged_images()
+//		SPAWN(0) src.create_submerged_images()
 //	..()
 
 

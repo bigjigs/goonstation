@@ -16,7 +16,7 @@
 
 INIT_TYPE(/obj/machinery/computer/operating)
 	..()
-	SPAWN_DBG(0.5 SECONDS)
+	SPAWN(0.5 SECONDS)
 		connection_scan()
 
 /obj/machinery/computer/operating/connection_scan()

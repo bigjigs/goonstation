@@ -164,7 +164,7 @@ INIT_TYPE(/obj/machinery/the_singularity, loc, var/E = 100, var/Ti = null,var/ra
 
 	if (active == 1)
 		move()
-		SPAWN_DBG(1.1 SECONDS) // slowing this baby down a little -drsingh
+		SPAWN(1.1 SECONDS) // slowing this baby down a little -drsingh
 			move()
 	else//this should probably be modified to use the enclosed test of the generator
 		var/checkpointC = 0
@@ -223,7 +223,7 @@ INIT_TYPE(/obj/machinery/the_singularity, loc, var/E = 100, var/Ti = null,var/ra
 
 /obj/machinery/the_singularity/ex_act(severity, last_touched, power)
 	if(!maxboom)
-		SPAWN_DBG(0.1 SECONDS)
+		SPAWN(0.1 SECONDS)
 			if(severity == 1 && (maxboom ? prob(maxboom*5) : prob(30))) //need a big bomb (TTV+ sized), but a big enough bomb will always clear it
 				qdel(src)
 			maxboom = 0
@@ -326,7 +326,7 @@ INIT_TYPE(/obj/machinery/the_singularity, loc, var/E = 100, var/Ti = null,var/ra
 // totally rewrote this proc from the ground-up because it was puke but I want to keep this comment down here vvv so we can bask in the glory of What Used To Be - haine
 		/* uh why was lighting a cig causing the singularity to have an extra process()?
 		   this is dumb as hell, commenting this. the cigarette will get processed very soon. -drsingh
-		SPAWN_DBG(0) //start fires while it's lit
+		SPAWN(0) //start fires while it's lit
 			src.process()
 		*/
 
@@ -475,7 +475,7 @@ INIT_TYPE(/obj/machinery/the_singularity, loc, var/E = 100, var/Ti = null,var/ra
 INIT_TYPE(/obj/machinery/field_generator)
 	START_TRACKING
 	..()
-	SPAWN_DBG(0.6 SECONDS)
+	SPAWN(0.6 SECONDS)
 		if(!src.link && (state == WELDED))
 			src.get_link()
 
@@ -602,6 +602,7 @@ INIT_TYPE(/obj/machinery/field_generator)
 		return
 	if(P.proj_data.damage_type == D_ENERGY)
 		src.power += P.power
+		flick("Field_Gen_Flash", src)
 
 /obj/machinery/field_generator/attackby(obj/item/W, mob/user)
 	if (iswrenchingtool(W))
@@ -629,8 +630,9 @@ INIT_TYPE(/obj/machinery/field_generator)
 		if(state != UNWRENCHED)
 			if(!W:try_weld(user, 1, noisy = 2))
 				return
-			SETUP_GENERIC_ACTIONBAR(user, src, 2 SECONDS, /obj/machinery/field_generator/proc/weld_action,\
-			list(user), W.icon, W.icon_state, "[user] finishes using their [W.name] on the field generator.", null)
+			var/positions = src.get_welding_positions()
+			actions.start(new /datum/action/bar/private/welding(user, src, 2 SECONDS, /obj/machinery/field_generator/proc/weld_action, \
+						list(user), "[user] finishes using their [W.name] on the field generator.", positions[1], positions[2]),user)
 		if(state == WRENCHED)
 			boutput(user, "You start to weld the field generator to the floor.")
 			return
@@ -653,6 +655,18 @@ INIT_TYPE(/obj/machinery/field_generator)
 		for(var/mob/M in AIviewers(src))
 			if(M == user)	continue
 			M.show_message("<span class='alert'>The [src.name] has been hit with the [W.name] by [user.name]!</span>")
+
+/obj/machinery/field_generator/proc/get_welding_positions()
+	var/start
+	var/stop
+
+	start = list(-6,-15)
+	stop = list(6,-15)
+
+	if(state == WELDED)
+		. = list(stop,start)
+	else
+		. = list(start,stop)
 
 /obj/machinery/field_generator/proc/weld_action(mob/user)
 	if(state == WRENCHED)
@@ -731,7 +745,7 @@ INIT_TYPE(/obj/machinery/field_generator)
 	//Otherwise, ff they aren't addressing us, ignore them
 	if(signal.data["address_1"] != src.net_id)
 		if((signal.data["address_1"] == "ping") && signal.data["sender"])
-			SPAWN_DBG(0.5 SECONDS) //Send a reply for those curious jerks
+			SPAWN(0.5 SECONDS) //Send a reply for those curious jerks
 				src.post_status(target, "command", "ping_reply", "device", "PNET_ENG_FIELD", "netid", src.net_id)
 
 		return
@@ -908,7 +922,7 @@ INIT_TYPE(/obj/machinery/containment_field, var/obj/machinery/field_generator/A,
 
 INIT_TYPE(/obj/machinery/emitter)
 	..()
-	SPAWN_DBG(0.6 SECONDS)
+	SPAWN(0.6 SECONDS)
 		if(!src.link && (state == WELDED))
 			src.get_link()
 
@@ -994,7 +1008,7 @@ INIT_TYPE(/obj/machinery/emitter)
 			src.fire_delay = rand(20,100)
 			src.shot_number = 0
 
-		if ((src.dir - 1) & src.dir) // Not cardinal (not power of 2)
+		if (!is_cardinal(src.dir)) // Not cardinal (not power of 2)
 			src.dir &= 12 // Cardinalize
 		src.visible_message("<span class='alert'><b>[src]</b> fires a bolt of energy!</span>")
 		shoot_projectile_DIR(src, current_projectile, dir)
@@ -1036,8 +1050,9 @@ INIT_TYPE(/obj/machinery/emitter)
 		if(state != UNWRENCHED)
 			if(!W:try_weld(user, 1, noisy = 2))
 				return
-			SETUP_GENERIC_ACTIONBAR(user, src, 2 SECONDS, /obj/machinery/emitter/proc/weld_action,\
-			list(user), W.icon, W.icon_state, "[user] finishes using their [W.name] on the emitter.", null)
+			var/positions = src.get_welding_positions()
+			actions.start(new /datum/action/bar/private/welding(user, src, 2 SECONDS, /obj/machinery/emitter/proc/weld_action, \
+						list(user), "[user] finishes using their [W.name] on the emitter.", positions[1], positions[2]),user)
 		if(state == WRENCHED)
 			boutput(user, "You start to weld the emitter to the floor.")
 			return
@@ -1062,6 +1077,22 @@ INIT_TYPE(/obj/machinery/emitter)
 		for(var/mob/M in AIviewers(src))
 			if(M == user)	continue
 			M.show_message("<span class='alert'>The [src.name] has been hit with the [W.name] by [user.name]!</span>")
+
+/obj/machinery/emitter/proc/get_welding_positions()
+	var/start
+	var/stop
+	if(dir & (NORTH|SOUTH))
+		start = list(-10,-7)
+		stop = list(10,-7)
+	else
+		start = list(-10,-14)
+		stop = list(10,-14)
+
+	if(state == WELDED)
+		. = list(stop,start)
+	else
+		. = list(start,stop)
+
 
 /obj/machinery/emitter/proc/weld_action(mob/user)
 	if(state == WRENCHED)
@@ -1115,7 +1146,7 @@ INIT_TYPE(/obj/machinery/emitter)
 	//Otherwise, ff they aren't addressing us, ignore them
 	if(signal.data["address_1"] != src.net_id)
 		if((signal.data["address_1"] == "ping") && signal.data["sender"])
-			SPAWN_DBG(0.5 SECONDS) //Send a reply for those curious jerks
+			SPAWN(0.5 SECONDS) //Send a reply for those curious jerks
 				src.post_status(target, "command", "ping_reply", "device", "PNET_ENG_EMITR", "netid", src.net_id)
 
 		return
@@ -1161,7 +1192,7 @@ INIT_TYPE(/obj/machinery/emitter)
 
 INIT_TYPE(/obj/machinery/power/collector_array)
 	..()
-	SPAWN_DBG(0.5 SECONDS)
+	SPAWN(0.5 SECONDS)
 		UpdateIcon()
 
 
@@ -1291,7 +1322,7 @@ INIT_TYPE(/obj/machinery/power/collector_array)
 INIT_TYPE(/obj/machinery/power/collector_control)
 	..()
 	START_TRACKING
-	SPAWN_DBG(1 SECOND)
+	SPAWN(1 SECOND)
 		updatecons()
 
 /obj/machinery/power/collector_control/disposing()
@@ -1343,12 +1374,12 @@ INIT_TYPE(/obj/machinery/power/collector_control)
 			S1 = null
 
 		UpdateIcon()
-		SPAWN_DBG(1 MINUTE)
+		SPAWN(1 MINUTE)
 			updatecons()
 
 	else
 		UpdateIcon()
-		SPAWN_DBG(1 MINUTE)
+		SPAWN(1 MINUTE)
 			updatecons()
 
 /obj/machinery/power/collector_control/update_icon()
@@ -1662,7 +1693,7 @@ INIT_TYPE(/obj/machinery/power/collector_control)
 		animate_shake(TF,5,1 * get_dist(TF,T),1 * get_dist(TF,T))
 	particleMaster.SpawnSystem(new /datum/particleSystem/bhole_warning(T))
 
-	SPAWN_DBG(3 SECONDS)
+	SPAWN(3 SECONDS)
 		for (var/mob/M in range(7,T))
 			boutput(M, "<span class='bold alert'>The containment field on \the [src] fails completely!</span>")
 			shake_camera(M, 5, 16)

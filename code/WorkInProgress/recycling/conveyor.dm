@@ -302,7 +302,7 @@ INIT_TYPE(/obj/machinery/diverter)
 		if(SOUTHWEST)
 			divert_to = SOUTH
 			divert_from = WEST
-	SPAWN_DBG(0.2 SECONDS)
+	SPAWN(0.2 SECONDS)
 		// wait for map load then find the conveyor in this turf
 		conv = locate() in src.loc
 		if(conv)	// divert_from dir must match possible conveyor movement
@@ -404,7 +404,7 @@ INIT_TYPE(/obj/machinery/diverter)
 		AddComponent(/datum/component/mechanics_holder)
 		SEND_SIGNAL(src,COMSIG_MECHCOMP_ADD_INPUT,"trigger", "trigger")
 		conveyors = list()
-		SPAWN_DBG(0.5 SECONDS)
+		SPAWN(0.5 SECONDS)
 			link_conveyors()
 			for (var/obj/machinery/conveyor/C as anything in conveyors)
 				if (C.id == src.id)
@@ -451,10 +451,11 @@ INIT_TYPE(/obj/machinery/diverter)
 			else
 				position = CONVEYOR_REVERSE
 				last_pos = CONVEYOR_STOPPED
+			logTheThing("station", user, null, "turns the conveyor switch on in [last_pos == CONVEYOR_REVERSE ? "forward" : "reverse"] mode at [log_loc(src)].")
 		else
 			last_pos = position
 			position = CONVEYOR_STOPPED
-
+			logTheThing("station", user, null, "turns the conveyor switch off at [log_loc(src)].")
 		UpdateIcon()
 
 		// find any switches with same id as this one, and set their positions to match us

@@ -11,7 +11,7 @@
 
 INIT_TYPE(/obj/machinery/computer/hologram_comp)
 	..()
-	SPAWN_DBG( 10 )
+	SPAWN( 10 )
 		src.projector = locate(/obj/machinery/hologram_proj, get_step(src.loc, NORTH))
 		return
 	return

@@ -33,7 +33,7 @@ proc/pick_landmark(name, default=null)
 
 INIT_TYPE(/obj/landmark)
 	if(current_state > GAME_STATE_MAP_LOAD)
-		SPAWN_DBG(0)
+		SPAWN(0)
 			src.init()
 		..()
 	else

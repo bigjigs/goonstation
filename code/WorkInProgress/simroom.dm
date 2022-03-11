@@ -17,7 +17,7 @@
 
 /*
 INIT_TYPE(/obj/machinery/sim/transmitter)
-	SPAWN_DBG(1 SECOND)
+	SPAWN(1 SECOND)
 		Connect()
 	..()
 */

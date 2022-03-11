@@ -614,14 +614,6 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/northeast)
-"abx" = (
-/obj/machinery/driver_button{
-	id = "research";
-	name = "Research Emergency Mass Ejector Control";
-	pixel_y = 32
-	},
-/turf/simulated/floor/plating/random,
-/area/station/maintenance/northeast)
 "aby" = (
 /obj/machinery/conveyor/west{
 	id = "outbound"
@@ -1075,18 +1067,6 @@
 	},
 /turf/simulated/floor,
 /area/station/crew_quarters/locker)
-"acj" = (
-/obj/morgue,
-/obj/item/reagent_containers/food/snacks/pizza/meatball,
-/obj/machinery/camera{
-	c_tag = "autotag";
-	dir = 4;
-	name = "autoname - SS13";
-	pixel_x = -10;
-	tag = ""
-	},
-/turf/simulated/floor/sanitary,
-/area/station/medical/morgue)
 "ack" = (
 /obj/submachine/chef_sink/chem_sink{
 	layer = 3;
@@ -1111,10 +1091,6 @@
 /obj/disposalpipe/trunk/morgue{
 	dir = 8
 	},
-/turf/simulated/floor/sanitary,
-/area/station/medical/morgue)
-"acm" = (
-/obj/morgue,
 /turf/simulated/floor/sanitary,
 /area/station/medical/morgue)
 "acn" = (
@@ -3059,11 +3035,6 @@
 /obj/item/device/radio/beacon,
 /turf/simulated/floor/sanitary,
 /area/station/medical/morgue)
-"agN" = (
-/obj/morgue,
-/obj/machinery/light/incandescent/cool,
-/turf/simulated/floor/sanitary,
-/area/station/medical/morgue)
 "agO" = (
 /obj/cable{
 	icon_state = "1-10"
@@ -3475,23 +3446,6 @@
 /obj/item_dispenser/latex_gloves,
 /turf/simulated/floor/white,
 /area/station/medical/medbay/surgery)
-"ahT" = (
-/obj/crematorium{
-	id = "crematorium"
-	},
-/obj/machinery/crema_switch{
-	id = "crematorium";
-	pixel_y = 28
-	},
-/obj/machinery/camera{
-	c_tag = "autotag";
-	dir = 4;
-	name = "autoname - SS13";
-	pixel_x = -10;
-	tag = ""
-	},
-/turf/simulated/floor/black,
-/area/station/medical/crematorium)
 "ahU" = (
 /obj/disposaloutlet{
 	mailgroup = "medresearch";
@@ -4292,15 +4246,6 @@
 "ajS" = (
 /obj/cable{
 	icon_state = "1-2"
-	},
-/turf/simulated/floor/red/checker,
-/area/station/medical/medbay/surgery/storage)
-"ajT" = (
-/obj/table/glass/reinforced/auto,
-/obj/machinery/coffeemaker/medbay,
-/obj/mug_rack{
-	pixel_x = 26;
-	pixel_y = 4
 	},
 /turf/simulated/floor/red/checker,
 /area/station/medical/medbay/surgery/storage)
@@ -7746,22 +7691,6 @@
 	},
 /turf/simulated/floor/sanitary,
 /area/station/medical/medbay/restroom)
-"ase" = (
-/obj/machinery/atmospherics/binary/pump{
-	dir = 0;
-	frequency = 1229;
-	icon_state = "intact_on";
-	id = "Chamber One Outlet";
-	on = 1;
-	target_pressure = 250
-	},
-/obj/machinery/ignition_switch{
-	id = "toxins_1";
-	pixel_x = 8;
-	pixel_y = 24
-	},
-/turf/simulated/floor/red,
-/area/research_outpost/toxins)
 "asf" = (
 /obj/machinery/light/incandescent/cool,
 /obj/machinery/firealarm{
@@ -7773,22 +7702,6 @@
 	dir = 1
 	},
 /area/station/science/teleporter)
-"asg" = (
-/obj/machinery/atmospherics/binary/pump{
-	dir = 1;
-	frequency = 1229;
-	icon_state = "intact_on";
-	id = "Chamber Two Inlet";
-	on = 1;
-	target_pressure = 500
-	},
-/obj/machinery/ignition_switch{
-	id = "toxins_2";
-	pixel_x = -8;
-	pixel_y = 24
-	},
-/turf/simulated/floor/blue,
-/area/research_outpost/toxins)
 "ash" = (
 /obj/storage/secure/closet/medical{
 	name = "locker"
@@ -9135,13 +9048,6 @@
 	},
 /turf/simulated/floor/carpet/arcade,
 /area/station/crew_quarters/clown)
-"avu" = (
-/obj/table/auto,
-/obj/item/reagent_containers/food/snacks/pie/cream,
-/obj/item/storage/goodybag,
-/obj/item/storage/pill_bottle/cyberpunk,
-/turf/simulated/floor/carpet/arcade/half,
-/area/station/crew_quarters/clown)
 "avv" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/machinery/power/apc/autoname_west,
@@ -9626,17 +9532,6 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/ghostdrone_factory)
-"awE" = (
-/obj/table/auto,
-/obj/item/wrench,
-/obj/item/device/analyzer/healthanalyzer,
-/obj/item/remote/porter/port_a_medbay,
-/obj/machinery/light/incandescent/cool,
-/obj/disposalpipe/segment/mail{
-	dir = 4
-	},
-/turf/simulated/floor/blue,
-/area/station/medical/medbay)
 "awF" = (
 /obj/decal/tile_edge/line/green{
 	dir = 6;
@@ -9769,18 +9664,6 @@
 	mail_tag = "artlab"
 	},
 /obj/disposalpipe/trunk/mail/south,
-/turf/simulated/floor/black,
-/area/station/science/artifact)
-"awS" = (
-/obj/table/reinforced/auto,
-/obj/item/storage/box/tapebox,
-/obj/item/disk/data/tape{
-	layer = 3.5
-	},
-/obj/machinery/light_switch/auto,
-/obj/artifact_paper_dispenser{
-	pixel_x = 15
-	},
 /turf/simulated/floor/black,
 /area/station/science/artifact)
 "awT" = (
@@ -12354,13 +12237,6 @@
 	},
 /turf/simulated/floor/carpet/arcade/half,
 /area/station/crew_quarters/arcade/dungeon)
-"aDf" = (
-/obj/machinery/light/incandescent/warm,
-/obj/disposalpipe/segment/morgue{
-	dir = 4
-	},
-/turf/simulated/floor/carpet/arcade/half,
-/area/station/crew_quarters/arcade/dungeon)
 "aDg" = (
 /obj/reagent_dispensers/foamtank,
 /obj/machinery/light/incandescent/harsh,
@@ -12976,13 +12852,6 @@
 /obj/item/clothing/glasses/sunglasses/tanning,
 /obj/machinery/light/incandescent/warm/very,
 /obj/item/pen/crayon/lipstick,
-/turf/simulated/floor/wood,
-/area/station/crew_quarters/sauna)
-"aEH" = (
-/obj/crematorium/tanning,
-/obj/machinery/computer/tanning{
-	pixel_y = 32
-	},
 /turf/simulated/floor/wood,
 /area/station/crew_quarters/sauna)
 "aEI" = (
@@ -15389,16 +15258,6 @@
 /obj/item/circuitboard/telescope,
 /turf/simulated/floor/plating/random,
 /area/station/storage/tech)
-"aKq" = (
-/obj/machinery/light/incandescent/warm/very,
-/obj/table/round,
-/obj/machinery/coffeemaker/research,
-/obj/mug_rack{
-	pixel_x = 26;
-	pixel_y = 4
-	},
-/turf/simulated/floor/wood,
-/area/station/science/lobby)
 "aKr" = (
 /obj/machinery/turret,
 /obj/machinery/camera{
@@ -16010,6 +15869,21 @@
 /obj/item/clothing/suit/hi_vis,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/inner/central)
+"aLU" = (
+/obj/crevice{
+	pixel_y = -30
+	},
+/obj/overlay{
+	density = 1;
+	desc = "";
+	dir = 4;
+	icon = 'icons/misc/racing.dmi';
+	icon_state = "clowncar";
+	layer = 6;
+	name = "broken clown car"
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/storage/tools)
 "aLV" = (
 /turf/simulated/wall/auto/supernorn,
 /area/shuttle/sea_elevator_room)
@@ -18552,20 +18426,6 @@
 	},
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/station/science/chemistry)
-"aSN" = (
-/obj/table/wood/auto,
-/obj/disposalpipe/segment/mail{
-	dir = 4
-	},
-/obj/machinery/coffeemaker,
-/obj/mug_rack{
-	pixel_x = 26;
-	pixel_y = 4
-	},
-/turf/simulated/floor/yellow/checker{
-	dir = 8
-	},
-/area/station/engine/engineering)
 "aSO" = (
 /obj/machinery/fluid_canister,
 /turf/simulated/floor/plating/random,
@@ -19134,45 +18994,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/iss)
-"aUm" = (
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
-/area/iss)
 "aUn" = (
 /obj/machinery/drainage/big,
 /turf/simulated/floor/grime,
 /area/iss)
-"aUo" = (
-/turf/simulated/martian/wall,
-/area/space)
 "aUp" = (
 /obj/lattice,
 /turf/space/fluid,
-/area/space)
-"aUq" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/space/fluid,
-/area/space)
-"aUr" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/space/fluid,
-/area/space)
-"aUs" = (
-/obj/map/light/white,
-/turf/simulated/martian/wall,
 /area/space)
 "aUt" = (
 /turf/simulated/wall/r_wall{
@@ -19185,58 +19013,11 @@
 /obj/lattice,
 /turf/space/fluid,
 /area/space)
-"aUv" = (
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
-/area/abandonedmedicalship/robot_trader)
 "aUw" = (
 /turf/simulated/martian/wall{
 	dir = 4;
 	icon_state = "diagonalWall"
 	},
-/turf/simulated/martian/floor,
-/area/space)
-"aUx" = (
-/obj/storage/crate,
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/stamp,
-/obj/item/emeter,
-/obj/lattice,
-/obj/item/parts/robot_parts/head/antique,
-/obj/item/parts/robot_parts/head/antique,
-/turf/simulated/martian/floor,
-/area/space)
-"aUy" = (
-/obj/decal/aliencomputer{
-	pixel_y = 32
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/turf/simulated/martian/floor,
-/area/space)
-"aUz" = (
-/obj/crevice{
-	pixel_y = 30
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/landmark/artifact,
-/obj/lattice,
 /turf/simulated/martian/floor,
 /area/space)
 "aUA" = (
@@ -19274,17 +19055,6 @@
 	icon_state = "old_rwall"
 	},
 /area/evilreaver/genetics)
-"aUH" = (
-/turf/simulated/martian/wall{
-	dir = 4;
-	icon_state = "diagonalWall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
 "aUI" = (
 /obj/landmark/artifact,
 /turf/simulated/floor/plating,
@@ -19314,19 +19084,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/iss)
-"aUN" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
 "aUO" = (
 /obj/disposalpipe/segment/mail,
 /turf/simulated/floor/green,
@@ -19391,26 +19148,10 @@
 /obj/item/clothing/head/emerg,
 /turf/simulated/floor/grime,
 /area/iss)
-"aUZ" = (
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
-/area/space)
 "aVa" = (
 /obj/machinery/portable_atmospherics/pump,
 /turf/simulated/floor/grime,
 /area/iss)
-"aVb" = (
-/turf/simulated/martian/wall{
-	dir = 5;
-	icon_state = "diagonalWall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
 "aVc" = (
 /obj/decal/woodclutter,
 /obj/overlay{
@@ -19523,23 +19264,6 @@
 	},
 /turf/simulated/floor/grime,
 /area/iss)
-"aVv" = (
-/obj/overlay{
-	density = 1;
-	desc = "Looks like a big jet turbine.";
-	icon = 'icons/obj/atmospherics/pipes.dmi';
-	icon_state = "compressor";
-	name = "old busted turbine thingy"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/damaged3,
-/area/space)
 "aVw" = (
 /obj/decal/floatingtiles{
 	dir = 1;
@@ -19815,54 +19539,8 @@
 	name = "organic floor"
 	},
 /area/space)
-"aWr" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/aliencomputer{
-	pixel_x = 32
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
-"aWs" = (
-/obj/crevice{
-	pixel_y = 30
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/space)
 "aWt" = (
 /obj/machinery/door/unpowered/martian,
-/turf/simulated/martian/floor,
-/area/space)
-"aWu" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
 /turf/simulated/martian/floor,
 /area/space)
 "aWv" = (
@@ -19877,20 +19555,6 @@
 /obj/item/clothing/head/helmet/space/old,
 /obj/storage/crate,
 /turf/simulated/floor/plating/damaged3,
-/area/space)
-"aWy" = (
-/obj/decal/aliencomputer{
-	pixel_x = 32
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/turf/simulated/martian/floor,
 /area/space)
 "aWz" = (
 /obj/decal/cleanable/fungus,
@@ -19914,70 +19578,6 @@
 /obj/item/tile/steel,
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/genetics)
-"aWD" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
-"aWE" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/space)
-"aWF" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/space)
-"aWG" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/space)
 "aWH" = (
 /turf/simulated/martian/wall{
 	dir = 1;
@@ -20029,63 +19629,9 @@
 "aWP" = (
 /turf/simulated/floor/plating/damaged1,
 /area/evilreaver/genetics)
-"aWQ" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/space/fluid,
-/area/space)
-"aWR" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
-"aWS" = (
-/obj/decal/aliencomputer{
-	pixel_x = -32
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/storage/crate/loot,
-/turf/simulated/martian/floor,
-/area/space)
 "aWT" = (
 /obj/item/furniture_parts/table,
 /obj/item/furniture_parts/table,
-/turf/simulated/martian/floor,
-/area/space)
-"aWU" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
 /turf/simulated/martian/floor,
 /area/space)
 "aWV" = (
@@ -20157,79 +19703,6 @@
 /obj/map/light/screen,
 /turf/simulated/floor/white,
 /area/evilreaver/genetics)
-"aXf" = (
-/turf/simulated/martian/wall{
-	dir = 1;
-	icon_state = "diagonalWall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
-"aXg" = (
-/obj/decal/fakeobjects{
-	anchored = 1;
-	density = 1;
-	desc = "Okay, you're pretty sure that even the martians didn't know what this thing is.";
-	icon = 'icons/obj/artifacts/artifacts.dmi';
-	icon_state = "martian-4";
-	name = "martian machine"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/space)
-"aXh" = (
-/turf/simulated/martian/wall{
-	dir = 8;
-	icon_state = "diagonalWall"
-	},
-/turf/simulated/floor/plating/airless/shuttlebay{
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "floor2";
-	name = "organic floor"
-	},
-/area/space)
-"aXi" = (
-/obj/item/basketball,
-/obj/item/kitchen/food_box/donut_box,
-/obj/storage/crate{
-	name = "Dented Crate"
-	},
-/obj/crevice{
-	pixel_x = -30
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/coin,
-/obj/item/cigpacket/propuffs,
-/obj/item/cigpacket/propuffs,
-/obj/item/clothing/head/XComHair,
-/turf/simulated/martian/floor,
-/area/space)
-"aXj" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/sheet/glass/reinforced,
-/turf/simulated/floor/plating/damaged3,
-/area/space)
 "aXk" = (
 /obj/decal/fakeobjects/apc_broken,
 /turf/simulated/wall/r_wall{
@@ -20265,14 +19738,6 @@
 	},
 /turf/simulated/floor/plating/scorched,
 /area/evilreaver/genetics)
-"aXq" = (
-/obj/item/old_grenade/banana,
-/obj/item/bananapeel,
-/obj/item/old_grenade/banana,
-/obj/storage/cart/trash,
-/obj/lattice,
-/turf/simulated/martian/floor,
-/area/space)
 "aXr" = (
 /obj/decal/fakeobjects/teleport_pad,
 /obj/map/light/dimred,
@@ -20311,12 +19776,6 @@
 /obj/item/reagent_containers/dropper,
 /turf/simulated/floor/white,
 /area/evilreaver/genetics)
-"aXx" = (
-/turf/simulated/martian/wall,
-/area/martian_trader)
-"aXy" = (
-/turf/simulated/martian/wall,
-/area/evilreaver/storage/tools)
 "aXz" = (
 /obj/rack,
 /obj/item/storage/firstaid/regular,
@@ -20346,15 +19805,6 @@
 /obj/decal/cleanable/machine_debris,
 /turf/simulated/floor/white,
 /area/evilreaver/genetics)
-"aXF" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/space/fluid,
-/area/space)
 "aXG" = (
 /obj/decal/cleanable/blood/splatter,
 /turf/simulated/floor/white,
@@ -20374,51 +19824,9 @@
 "aXI" = (
 /turf/simulated/floor/shuttle/flock,
 /area/flock_trader)
-"aXJ" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/obj/item/furniture_parts/rack,
-/obj/item/wirecutters,
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
 "aXK" = (
 /turf/simulated/shuttle/wall/flock,
 /area/flock_trader)
-"aXL" = (
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/turf/simulated/martian/wall,
-/area/evilreaver/storage/tools)
-"aXM" = (
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/computerframe{
-	anchored = 1;
-	desc = "It is highly unlikely that this still works.";
-	icon = 'icons/obj/computer.dmi';
-	icon_state = "datamedb";
-	name = "smashed computer"
-	},
-/obj/map/light/screen,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/storage/tools)
 "aXN" = (
 /turf/simulated/wall/r_wall{
 	icon = 'icons/misc/evilreaverstation.dmi';
@@ -20436,9 +19844,6 @@
 	name = "rusty airlock"
 	},
 /turf/simulated/floor/plating/damaged3,
-/area/evilreaver/genetics)
-"aXQ" = (
-/turf/simulated/martian/wall,
 /area/evilreaver/genetics)
 "aXR" = (
 /turf/simulated/martian/wall{
@@ -20459,67 +19864,8 @@
 /obj/critter/martian/soldier/dead,
 /turf/simulated/martian/floor,
 /area/evilreaver/storage/tools)
-"aXV" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
 "aXW" = (
 /turf/simulated/floor/plating/damaged3,
-/area/evilreaver/storage/tools)
-"aXX" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/storage/crate/loot,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/storage/tools)
-"aXY" = (
-/obj/crevice{
-	pixel_y = -30
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	density = 1;
-	desc = "";
-	dir = 4;
-	icon = 'icons/misc/racing.dmi';
-	icon_state = "clowncar";
-	layer = 6;
-	name = "broken clown car"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
-"aXZ" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
 /area/evilreaver/storage/tools)
 "aYa" = (
 /obj/decal/fakeobjects/flock/antenna/broken{
@@ -20535,23 +19881,6 @@
 	},
 /turf/simulated/martian/floor,
 /area/evilreaver/storage/tools)
-"aYc" = (
-/turf/simulated/martian/wall,
-/area/evilreaver/atmospherics)
-"aYd" = (
-/obj/crevice{
-	pixel_x = -28
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/fakeobjects/oldcanister/plasma,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/atmospherics)
 "aYe" = (
 /obj/item/clothing/under/misc/atmospheric_technician,
 /turf/simulated/floor/plating/damaged3,
@@ -20575,21 +19904,6 @@
 /obj/wingrille_spawn/flock,
 /turf/simulated/floor/shuttle/flock,
 /area/flock_trader)
-"aYj" = (
-/obj/crevice{
-	pixel_x = -28
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/item/c_tube,
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
 "aYk" = (
 /obj/critter/martian/soldier,
 /turf/simulated/floor/plating/damaged3,
@@ -20643,50 +19957,6 @@
 /obj/decal/fakeobjects/pipe,
 /turf/simulated/floor/plating/damaged2,
 /area/evilreaver/atmospherics)
-"aYu" = (
-/obj/decal/fakeobjects/oldcanister,
-/obj/lattice,
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/atmospherics)
-"aYv" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/cleanable/oil,
-/obj/item/cable_coil/cut{
-	icon_state = "coil1"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/storage/tools)
-"aYw" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/storage/toolbox/mechanical,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/storage/tools)
 "aYx" = (
 /obj/decal/fakeobjects/airmonitor_broken,
 /turf/simulated/wall/r_wall{
@@ -20703,27 +19973,6 @@
 "aYz" = (
 /obj/lattice,
 /obj/critter/martian/warrior/dead,
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
-"aYA" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/clothing/suit/space/old,
-/obj/item/clothing/head/helmet/space/old,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/storage/tools)
-"aYB" = (
-/obj/lattice,
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
 /turf/simulated/martian/floor,
 /area/evilreaver/storage/tools)
 "aYC" = (
@@ -20748,20 +19997,6 @@
 /obj/critter/martian/soldier/dead,
 /turf/simulated/floor/plating/damaged2,
 /area/evilreaver/atmospherics)
-"aYG" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/psychic/dead,
-/turf/simulated/floor/plating/damaged1,
-/area/evilreaver/atmospherics)
-"aYH" = (
-/turf/simulated/martian/wall,
-/area/evilreaver/chapel)
 "aYI" = (
 /obj/machinery/door/unpowered/martian,
 /obj/lattice,
@@ -20818,36 +20053,6 @@
 	},
 /turf/space/fluid,
 /area/space)
-"aYR" = (
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
-"aYS" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
-"aYT" = (
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/turf/simulated/martian/wall,
-/area/evilreaver/atmospherics)
 "aYU" = (
 /obj/machinery/door/airlock/pyro/alt{
 	dir = 4;
@@ -20901,36 +20106,6 @@
 /obj/map/light/screen,
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/atmospherics)
-"aZa" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/decal/fakeobjects/pipe{
-	dir = 4
-	},
-/turf/simulated/floor/plating/damaged1,
-/area/evilreaver/atmospherics)
-"aZb" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/chapel)
 "aZc" = (
 /obj/landmark/artifact,
 /turf/simulated/floor/plating/damaged3,
@@ -20939,49 +20114,9 @@
 /obj/storage/crate/loot,
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/storage/tools)
-"aZe" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/warrior,
-/turf/simulated/martian/floor,
-/area/evilreaver/storage/tools)
 "aZf" = (
 /obj/machinery/door/unpowered/martian,
 /turf/simulated/martian/floor,
-/area/evilreaver/atmospherics)
-"aZg" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/card/id/security{
-	assignment = "Security Officer";
-	name = "#1900494 (Security Officer)";
-	registered = "#1900494"
-	},
-/turf/simulated/floor/plating/damaged2,
 /area/evilreaver/atmospherics)
 "aZh" = (
 /obj/decal/cleanable/blood/gibs{
@@ -21009,30 +20144,6 @@
 /obj/critter/martian/warrior/dead,
 /turf/simulated/floor/plating/scorched,
 /area/evilreaver/atmospherics)
-"aZl" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/storage/closet/coffin,
-/obj/item/aiboss_tape/martian,
-/turf/simulated/floor/carpet/grime,
-/area/evilreaver/chapel)
-"aZm" = (
-/obj/crevice{
-	pixel_y = 30
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/fakeobjects/pipe,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/chapel)
 "aZn" = (
 /turf/simulated/martian/floor,
 /area/evilreaver/chapel)
@@ -21074,11 +20185,6 @@
 /obj/critter/martian/psychic,
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/chapel)
-"aZw" = (
-/obj/decal/aliencomputer,
-/obj/map/light/dimred,
-/turf/simulated/martian/wall,
-/area/space)
 "aZx" = (
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/chapel)
@@ -21104,29 +20210,6 @@
 	icon_state = "old_rwall"
 	},
 /area/evilreaver/security)
-"aZC" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/storage/closet/coffin,
-/obj/item/clothing/head/mario,
-/obj/item/clothing/under/gimmick/mario,
-/turf/simulated/floor/carpet/grime,
-/area/evilreaver/chapel)
-"aZD" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/carpet/grime,
-/area/evilreaver/chapel)
 "aZE" = (
 /obj/item/cable_coil/cut{
 	icon_state = "coil1"
@@ -21138,42 +20221,10 @@
 /obj/critter/martian/soldier,
 /turf/simulated/martian/floor,
 /area/evilreaver/chapel)
-"aZG" = (
-/obj/decal/fakeobjects{
-	anchored = 1;
-	density = 1;
-	desc = "Some type of martian gewgaw, perhaps a gimcrack or bauble.";
-	icon = 'icons/obj/artifacts/artifacts.dmi';
-	icon_state = "martian-3";
-	name = "martian machine"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/chapel)
 "aZH" = (
 /obj/lattice,
 /obj/decal/cleanable/machine_debris,
 /turf/simulated/martian/floor,
-/area/evilreaver/chapel)
-"aZI" = (
-/obj/crevice{
-	pixel_y = 30
-	},
-/obj/table/auto,
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/reagent_containers/glass/bottle/holywater,
-/turf/simulated/floor/plating/damaged3,
 /area/evilreaver/chapel)
 "aZJ" = (
 /obj/decal/cleanable/dirt,
@@ -21188,32 +20239,11 @@
 	dir = 1
 	},
 /area/evilreaver/security)
-"aZL" = (
-/obj/table/auto,
-/obj/item/paper/courtroom{
-	name = "paper- 'A Crash Course in Legal SOP"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/cleanable/dirt,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/security)
-"aZM" = (
-/turf/simulated/martian/wall,
-/area/evilreaver/security)
 "aZN" = (
 /turf/simulated/wall/r_wall{
 	icon = 'icons/misc/evilreaverstation.dmi';
 	icon_state = "old_rwall"
 	},
-/area/evilreaver/bridge)
-"aZO" = (
-/turf/simulated/martian/wall,
 /area/evilreaver/bridge)
 "aZP" = (
 /turf/simulated/martian/wall{
@@ -21228,17 +20258,6 @@
 	icon_state = "diagonalWall"
 	},
 /turf/simulated/martian/floor,
-/area/evilreaver/chapel)
-"aZR" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/raw_material/shard/glass,
-/turf/simulated/floor/plating/damaged3,
 /area/evilreaver/chapel)
 "aZS" = (
 /turf/simulated/floor/carpet/grime,
@@ -21258,29 +20277,6 @@
 "aZV" = (
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/security)
-"aZW" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/soldier/dead,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/security)
-"aZX" = (
-/obj/lattice,
-/obj/crevice{
-	pixel_y = 30
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
 "aZY" = (
 /turf/simulated/martian/wall{
 	dir = 5;
@@ -21295,110 +20291,16 @@
 	},
 /turf/simulated/martian/floor,
 /area/evilreaver/bridge)
-"baa" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/critter/martian/soldier/dead,
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
-"bab" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/decal/fakeobjects/pipe,
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
-"bac" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/critter/martian/warrior,
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
-"bad" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/item/device/infra_sensor,
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bae" = (
 /turf/simulated/wall/r_wall{
 	icon = 'icons/misc/evilreaverstation.dmi';
 	icon_state = "old_rwall"
 	},
 /area/evilreaver/bar)
-"baf" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/scorched,
-/area/evilreaver/chapel)
-"bag" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/soldier,
-/turf/simulated/floor/carpet/grime,
-/area/evilreaver/chapel)
 "bah" = (
 /obj/decal/cleanable/paper,
 /turf/simulated/floor/sanitary,
 /area/station/science/restroom)
-"bai" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/scorched,
-/area/evilreaver/security)
-"baj" = (
-/obj/decal/fakeobjects{
-	anchored = 1;
-	density = 1;
-	desc = "Some type of martian gewgaw, perhaps a gimcrack or bauble.";
-	icon = 'icons/obj/artifacts/artifacts.dmi';
-	icon_state = "martian-3";
-	name = "martian machine"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
 "bak" = (
 /obj/lattice,
 /turf/simulated/martian/floor,
@@ -21428,24 +20330,6 @@
 /obj/decal/fakeobjects/pipe,
 /turf/simulated/martian/floor,
 /area/evilreaver/bridge)
-"baq" = (
-/obj/decal/fakeobjects{
-	anchored = 1;
-	density = 1;
-	desc = "Some manner of martian experimentation thingamajig.";
-	icon = 'icons/obj/artifacts/artifacts.dmi';
-	icon_state = "martian-2";
-	name = "martian machine"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bar" = (
 /obj/lattice,
 /obj/critter/martian/warrior/dead,
@@ -21458,27 +20342,6 @@
 	},
 /turf/simulated/martian/floor,
 /area/evilreaver/bridge)
-"bat" = (
-/turf/simulated/martian/wall,
-/area/evilreaver/bar)
-"bau" = (
-/obj/decal/aliencomputer,
-/obj/map/light/dimred,
-/turf/simulated/martian/wall,
-/area/evilreaver/bar)
-"bav" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/cigbutt,
-/obj/item/cigpacket,
-/obj/item/cigpacket,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/bar)
 "baw" = (
 /obj/machinery/bot/secbot{
 	control_freq = 1441;
@@ -21488,38 +20351,6 @@
 	},
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/bar)
-"bax" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/photo/beepsky1{
-	desc = "You can see a securitron on the photo.  Looks kinda familiar. It appears to be holding a \"#1 Son\" mug.  Is...is that a young Officer Beepsky?"
-	},
-/turf/simulated/bar,
-/area/evilreaver/bar)
-"bay" = (
-/obj/crevice{
-	pixel_x = -28
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
 "baz" = (
 /obj/machinery/portable_atmospherics/canister/toxins,
 /obj/machinery/light/incandescent/cool,
@@ -21857,19 +20688,6 @@
 	},
 /turf/simulated/floor/engine/vacuum,
 /area/research_outpost/toxins)
-"bbv" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	external_pressure_bound = 0;
-	icon_state = "in";
-	dir = 1;
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine/vacuum{
-	icon_state = "engine_caution_east"
-	},
-/area/research_outpost/toxins)
 "bbw" = (
 /obj/machinery/light/flock{
 	dir = 1;
@@ -21886,20 +20704,6 @@
 	},
 /turf/simulated/floor/engine/vacuum{
 	icon_state = "engine_caution_west"
-	},
-/area/research_outpost/toxins)
-"bby" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 4;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine/vacuum{
-	icon_state = "engine_caution_east"
 	},
 /area/research_outpost/toxins)
 "bbA" = (
@@ -23038,24 +21842,6 @@
 	dir = 1
 	},
 /area/station/hallway/primary/east)
-"bfv" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/obj/decal/fakeobjects/pipe,
-/obj/decal/cleanable/blood/gibs{
-	icon_state = "gib6"
-	},
-/obj/decal/cleanable/blood/gibs{
-	icon_state = "gibarm"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bfw" = (
 /obj/machinery/door/airlock/pyro/command/alt,
 /obj/access_spawn/engineering_chief,
@@ -23308,20 +22094,6 @@
 	dir = 8
 	},
 /area/station/engine/engineering)
-"bgc" = (
-/obj/crevice{
-	pixel_x = -28
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/lattice,
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bgd" = (
 /obj/critter/martian/psychic/dead,
 /turf/simulated/martian/floor,
@@ -23397,25 +22169,6 @@
 	},
 /turf/simulated/floor/green,
 /area/station/hydroponics/bay)
-"bgs" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/oven{
-	name = "broken oven"
-	},
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/bar)
 "bgt" = (
 /obj/reagent_dispensers/watertank/big,
 /obj/disposalpipe/segment{
@@ -23642,23 +22395,6 @@
 "bgW" = (
 /turf/simulated/martian/floor,
 /area/evilreaver/security)
-"bgX" = (
-/obj/lattice,
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/warrior/dead,
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
-"bgY" = (
-/obj/decal/aliencomputer,
-/obj/map/light/dimred,
-/turf/simulated/martian/wall,
-/area/evilreaver/security)
 "bgZ" = (
 /turf/simulated/floor/engine/caution/east,
 /area/station/engine/gas)
@@ -23687,24 +22423,6 @@
 /obj/item/clothing/glasses/spectro,
 /turf/simulated/floor/carpet/grime,
 /area/station/crew_quarters/baroffice)
-"bhe" = (
-/obj/decal/aliencomputer,
-/obj/map/light/dimred,
-/turf/simulated/martian/wall,
-/area/evilreaver/bridge)
-"bhf" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/cleanable/blood/gibs{
-	icon_state = "gib4"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bhg" = (
 /obj/decal/cleanable/blood/gibs{
 	icon_state = "gib3"
@@ -23782,16 +22500,6 @@
 /obj/disposalpipe/segment,
 /turf/simulated/wall/auto/supernorn,
 /area/station/storage/emergency)
-"bhq" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/soldier,
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bhr" = (
 /turf/simulated/floor/yellow,
 /area/station/engine/engineering)
@@ -23870,23 +22578,6 @@
 	},
 /turf/simulated/martian/floor,
 /area/evilreaver/bridge)
-"bhF" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/crevice{
-	pixel_x = -28
-	},
-/obj/item/cigbutt,
-/obj/critter/mouse{
-	name = "Sgt. Pepper"
-	},
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/bar)
 "bhG" = (
 /obj/disposalpipe/segment/mail{
 	dir = 4
@@ -24086,47 +22777,9 @@
 	},
 /turf/simulated/floor/shuttlebay,
 /area/station/hangar/engine)
-"big" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/cleanable/machine_debris,
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
-"bih" = (
-/obj/lattice,
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/fakeobjects/pipe,
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
 "bii" = (
 /obj/critter/martian/soldier/dead,
 /turf/simulated/martian/floor,
-/area/evilreaver/security)
-"bij" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/damaged3,
 /area/evilreaver/security)
 "bik" = (
 /obj/machinery/atmospherics/pipe/manifold{
@@ -24307,19 +22960,6 @@
 	},
 /turf/simulated/floor,
 /area/station/engine/engineering)
-"biM" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/decal/cleanable/blood/gibs{
-	icon_state = "gib1"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "biN" = (
 /obj/item/cable_coil/cut,
 /obj/decal/cleanable/blood/gibs{
@@ -24535,18 +23175,6 @@
 	},
 /turf/simulated/floor,
 /area/station/storage/eeva)
-"bjq" = (
-/obj/table/auto,
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/item/storage/box/donkpocket_kit,
-/turf/simulated/floor/plating/damaged3,
-/area/evilreaver/bar)
 "bjr" = (
 /obj/cable{
 	icon_state = "2-8"
@@ -24616,52 +23244,11 @@
 /obj/critter/martian/soldier,
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/security)
-"bjC" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/critter/martian/warrior,
-/turf/simulated/martian/floor,
-/area/evilreaver/security)
 "bjD" = (
 /obj/machinery/door/unpowered/martian,
 /obj/lattice,
 /turf/simulated/martian/floor,
 /area/evilreaver/security)
-"bjE" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 8;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
 "bjF" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 4
@@ -24728,24 +23315,6 @@
 	},
 /turf/simulated/floor/white,
 /area/station/crew_quarters/kitchen)
-"bjM" = (
-/obj/lattice,
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bridge)
-"bjN" = (
-/obj/machinery/vending/alcohol,
-/obj/mug_rack{
-	pixel_y = 30
-	},
-/turf/simulated/floor/carpet/blue/fancy/narrow/nw,
-/area/station/crew_quarters/bar)
 "bjO" = (
 /obj/noticeboard/persistent{
 	name = "Bar persistent notice board";
@@ -25044,18 +23613,6 @@
 /obj/item/device/light/zippo,
 /turf/simulated/floor/plating/damaged3,
 /area/evilreaver/bar)
-"bkA" = (
-/obj/overlay{
-	desc = "Gross.";
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/machinery/door/airlock/classic{
-	name = "rusty airlock"
-	},
-/turf/simulated/bar,
-/area/evilreaver/bar)
 "bkB" = (
 /obj/decal/cleanable/molten_item,
 /obj/decal/cleanable/generic,
@@ -25072,18 +23629,6 @@
 	},
 /turf/simulated/martian/floor,
 /area/evilreaver/security)
-"bkD" = (
-/obj/item/paper/sop,
-/obj/decal/cleanable/dirt,
-/obj/overlay{
-	desc = "Gross.";
-	dir = 4;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/floor/plating/scorched,
-/area/evilreaver/bridge)
 "bkE" = (
 /obj/computerframe{
 	anchored = 1;
@@ -25349,48 +23894,12 @@
 /obj/firedoor_spawn,
 /turf/simulated/floor,
 /area/station/engine/engineering)
-"bli" = (
-/obj/decal/fakeobjects{
-	anchored = 1;
-	density = 1;
-	desc = "Some manner of martian gizmo.  Or possibly a doodad.  You aren't an expert.";
-	icon = 'icons/obj/artifacts/artifacts.dmi';
-	icon_state = "martian-1";
-	name = "martian machine"
-	},
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/martian/floor,
-/area/evilreaver/bar)
 "blj" = (
 /obj/cable{
 	icon_state = "1-2"
 	},
 /turf/simulated/floor/yellow,
 /area/station/engine/engineering)
-"blk" = (
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/obj/table/auto,
-/obj/overlay{
-	desc = "Gross.";
-	dir = 1;
-	icon = 'icons/turf/martian.dmi';
-	icon_state = "sideWall";
-	name = "organic wall"
-	},
-/turf/simulated/bar,
-/area/evilreaver/bar)
 "blm" = (
 /obj/machinery/door/airlock/pyro/alt,
 /obj/access_spawn/kitchen,
@@ -26291,9 +24800,6 @@
 /obj/item/reagent_containers/food/snacks/cereal_box/roach,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/west)
-"bnE" = (
-/turf/simulated/shuttle/wall,
-/area/space)
 "bnF" = (
 /obj/decal/tile_edge/line/black{
 	dir = 4;
@@ -27967,16 +26473,6 @@
 /obj/machinery/firealarm{
 	pixel_y = 24;
 	text = "NF"
-	},
-/turf/simulated/floor/black,
-/area/station/crew_quarters/observatory)
-"brL" = (
-/obj/machinery/espresso_machine{
-	pixel_y = 4
-	},
-/obj/table/reinforced/bar/auto,
-/obj/cup_rack{
-	pixel_y = 32
 	},
 /turf/simulated/floor/black,
 /area/station/crew_quarters/observatory)
@@ -29799,30 +28295,6 @@
 	icon_state = "fgreen2"
 	},
 /area/station/bridge/hos)
-"bwr" = (
-/obj/table/reinforced/auto,
-/obj/item/chem_grenade/flashbang{
-	pixel_x = -7;
-	pixel_y = 6
-	},
-/obj/item/device/detective_scanner{
-	pixel_x = -6
-	},
-/obj/item/device/detective_scanner{
-	pixel_x = -3
-	},
-/obj/disposalpipe/junction/right/west,
-/obj/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/phone{
-	pixel_x = 9;
-	pixel_y = -3
-	},
-/turf/simulated/floor/red,
-/area/station/security/main)
 "bws" = (
 /obj/storage/secure/closet/command/hop,
 /obj/machinery/firealarm{
@@ -32783,17 +31255,6 @@
 /obj/firedoor_spawn,
 /turf/simulated/floor/delivery,
 /area/station/hallway/primary/south)
-"bDx" = (
-/obj/item/plank,
-/obj/item/plank,
-/obj/item/plank,
-/obj/item/plank,
-/obj/item/plank,
-/obj/storage/crate{
-	name = "Dented Crate"
-	},
-/turf/simulated/floor/airless/plating/damaged1,
-/area/space)
 "bDy" = (
 /turf/simulated/floor/black,
 /area/station/teleporter)
@@ -33634,15 +32095,6 @@
 /area/station/crew_quarters/info{
 	name = "Net Cafe"
 	})
-"bFx" = (
-/obj/storage/crate{
-	name = "Dented Crate";
-	welded = 1
-	},
-/obj/item/mining_tool/powerhammer,
-/obj/item/shipcomponent/mainweapon/mining,
-/turf/space/fluid,
-/area/space)
 "bFy" = (
 /obj/machinery/dispenser{
 	pltanks = 0
@@ -33775,18 +32227,6 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/crew_quarters/info)
-"bFR" = (
-/obj/storage/crate{
-	name = "Dented Crate";
-	welded = 1
-	},
-/obj/item/mine/stun,
-/obj/item/mine/stun,
-/obj/item/mine/stun,
-/obj/item/mine/stun,
-/obj/item/mine/stun,
-/turf/space/fluid,
-/area/space)
 "bFS" = (
 /obj/table/reinforced/auto,
 /obj/machinery/cashreg,
@@ -33903,17 +32343,6 @@
 /area/station/crew_quarters/info{
 	name = "Net Cafe"
 	})
-"bGj" = (
-/obj/storage/crate{
-	name = "Dented Crate";
-	welded = 1
-	},
-/obj/item/clothing/suit/space/captain/blue,
-/obj/item/clothing/head/helmet/swat,
-/obj/item/clothing/shoes/flippers,
-/obj/item/storage/belt/utility,
-/turf/simulated/floor/plating/airless/asteroid,
-/area/space)
 "bGk" = (
 /obj/machinery/vending/coffee,
 /turf/simulated/floor/blue/side{
@@ -34576,14 +33005,6 @@
 	},
 /turf/simulated/floor,
 /area/station/hallway/secondary/exit)
-"bHP" = (
-/obj/table/auto,
-/obj/machinery/coffeemaker,
-/obj/mug_rack{
-	pixel_y = 28
-	},
-/turf/simulated/floor/yellow,
-/area/station/quartermaster/office)
 "bHQ" = (
 /obj/cable{
 	d1 = 1;
@@ -36936,12 +35357,6 @@
 /obj/table/wood/auto,
 /turf/simulated/floor/carpet/purple/fancy/narrow/se,
 /area/station/crew_quarters/radio/lab)
-"bNY" = (
-/turf/simulated/floor/airless/plating/damaged2,
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
-/area/space)
 "bNZ" = (
 /obj/decal/cleanable/dirt,
 /turf/simulated/wall/auto/reinforced/supernorn,
@@ -37313,12 +35728,6 @@
 	},
 /turf/simulated/floor/wood/two,
 /area/station/crew_quarters/radio/lab)
-"bPc" = (
-/obj/stocking,
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
-/area/space)
 "bPd" = (
 /obj/cable{
 	d1 = 4;
@@ -37494,12 +35903,6 @@
 /obj/machinery/drone_recharger,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/south)
-"bPx" = (
-/obj/decal/wreath,
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
-/area/space)
 "bPy" = (
 /obj/machinery/light/small/floor/netural,
 /turf/simulated/floor/damaged2,
@@ -38565,12 +36968,6 @@
 	name = "special bedsheet"
 	},
 /turf/simulated/floor/grime,
-/area/space)
-"bRP" = (
-/obj/decal/poster/wallsign/poster_rand,
-/turf/simulated/shuttle/wall{
-	icon_state = "wall3"
-	},
 /area/space)
 "bRQ" = (
 /obj/stool,
@@ -40613,29 +39010,6 @@
 	name = "Security Officer"
 	},
 /turf/simulated/floor/red,
-/area/station/security/main)
-"bWT" = (
-/obj/disposalpipe/segment/brig{
-	desc = "An underfloor interrogation pipe.";
-	dir = 4;
-	name = "interrogation pipe"
-	},
-/obj/machinery/power/data_terminal,
-/obj/machinery/computer3/generic/secure_data{
-	dir = 8;
-	name = "Security Records"
-	},
-/obj/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/mug_rack{
-	pixel_x = 26;
-	pixel_y = 4
-	},
-/turf/simulated/floor/red/side{
-	dir = 10
-	},
 /area/station/security/main)
 "bWU" = (
 /obj/disposaloutlet{
@@ -44477,9 +42851,6 @@
 	},
 /turf/simulated/floor,
 /area/station/crew_quarters/radio/lab)
-"ciK" = (
-/turf/simulated/floor/plating/random,
-/area/station/storage/eeva)
 "ciM" = (
 /obj/cable/reinforced{
 	icon_state = "1-2-thick"
@@ -44517,22 +42888,6 @@
 /obj/chicken_nesting_box,
 /turf/simulated/floor/grass/leafy,
 /area/station/ranch)
-"ciU" = (
-/obj/shrub{
-	dir = 4;
-	icon = 'icons/obj/stationobjs.dmi';
-	icon_state = "plant"
-	},
-/obj/decal/tile_edge/line/black{
-	dir = 10;
-	icon_state = "line1"
-	},
-/obj/machinery/light/incandescent/warm,
-/obj/item/old_grenade/banana,
-/turf/simulated/floor/darkblue{
-	dir = 10
-	},
-/area/station/crew_quarters/bar)
 "ciV" = (
 /obj/stool/chair/green{
 	dir = 4
@@ -44741,14 +43096,6 @@
 	icon_state = "dirt";
 	name = "not grass"
 	},
-/area/station/ranch)
-"cjI" = (
-/obj/machinery/door/airlock/pyro/maintenance/alt{
-	dir = 4
-	},
-/obj/firedoor_spawn,
-/obj/access_spawn/rancher,
-/turf/simulated/floor/plating/random,
 /area/station/ranch)
 "cjJ" = (
 /obj/machinery/hydro_growlamp,
@@ -45469,10 +43816,6 @@
 	},
 /turf/simulated/floor/specialroom/cafeteria,
 /area/station/crew_quarters/kitchen)
-"clV" = (
-/obj/bookshelf/persistent,
-/turf/simulated/floor,
-/area/station/hallway/primary/north)
 "clW" = (
 /obj/item/storage/belt/utility,
 /obj/item/storage/belt/utility,
@@ -45599,6 +43942,19 @@
 /obj/landmark/gps_waypoint,
 /turf/simulated/floor/purple/checker,
 /area/station/science/chemistry)
+"cEP" = (
+/obj/item/basketball,
+/obj/item/kitchen/food_box/donut_box,
+/obj/storage/crate/bloody,
+/obj/crevice{
+	pixel_x = -30
+	},
+/obj/item/coin,
+/obj/item/cigpacket/propuffs,
+/obj/item/cigpacket/propuffs,
+/obj/item/clothing/head/XComHair,
+/turf/simulated/martian/floor,
+/area/space)
 "cFM" = (
 /obj/lattice,
 /obj/machinery/light/runway_light/delay2,
@@ -45680,6 +44036,14 @@
 	dir = 8
 	},
 /area/station/hallway/secondary/exit)
+"cYs" = (
+/obj/item/old_grenade/spawner/banana,
+/obj/item/bananapeel,
+/obj/item/old_grenade/spawner/banana,
+/obj/storage/cart/trash,
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/space)
 "dbi" = (
 /obj/machinery/door/airlock/pyro/alt{
 	dir = 4;
@@ -45698,6 +44062,27 @@
 /area/station/hangar/catering{
 	name = "Catering Hangar"
 	})
+"ddw" = (
+/obj/decal/fakeobjects{
+	anchored = 1;
+	density = 1;
+	desc = "Some manner of martian experimentation thingamajig.";
+	icon = 'icons/obj/artifacts/artifacts.dmi';
+	icon_state = "martian-2";
+	name = "martian machine"
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
+"dfN" = (
+/obj/item/paper/sop,
+/obj/decal/cleanable/dirt,
+/turf/simulated/floor/plating/scorched,
+/area/evilreaver/bridge)
+"dkN" = (
+/obj/decal/aliencomputer,
+/obj/map/light/dimred,
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/security)
 "dlH" = (
 /obj/submachine/chef_oven{
 	dir = 4
@@ -45707,10 +44092,38 @@
 	dir = 1
 	},
 /area/station/crew_quarters/kitchen)
+"dlZ" = (
+/obj/indestructible/shuttle_corner{
+	dir = 9;
+	icon = 'icons/turf/walls_martian.dmi';
+	icon_state = "diagonal"
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/area/space)
 "doK" = (
 /obj/machinery/door/airlock/pyro/external,
 /turf/simulated/floor,
 /area/station/hallway/secondary/exit)
+"dsL" = (
+/obj/decal/fakeobjects{
+	anchored = 1;
+	density = 1;
+	desc = "Some type of martian gewgaw, perhaps a gimcrack or bauble.";
+	icon = 'icons/obj/artifacts/artifacts.dmi';
+	icon_state = "martian-3";
+	name = "martian machine"
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/chapel)
 "dtX" = (
 /obj/machinery/camera/ranch{
 	dir = 10
@@ -45793,6 +44206,13 @@
 /obj/item/device/radio/intercom/cargo,
 /turf/simulated/floor/yellow,
 /area/station/quartermaster/office)
+"dJc" = (
+/obj/crevice{
+	pixel_x = -28
+	},
+/obj/decal/fakeobjects/oldcanister/plasma,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/atmospherics)
 "dJO" = (
 /obj/plasticflaps,
 /obj/forcefield/energyshield/perma{
@@ -45811,6 +44231,22 @@
 	},
 /turf/simulated/floor/sanitary,
 /area/station/science/restroom)
+"dMn" = (
+/obj/overlay{
+	density = 1;
+	desc = "Looks like a big jet turbine.";
+	icon = 'icons/obj/atmospherics/pipes.dmi';
+	icon_state = "compressor";
+	name = "old busted turbine thingy"
+	},
+/turf/simulated/floor/plating/damaged3,
+/area/space)
+"dNe" = (
+/obj/item/photo/beepsky1{
+	desc = "You can see a securitron on the photo.  Looks kinda familiar. It appears to be holding a \"#1 Son\" mug.  Is...is that a young Officer Beepsky?"
+	},
+/turf/simulated/bar,
+/area/evilreaver/bar)
 "dNf" = (
 /obj/machinery/vending/standard,
 /obj/item/device/radio/intercom/engineering,
@@ -45854,6 +44290,15 @@
 	dir = 4
 	},
 /area/station/hydroponics/bay)
+"ett" = (
+/obj/table/glass/reinforced/auto,
+/obj/machinery/coffeemaker/medbay,
+/obj/drink_rack/mug{
+	pixel_x = 26;
+	pixel_y = 4
+	},
+/turf/simulated/floor/red/checker,
+/area/station/medical/medbay/surgery/storage)
 "euS" = (
 /obj/cable{
 	icon_state = "1-2"
@@ -45905,6 +44350,11 @@
 /obj/machinery/computer/sea_elevator,
 /turf/simulated/floor/scorched2,
 /area/shuttle/sea_elevator_room)
+"eCh" = (
+/obj/table/glass/reinforced/auto,
+/obj/item/storage/toolbox/artistic,
+/turf/simulated/floor,
+/area/station/crew_quarters/lounge/port)
 "eGa" = (
 /obj/machinery/computer/security/wooden_tv,
 /obj/item/clothing/head/fedora{
@@ -45947,6 +44397,22 @@
 /obj/machinery/light_switch/auto,
 /turf/simulated/floor/circuit,
 /area/station/turret_protected/ai_upload)
+"eNM" = (
+/obj/table/reinforced/auto,
+/obj/item/pinpointer/category/artifacts/safe{
+	pixel_x = -6;
+	pixel_y = 5
+	},
+/obj/item/storage/box/tapebox,
+/obj/item/disk/data/tape{
+	layer = 3.5
+	},
+/obj/machinery/light_switch/auto,
+/obj/artifact_paper_dispenser{
+	pixel_x = 15
+	},
+/turf/simulated/floor/black,
+/area/station/science/artifact)
 "eNR" = (
 /obj/machinery/door/airlock/pyro/maintenance/alt{
 	dir = 4
@@ -45955,6 +44421,15 @@
 /obj/firedoor_spawn,
 /turf/simulated/floor/plating/random,
 /area/station/crew_quarters/barber_shop)
+"ePO" = (
+/obj/storage/crate,
+/obj/item/stamp,
+/obj/item/emeter,
+/obj/lattice,
+/obj/item/parts/robot_parts/head/antique,
+/obj/item/parts/robot_parts/head/antique,
+/turf/simulated/martian/floor,
+/area/space)
 "eSt" = (
 /obj/table/auto,
 /obj/item/camera,
@@ -45964,6 +44439,10 @@
 	},
 /turf/simulated/floor/black,
 /area/station/crew_quarters/quartersA)
+"eXc" = (
+/obj/item/storage/toolbox/mechanical,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/storage/tools)
 "eXS" = (
 /obj/cable{
 	d1 = 1;
@@ -45975,6 +44454,11 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/research_outpost/maint)
+"eYr" = (
+/obj/storage/closet/coffin,
+/obj/item/aiboss_tape/martian,
+/turf/simulated/floor/carpet/grime,
+/area/evilreaver/chapel)
 "eYC" = (
 /obj/machinery/power/apc/autoname_west,
 /obj/cable{
@@ -46005,12 +44489,26 @@
 	dir = 5
 	},
 /area/station/medical/medbay/cloner)
+"feB" = (
+/obj/machinery/light/incandescent/warm/very,
+/obj/table/round,
+/obj/machinery/coffeemaker/research,
+/obj/drink_rack/mug{
+	pixel_x = 26;
+	pixel_y = 4
+	},
+/turf/simulated/floor/wood,
+/area/station/science/lobby)
 "fhb" = (
 /obj/cable{
 	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating/random,
 /area/research_outpost/maint)
+"fjS" = (
+/obj/machinery/traymachine/morgue,
+/turf/simulated/floor/sanitary,
+/area/station/medical/morgue)
 "fkH" = (
 /obj/machinery/camera{
 	c_tag = "autotag";
@@ -46074,6 +44572,13 @@
 	dir = 5
 	},
 /area/station/medical/medbay/cloner)
+"fLh" = (
+/obj/decal/aliencomputer{
+	pixel_x = -32
+	},
+/obj/storage/crate/loot,
+/turf/simulated/martian/floor,
+/area/space)
 "fML" = (
 /obj/lattice,
 /obj/machinery/conveyor/oshan_carousel{
@@ -46094,6 +44599,39 @@
 	},
 /turf/simulated/floor/scorched2,
 /area/shuttle/sea_elevator_room)
+"fRp" = (
+/obj/rack,
+/obj/item/device/radio/electropack,
+/obj/item/device/radio/electropack,
+/obj/item/device/radio/signaler,
+/obj/item/device/radio/signaler,
+/obj/item/chem_grenade/pepper,
+/obj/item/chem_grenade/pepper,
+/obj/item/chem_grenade/pepper,
+/obj/item/breaching_charge{
+	pixel_x = -2;
+	pixel_y = -5
+	},
+/obj/item/breaching_charge{
+	pixel_x = -2;
+	pixel_y = -5
+	},
+/obj/item/breaching_charge{
+	pixel_x = -2;
+	pixel_y = -5
+	},
+/obj/item/breaching_hammer{
+	pixel_x = -1;
+	pixel_y = 1
+	},
+/obj/item/breaching_hammer{
+	pixel_x = -1;
+	pixel_y = 1
+	},
+/turf/simulated/floor/redblack/corner{
+	dir = 1
+	},
+/area/station/ai_monitored/armory)
 "fRB" = (
 /obj/table/round/auto,
 /obj/item/seed/cannabis,
@@ -46175,6 +44713,10 @@
 	},
 /turf/simulated/floor,
 /area/station/security/checkpoint/sec_foyer)
+"gab" = (
+/obj/critter/martian/soldier,
+/turf/simulated/floor/carpet/grime,
+/area/evilreaver/chapel)
 "gaJ" = (
 /obj/cable{
 	d1 = 1;
@@ -46191,6 +44733,13 @@
 /obj/computer3frame,
 /turf/simulated/floor/plating/random,
 /area/research_outpost/maint)
+"gew" = (
+/obj/crevice{
+	pixel_y = 30
+	},
+/obj/decal/fakeobjects/pipe,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/chapel)
 "ggG" = (
 /obj/table/auto,
 /obj/machinery/cell_charger,
@@ -46265,11 +44814,24 @@
 	dir = 8
 	},
 /area/station/medical/staff)
+"gnw" = (
+/obj/crevice{
+	pixel_x = -28
+	},
+/obj/lattice,
+/obj/item/c_tube,
+/turf/simulated/martian/floor,
+/area/evilreaver/storage/tools)
 "gpP" = (
 /obj/machinery/plantpot,
 /obj/machinery/light_switch/auto,
 /turf/simulated/floor/grass,
 /area/station/hydroponics/bay)
+"grF" = (
+/obj/decal/aliencomputer,
+/obj/map/light/dimred,
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/bridge)
 "gtx" = (
 /obj/decal/tile_edge/stripe/extra_big{
 	dir = 8
@@ -46287,6 +44849,12 @@
 /obj/machinery/light/incandescent/netural,
 /turf/simulated/floor/shuttlebay,
 /area/research_outpost/hangar)
+"gyR" = (
+/obj/storage/closet/coffin,
+/obj/item/clothing/head/mario,
+/obj/item/clothing/under/gimmick/mario,
+/turf/simulated/floor/carpet/grime,
+/area/evilreaver/chapel)
 "gCF" = (
 /obj/storage/crate,
 /obj/item/storage/box/beakerbox,
@@ -46360,6 +44928,10 @@
 	},
 /turf/simulated/floor,
 /area/shuttle/sea_elevator_room)
+"gRv" = (
+/obj/critter/martian/soldier,
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
 "gUK" = (
 /obj/storage/crate/freezer{
 	name = "Freezer"
@@ -46390,11 +44962,49 @@
 	},
 /turf/simulated/floor/wood/two,
 /area/station/crew_quarters/barber_shop)
+"gYJ" = (
+/obj/machinery/traymachine/locking/crematorium{
+	id = "crematorium"
+	},
+/obj/machinery/crema_switch{
+	id = "crematorium";
+	pixel_y = 28
+	},
+/obj/machinery/camera{
+	c_tag = "autotag";
+	dir = 4;
+	name = "autoname - SS13";
+	pixel_x = -10;
+	tag = ""
+	},
+/turf/simulated/floor/black,
+/area/station/medical/crematorium)
 "hbh" = (
 /turf/simulated/floor/escape/corner{
 	dir = 8
 	},
 /area/station/hallway/secondary/exit)
+"hdb" = (
+/obj/table/reinforced/auto,
+/obj/item/wrench,
+/obj/item/device/analyzer/healthanalyzer,
+/obj/item/remote/porter/port_a_medbay,
+/obj/machinery/light/incandescent/cool,
+/obj/disposalpipe/segment/mail{
+	dir = 4
+	},
+/turf/simulated/floor/blue,
+/area/station/medical/medbay)
+"hfz" = (
+/obj/storage/crate/bloody{
+	welded = 1
+	},
+/obj/item/clothing/suit/space/captain/blue,
+/obj/item/clothing/head/helmet/swat,
+/obj/item/clothing/shoes/flippers,
+/obj/item/storage/belt/utility,
+/turf/simulated/floor/plating/airless/asteroid,
+/area/space)
 "hkh" = (
 /obj/storage/crate/furnacefuel,
 /obj/item/raw_material/char,
@@ -46411,6 +45021,19 @@
 	},
 /turf/simulated/floor/wood/two,
 /area/station/security/detectives_office)
+"hqk" = (
+/obj/indestructible/shuttle_corner{
+	dir = 6;
+	icon = 'icons/turf/walls_martian.dmi';
+	icon_state = "diagonal"
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/turf/space,
+/area/space)
 "hzx" = (
 /obj/wingrille_spawn/auto,
 /obj/barber_pole{
@@ -46419,6 +45042,13 @@
 	},
 /turf/simulated/floor,
 /area/station/crew_quarters/barber_shop)
+"hAH" = (
+/obj/crevice{
+	pixel_x = -28
+	},
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
 "hBQ" = (
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/research_outpost/pathology)
@@ -46475,6 +45105,15 @@
 /obj/machinery/atmospherics/portables_connector,
 /turf/simulated/floor,
 /area/research_outpost/toxins)
+"hYS" = (
+/obj/lattice,
+/obj/decal/fakeobjects/pipe{
+	dir = 4
+	},
+/obj/item/furniture_parts/rack,
+/obj/item/wirecutters,
+/turf/simulated/martian/floor,
+/area/evilreaver/storage/tools)
 "ibd" = (
 /obj/stool,
 /turf/simulated/floor/specialroom/arcade,
@@ -46484,6 +45123,18 @@
 	dir = 4
 	},
 /area/station/hallway/secondary/exit)
+"inS" = (
+/obj/decal/fakeobjects{
+	anchored = 1;
+	density = 1;
+	desc = "Some type of martian gewgaw, perhaps a gimcrack or bauble.";
+	icon = 'icons/obj/artifacts/artifacts.dmi';
+	icon_state = "martian-3";
+	name = "martian machine"
+	},
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/evilreaver/security)
 "iqQ" = (
 /obj/lattice,
 /obj/machinery/conveyor/oshan_carousel{
@@ -46558,6 +45209,48 @@
 /obj/access_spawn/rancher,
 /turf/simulated/floor,
 /area/station/ranch)
+"iFw" = (
+/obj/machinery/traymachine/morgue,
+/obj/machinery/light/incandescent/cool,
+/turf/simulated/floor/sanitary,
+/area/station/medical/morgue)
+"iGk" = (
+/obj/table/wood/auto,
+/obj/disposalpipe/segment/mail{
+	dir = 4
+	},
+/obj/machinery/coffeemaker,
+/obj/drink_rack/mug{
+	pixel_x = 26;
+	pixel_y = 4
+	},
+/turf/simulated/floor/yellow/checker{
+	dir = 8
+	},
+/area/station/engine/engineering)
+"iHB" = (
+/obj/disposalpipe/segment/brig{
+	desc = "An underfloor interrogation pipe.";
+	dir = 4;
+	name = "interrogation pipe"
+	},
+/obj/machinery/power/data_terminal,
+/obj/machinery/computer3/generic/secure_data{
+	dir = 8;
+	name = "Security Records"
+	},
+/obj/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/drink_rack/mug{
+	pixel_x = 26;
+	pixel_y = 4
+	},
+/turf/simulated/floor/red/side{
+	dir = 10
+	},
+/area/station/security/main)
 "iHN" = (
 /obj/table/reinforced/auto,
 /obj/machinery/recharger,
@@ -46612,6 +45305,14 @@
 /obj/disposalpipe/segment/mail,
 /turf/simulated/floor/caution/west,
 /area/station/maintenance/south)
+"iQu" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/chapel)
+"iQX" = (
+/obj/lattice,
+/obj/item/device/infra_sensor,
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
 "iUC" = (
 /obj/item/pen/crayon/pink,
 /turf/simulated/floor/plating/random,
@@ -46688,6 +45389,34 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/research_outpost/maint)
+"jsJ" = (
+/obj/table/reinforced/auto,
+/obj/item/chem_grenade/flashbang{
+	pixel_x = -7;
+	pixel_y = 6
+	},
+/obj/item/device/detective_scanner{
+	pixel_x = -6
+	},
+/obj/item/hand_labeler{
+	pixel_x = 8;
+	pixel_y = 10
+	},
+/obj/item/device/detective_scanner{
+	pixel_x = -3
+	},
+/obj/disposalpipe/junction/right/west,
+/obj/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/phone{
+	pixel_x = 9;
+	pixel_y = -3
+	},
+/turf/simulated/floor/red,
+/area/station/security/main)
 "juK" = (
 /obj/disposalpipe/segment/mail,
 /turf/simulated/wall/auto/reinforced/supernorn,
@@ -46707,6 +45436,10 @@
 /obj/machinery/manufacturer/general,
 /turf/simulated/floor,
 /area/research_outpost/hangar)
+"jCr" = (
+/turf/simulated/floor/airless/plating/damaged2,
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
+/area/space)
 "jCs" = (
 /obj/disposalpipe/segment/morgue{
 	dir = 4
@@ -46743,6 +45476,20 @@
 	},
 /turf/simulated/floor/black,
 /area/station/crew_quarters/observatory)
+"jHu" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "engine_caution_east"
+	},
+/area/research_outpost/toxins)
 "jJN" = (
 /obj/cable{
 	icon_state = "1-2"
@@ -46768,6 +45515,17 @@
 /area/station/hangar/catering{
 	name = "Catering Hangar"
 	})
+"jKP" = (
+/obj/decal/fakeobjects{
+	anchored = 1;
+	density = 1;
+	desc = "Some manner of martian gizmo.  Or possibly a doodad.  You aren't an expert.";
+	icon = 'icons/obj/artifacts/artifacts.dmi';
+	icon_state = "martian-1";
+	name = "martian machine"
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/bar)
 "jLI" = (
 /obj/cable{
 	icon_state = "1-2"
@@ -46842,6 +45600,12 @@
 /obj/item/kitchen/utensil/fork,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/inner/central)
+"klc" = (
+/obj/machinery/door/airlock/classic{
+	name = "rusty airlock"
+	},
+/turf/simulated/bar,
+/area/evilreaver/bar)
 "knq" = (
 /obj/table/reinforced,
 /obj/item/reagent_containers/food/snacks/cookie{
@@ -46854,6 +45618,10 @@
 	},
 /turf/simulated/floor,
 /area/research_outpost)
+"koh" = (
+/obj/map/light/white,
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/space)
 "ksg" = (
 /turf/simulated/floor/black,
 /area/research_outpost)
@@ -46880,6 +45648,13 @@
 	},
 /turf/simulated/floor,
 /area/station/hallway/primary/north)
+"kCq" = (
+/turf/unsimulated/wall/auto/adventure/shuttle,
+/area/space)
+"kHD" = (
+/obj/decal/poster/wallsign/poster_rand,
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
+/area/space)
 "kLf" = (
 /obj/landmark/gps_waypoint,
 /turf/simulated/floor/escape,
@@ -46899,6 +45674,25 @@
 /area/station/crew_quarters/market{
 	name = "Supply Lobby"
 	})
+"kTN" = (
+/obj/shrub{
+	dir = 4;
+	icon = 'icons/obj/stationobjs.dmi';
+	icon_state = "plant"
+	},
+/obj/decal/tile_edge/line/black{
+	dir = 10;
+	icon_state = "line1"
+	},
+/obj/machinery/light/incandescent/warm,
+/obj/item/old_grenade/spawner/banana,
+/turf/simulated/floor/darkblue{
+	dir = 10
+	},
+/area/station/crew_quarters/bar)
+"kVh" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/bar)
 "kVp" = (
 /obj/machinery/firealarm{
 	dir = 4;
@@ -46918,6 +45712,9 @@
 /obj/storage/cart/trash,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/south)
+"ldH" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/storage/tools)
 "lgA" = (
 /obj/landmark/gps_waypoint,
 /turf/simulated/floor/carpet{
@@ -46960,6 +45757,15 @@
 /obj/machinery/centrifuge,
 /turf/simulated/floor/green,
 /area/research_outpost/pathology)
+"lzx" = (
+/obj/machinery/door/airlock/pyro/maintenance/alt{
+	dir = 4;
+	req_access = null
+	},
+/obj/firedoor_spawn,
+/obj/access_spawn/rancher,
+/turf/simulated/floor/plating/random,
+/area/station/ranch)
 "lGL" = (
 /obj/item/clothing/mask/cigarette/random,
 /obj/ladder{
@@ -47020,6 +45826,19 @@
 	},
 /turf/simulated/floor/engine,
 /area/research_outpost/chamber)
+"mer" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 0;
+	icon_state = "in";
+	dir = 1;
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "engine_caution_east"
+	},
+/area/research_outpost/toxins)
 "mhq" = (
 /turf/simulated/floor/caution/corner/misc{
 	dir = 6
@@ -47084,6 +45903,21 @@
 	icon_state = "Stairs2_wide"
 	},
 /area/station/hallway/secondary/exit)
+"mvv" = (
+/obj/critter/martian/psychic/dead,
+/turf/simulated/floor/plating/damaged1,
+/area/evilreaver/atmospherics)
+"mxt" = (
+/obj/decal/fakeobjects{
+	anchored = 1;
+	density = 1;
+	desc = "Okay, you're pretty sure that even the martians didn't know what this thing is.";
+	icon = 'icons/obj/artifacts/artifacts.dmi';
+	icon_state = "martian-4";
+	name = "martian machine"
+	},
+/turf/simulated/martian/floor,
+/area/space)
 "myo" = (
 /turf/simulated/floor/shuttlebay,
 /area/station/hangar/catering{
@@ -47170,6 +46004,9 @@
 /obj/machinery/vending/snack,
 /turf/simulated/floor,
 /area/research_outpost)
+"mSs" = (
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
+/area/iss)
 "mSU" = (
 /obj/decal/tile_edge/stripe/extra_big{
 	dir = 4
@@ -47197,6 +46034,13 @@
 /obj/landmark/gps_waypoint,
 /turf/simulated/floor/white,
 /area/station/crew_quarters/kitchen)
+"ncp" = (
+/obj/bookshelf/persistent{
+	density = 0;
+	pixel_y = 19
+	},
+/turf/simulated/floor,
+/area/station/hallway/primary/north)
 "ndB" = (
 /obj/machinery/vending/cigarette,
 /turf/simulated/floor,
@@ -47245,12 +46089,37 @@
 /obj/machinery/plantpot,
 /turf/simulated/floor/grass,
 /area/station/hydroponics/bay)
+"nnQ" = (
+/obj/table/auto,
+/obj/item/reagent_containers/food/snacks/pie/cream,
+/obj/item/storage/goodybag,
+/obj/item/storage/pill_bottle/cyberpunk,
+/obj/item/aiModule/hologram_expansion/clown,
+/turf/simulated/floor/carpet/arcade/half,
+/area/station/crew_quarters/clown)
+"noN" = (
+/obj/lattice,
+/obj/decal/fakeobjects/pipe{
+	dir = 4
+	},
+/turf/simulated/floor/plating/damaged1,
+/area/evilreaver/atmospherics)
+"nqj" = (
+/obj/table/auto,
+/obj/item/storage/box/donkpocket_kit,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/bar)
 "nvJ" = (
 /obj/cable{
 	icon_state = "1-8"
 	},
 /turf/simulated/floor,
 /area/research_outpost/hangar)
+"nzy" = (
+/obj/item/clothing/suit/space/old,
+/obj/item/clothing/head/helmet/space/old,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/storage/tools)
 "nAo" = (
 /obj/storage/crate/freezer,
 /obj/item/reagent_containers/food/snacks/yoghurt/frozen,
@@ -47332,6 +46201,14 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/northwest)
+"nHd" = (
+/obj/crevice{
+	pixel_y = 30
+	},
+/obj/landmark/artifact,
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/space)
 "nJp" = (
 /obj/rack,
 /obj/item/tank/air,
@@ -47361,6 +46238,11 @@
 /area/station/hangar/catering{
 	name = "Catering Hangar"
 	})
+"oaa" = (
+/obj/decal/aliencomputer,
+/obj/map/light/dimred,
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/space)
 "odD" = (
 /obj/item/reagent_containers/pill/hairgrownium{
 	pixel_x = 17;
@@ -47385,6 +46267,10 @@
 /obj/machinery/light/incandescent/netural,
 /turf/simulated/floor/plating/random,
 /area/research_outpost/hangar)
+"ojI" = (
+/obj/table/auto,
+/turf/simulated/bar,
+/area/evilreaver/bar)
 "oox" = (
 /obj/machinery/disposal/small{
 	dir = 1;
@@ -47396,6 +46282,18 @@
 	},
 /turf/simulated/floor,
 /area/station/hangar/sec)
+"opM" = (
+/obj/lattice,
+/obj/critter/martian/warrior/dead,
+/turf/simulated/martian/floor,
+/area/evilreaver/security)
+"oqm" = (
+/obj/decal/cleanable/oil,
+/obj/item/cable_coil/cut{
+	icon_state = "coil1"
+	},
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/storage/tools)
 "oqx" = (
 /obj/machinery/portable_atmospherics/canister/air/large,
 /turf/simulated/floor/plating/random,
@@ -47413,6 +46311,13 @@
 /obj/machinery/portable_atmospherics/canister/toxins,
 /turf/simulated/floor,
 /area/research_outpost/toxins)
+"oFb" = (
+/obj/decal/aliencomputer{
+	pixel_y = 32
+	},
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/space)
 "oFy" = (
 /obj/machinery/light/incandescent/netural,
 /turf/simulated/floor/black,
@@ -47443,6 +46348,11 @@
 /obj/grille/steel,
 /turf/space/fluid,
 /area/station/com_dish/research_outpost)
+"oUR" = (
+/obj/decal/aliencomputer,
+/obj/map/light/dimred,
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/bar)
 "oVm" = (
 /obj/table/round/auto,
 /obj/item/device/audio_log,
@@ -47527,6 +46437,10 @@
 	dir = 8
 	},
 /area/station/ai_monitored/armory)
+"piG" = (
+/obj/item/raw_material/shard/glass,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/chapel)
 "pnu" = (
 /obj/cable{
 	d1 = 4;
@@ -47542,6 +46456,9 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/south)
+"ppn" = (
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
+/area/abandonedmedicalship/robot_trader)
 "prZ" = (
 /obj/cable{
 	icon_state = "4-8"
@@ -47553,6 +46470,17 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/research_outpost/maint)
+"psk" = (
+/obj/lattice,
+/obj/decal/fakeobjects/pipe,
+/obj/decal/cleanable/blood/gibs{
+	icon_state = "gib6"
+	},
+/obj/decal/cleanable/blood/gibs{
+	icon_state = "gibarm"
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
 "pvB" = (
 /obj/cable/reinforced{
 	icon_state = "4-8-thick"
@@ -47576,6 +46504,14 @@
 	},
 /turf/simulated/floor/specialroom/cafeteria,
 /area/station/crew_quarters/barber_shop)
+"pEP" = (
+/obj/table/auto,
+/obj/item/paper/courtroom{
+	name = "paper- 'A Crash Course in Legal SOP"
+	},
+/obj/decal/cleanable/dirt,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/security)
 "pFS" = (
 /obj/submachine/chef_sink/chem_sink{
 	dir = 8;
@@ -47644,6 +46580,9 @@
 /obj/machinery/light/incandescent/greenish,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/south)
+"pVe" = (
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
+/area/space)
 "pWz" = (
 /obj/machinery/firealarm{
 	dir = 8;
@@ -47654,6 +46593,16 @@
 /area/station/hangar/catering{
 	name = "Catering Hangar"
 	})
+"pXh" = (
+/obj/machinery/vending/alcohol,
+/obj/drink_rack/mug{
+	pixel_y = 30
+	},
+/turf/simulated/floor/carpet/blue/fancy/narrow/nw,
+/area/station/crew_quarters/bar)
+"pXx" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/security)
 "pZs" = (
 /obj/cable{
 	icon_state = "1-4"
@@ -47664,6 +46613,16 @@
 /obj/landmark/gps_waypoint,
 /turf/simulated/floor/wood,
 /area/station/bridge/customs)
+"qbA" = (
+/obj/machinery/espresso_machine{
+	pixel_y = 4
+	},
+/obj/table/reinforced/bar/auto,
+/obj/drink_rack/cup{
+	pixel_y = 32
+	},
+/turf/simulated/floor/black,
+/area/station/crew_quarters/observatory)
 "qcB" = (
 /obj/rack,
 /obj/item/tank/air,
@@ -47760,6 +46719,9 @@
 /area/station/hangar/catering{
 	name = "Catering Hangar"
 	})
+"qwc" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/bridge)
 "qBd" = (
 /obj/machinery/door/poddoor/blast/pyro/podbay_autoclose{
 	id = "secure_dock"
@@ -47774,6 +46736,25 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/inner/central)
+"qGc" = (
+/obj/item/plank,
+/obj/item/plank,
+/obj/item/plank,
+/obj/item/plank,
+/obj/item/plank,
+/obj/storage/crate/bloody,
+/turf/simulated/floor/airless/plating/damaged1,
+/area/space)
+"qGt" = (
+/obj/decal/aliencomputer{
+	pixel_x = 32
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/area/space)
 "qKr" = (
 /obj/decal/tile_edge/line/red{
 	dir = 10;
@@ -47999,6 +46980,13 @@
 /obj/item/furniture_parts/stool,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/inner/central)
+"rYy" = (
+/obj/lattice,
+/obj/crevice{
+	pixel_y = 30
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/security)
 "sak" = (
 /obj/machinery/drainage/big,
 /turf/simulated/floor/shuttlebay,
@@ -48032,9 +47020,25 @@
 /obj/access_spawn/research,
 /turf/simulated/floor,
 /area/research_outpost/toxins)
+"skB" = (
+/obj/stocking,
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
+/area/space)
 "smn" = (
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/station/security/detectives_office)
+"sqO" = (
+/obj/machinery/traymachine/morgue,
+/obj/item/reagent_containers/food/snacks/pizza/meatball,
+/obj/machinery/camera{
+	c_tag = "autotag";
+	dir = 4;
+	name = "autoname - SS13";
+	pixel_x = -10;
+	tag = ""
+	},
+/turf/simulated/floor/sanitary,
+/area/station/medical/morgue)
 "sso" = (
 /obj/cable{
 	icon_state = "0-2"
@@ -48044,6 +47048,22 @@
 /obj/machinery/networked/storage/scanner,
 /turf/simulated/floor/plating/random,
 /area/research_outpost/maint)
+"sAv" = (
+/obj/storage/crate/bloody{
+	welded = 1
+	},
+/obj/item/mining_tool/powerhammer,
+/obj/item/shipcomponent/mainweapon/mining,
+/turf/space/fluid,
+/area/space)
+"sAX" = (
+/obj/crevice{
+	pixel_y = 30
+	},
+/obj/table/auto,
+/obj/item/reagent_containers/glass/bottle/holywater,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/chapel)
 "sBu" = (
 /obj/cable{
 	d1 = 4;
@@ -48067,6 +47087,34 @@
 /obj/machinery/computer/tetris,
 /turf/simulated/floor/carpet/arcade,
 /area/station/crew_quarters/arcade)
+"sIA" = (
+/turf/simulated/floor/plating/scorched,
+/area/evilreaver/chapel)
+"sLC" = (
+/obj/decal/fakeobjects/pipe{
+	dir = 4
+	},
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/atmospherics)
+"sNn" = (
+/obj/machinery/activation_button/driver_button{
+	id = "research";
+	name = "Research Emergency Mass Ejector Control";
+	pixel_y = 32
+	},
+/turf/simulated/floor/plating/random,
+/area/station/maintenance/northeast)
+"sOK" = (
+/obj/table/auto,
+/obj/machinery/coffeemaker,
+/obj/drink_rack/mug{
+	pixel_y = 28
+	},
+/turf/simulated/floor/yellow,
+/area/station/quartermaster/office)
+"sOP" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/martian_trader)
 "sRT" = (
 /obj/item/device/radio/intercom/science,
 /turf/simulated/floor/engine,
@@ -48076,6 +47124,9 @@
 /obj/firedoor_spawn,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/west)
+"sSK" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/genetics)
 "sVY" = (
 /obj/stool/chair/office/purple{
 	dir = 4
@@ -48097,6 +47148,9 @@
 /obj/access_spawn/bar,
 /turf/simulated/floor/black,
 /area/station/crew_quarters/catering)
+"tcn" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/space)
 "ten" = (
 /obj/cable{
 	icon_state = "2-8"
@@ -48106,12 +47160,20 @@
 	},
 /turf/simulated/floor/wood/two,
 /area/station/security/detectives_office)
+"teZ" = (
+/obj/item/sheet/glass/reinforced,
+/turf/simulated/floor/plating/damaged3,
+/area/space)
 "toE" = (
 /obj/cable{
 	icon_state = "1-8"
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/south)
+"tzP" = (
+/obj/decal/cleanable/machine_debris,
+/turf/simulated/martian/floor,
+/area/evilreaver/security)
 "tAS" = (
 /obj/machinery/firealarm{
 	pixel_x = 1;
@@ -48134,6 +47196,12 @@
 	},
 /turf/simulated/floor,
 /area/station/security/checkpoint/sec_foyer)
+"tCu" = (
+/obj/decal/fakeobjects/pipe{
+	dir = 4
+	},
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/storage/tools)
 "tDZ" = (
 /obj/cable{
 	d1 = 4;
@@ -48190,6 +47258,9 @@
 	},
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/research_outpost/chamber)
+"tTr" = (
+/turf/unsimulated/wall/auto/adventure/martian,
+/area/evilreaver/atmospherics)
 "tVl" = (
 /obj/table/wood/round/auto,
 /obj/item/device/radio/intercom/AI,
@@ -48246,6 +47317,19 @@
 /obj/table/round/auto,
 /turf/simulated/floor,
 /area/research_outpost)
+"uan" = (
+/obj/indestructible/shuttle_corner{
+	dir = 10;
+	icon = 'icons/turf/walls_martian.dmi';
+	icon_state = "diagonal"
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/turf/space,
+/area/space)
 "uaw" = (
 /obj/machinery/hair_dye_dispenser,
 /turf/simulated/floor/specialroom/cafeteria,
@@ -48265,18 +47349,24 @@
 /obj/machinery/light/incandescent/netural,
 /turf/simulated/floor,
 /area/research_outpost/hangar)
-"uij" = (
-/obj/table/reinforced/auto,
-/obj/machinery/coffeemaker/botany,
-/obj/mug_rack{
-	pixel_y = 28
+"ugG" = (
+/obj/crevice{
+	pixel_y = 30
 	},
-/turf/simulated/floor/black,
-/area/station/hydroponics/bay)
+/turf/simulated/martian/floor,
+/area/space)
 "umv" = (
 /obj/machinery/light/incandescent/netural,
 /turf/simulated/floor,
 /area/research_outpost)
+"unB" = (
+/obj/item/card/id/security{
+	assignment = "Security Officer";
+	name = "#1900494 (Security Officer)";
+	registered = "#1900494"
+	},
+/turf/simulated/floor/plating/damaged2,
+/area/evilreaver/atmospherics)
 "uoX" = (
 /obj/item/toy/handheld/robustris,
 /turf/simulated/floor/plating/random,
@@ -48294,6 +47384,14 @@
 /obj/storage/closet/fire,
 /turf/simulated/floor,
 /area/research_outpost/hangar)
+"uzC" = (
+/obj/table/reinforced/auto,
+/obj/machinery/coffeemaker/botany,
+/obj/drink_rack/mug{
+	pixel_y = 28
+	},
+/turf/simulated/floor/black,
+/area/station/hydroponics/bay)
 "uzL" = (
 /obj/wingrille_spawn/auto/crystal,
 /obj/cable{
@@ -48339,6 +47437,20 @@
 	},
 /turf/simulated/floor,
 /area/station/hangar/sec)
+"uId" = (
+/obj/decal/fakeobjects/pipe{
+	dir = 4
+	},
+/obj/computerframe{
+	anchored = 1;
+	desc = "It is highly unlikely that this still works.";
+	icon = 'icons/obj/computer.dmi';
+	icon_state = "datamedb";
+	name = "smashed computer"
+	},
+/obj/map/light/screen,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/storage/tools)
 "uTy" = (
 /obj/submachine/cargopad{
 	name = "Security Pod Bay Pad"
@@ -48370,6 +47482,22 @@
 /obj/item/furniture_parts/office_chair/blue,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/inner/central)
+"vdc" = (
+/obj/crevice{
+	pixel_x = -28
+	},
+/obj/item/cigbutt,
+/obj/critter/mouse{
+	name = "Sgt. Pepper"
+	},
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/bar)
+"vdP" = (
+/obj/crevice{
+	pixel_x = -28
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/security)
 "vex" = (
 /obj/storage/secure/crate/weapon/armory/tranquilizer,
 /obj/item/ammo/bullets/tranq_darts,
@@ -48384,6 +47512,28 @@
 "vfw" = (
 /turf/simulated/floor/carpet/grime,
 /area/station/security/detectives_office)
+"vjB" = (
+/obj/indestructible/shuttle_corner{
+	dir = 5;
+	icon = 'icons/turf/walls_martian.dmi';
+	icon_state = "diagonal"
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/turf/simulated/floor/plating/airless/shuttlebay{
+	icon = 'icons/turf/martian.dmi';
+	icon_state = "floor2";
+	name = "organic floor"
+	},
+/area/space)
+"vkg" = (
+/obj/lattice,
+/obj/critter/martian/warrior,
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
 "vqP" = (
 /turf/simulated/floor/escape/corner,
 /area/station/hallway/secondary/exit)
@@ -48401,6 +47551,24 @@
 	},
 /turf/simulated/floor,
 /area/station/hallway/primary/north)
+"vsl" = (
+/obj/machinery/traymachine/locking/tanning,
+/obj/machinery/computer/tanning{
+	pixel_y = 32
+	},
+/turf/simulated/floor/wood,
+/area/station/crew_quarters/sauna)
+"vye" = (
+/turf/simulated/floor/plating/scorched,
+/area/evilreaver/security)
+"vCt" = (
+/obj/machinery/light/incandescent/warm,
+/obj/disposalpipe/segment/morgue{
+	dir = 4
+	},
+/obj/storage/closet/office,
+/turf/simulated/floor/carpet/arcade/half,
+/area/station/crew_quarters/arcade/dungeon)
 "vCx" = (
 /obj/machinery/conveyor/oshan_carousel{
 	dir = 1
@@ -48459,31 +47627,6 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/research_outpost)
-"vLB" = (
-/obj/rack,
-/obj/item/device/radio/electropack,
-/obj/item/device/radio/electropack,
-/obj/item/device/radio/signaler,
-/obj/item/device/radio/signaler,
-/obj/item/chem_grenade/pepper,
-/obj/item/chem_grenade/pepper,
-/obj/item/chem_grenade/pepper,
-/obj/item/breaching_charge{
-	pixel_x = -2;
-	pixel_y = -5
-	},
-/obj/item/breaching_charge{
-	pixel_x = -2;
-	pixel_y = -5
-	},
-/obj/item/breaching_charge{
-	pixel_x = -2;
-	pixel_y = -5
-	},
-/turf/simulated/floor/redblack/corner{
-	dir = 1
-	},
-/area/station/ai_monitored/armory)
 "vNf" = (
 /obj/item/storage/wall/emergency{
 	dir = 4;
@@ -48538,6 +47681,29 @@
 /obj/item/clothing/ears/earmuffs,
 /turf/simulated/floor,
 /area/station/storage/eeva)
+"waZ" = (
+/obj/decal/aliencomputer{
+	pixel_x = 32
+	},
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/space)
+"wdM" = (
+/obj/machinery/atmospherics/binary/pump{
+	dir = 1;
+	frequency = 1229;
+	icon_state = "intact_on";
+	id = "Chamber Two Inlet";
+	on = 1;
+	target_pressure = 500
+	},
+/obj/machinery/activation_button/ignition_switch{
+	id = "toxins_2";
+	pixel_x = -8;
+	pixel_y = 24
+	},
+/turf/simulated/floor/blue,
+/area/research_outpost/toxins)
 "wfi" = (
 /obj/cable{
 	icon_state = "1-2"
@@ -48605,6 +47771,12 @@
 /area/station/hangar/catering{
 	name = "Catering Hangar"
 	})
+"wHs" = (
+/obj/item/cigbutt,
+/obj/item/cigpacket,
+/obj/item/cigpacket,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/bar)
 "wJj" = (
 /obj/machinery/door/airlock/pyro/external,
 /obj/machinery/light/small/floor/cool,
@@ -48625,6 +47797,11 @@
 "wOk" = (
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/station/crew_quarters/arcade)
+"wQb" = (
+/obj/decal/fakeobjects/oldcanister,
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/evilreaver/atmospherics)
 "wRa" = (
 /turf/simulated/floor/stairs/wide,
 /area/station/hallway/secondary/exit)
@@ -48637,6 +47814,22 @@
 	dir = 9
 	},
 /area/station/medical/staff)
+"wWA" = (
+/obj/machinery/atmospherics/binary/pump{
+	dir = 0;
+	frequency = 1229;
+	icon_state = "intact_on";
+	id = "Chamber One Outlet";
+	on = 1;
+	target_pressure = 250
+	},
+/obj/machinery/activation_button/ignition_switch{
+	id = "toxins_1";
+	pixel_x = 8;
+	pixel_y = 24
+	},
+/turf/simulated/floor/red,
+/area/research_outpost/toxins)
 "wXx" = (
 /obj/lattice{
 	icon_state = "lattice-dir-b"
@@ -48645,6 +47838,21 @@
 	name = "Mining Dock"
 	},
 /turf/space/fluid,
+/area/space)
+"wZB" = (
+/obj/lattice,
+/obj/critter/martian/soldier/dead,
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
+"xdr" = (
+/obj/decal/oven{
+	name = "broken oven"
+	},
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/bar)
+"xfi" = (
+/obj/decal/wreath,
+/turf/unsimulated/wall/auto/adventure/shuttle/dark,
 /area/space)
 "xhN" = (
 /obj/machinery/power/apc/autoname_north,
@@ -48667,6 +47875,10 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/north)
+"xmj" = (
+/obj/critter/martian/soldier/dead,
+/turf/simulated/floor/plating/damaged3,
+/area/evilreaver/security)
 "xmO" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 4;
@@ -48696,10 +47908,25 @@
 	dir = 4
 	},
 /area/station/medical/medbay)
+"xyJ" = (
+/obj/critter/martian/warrior,
+/turf/simulated/martian/floor,
+/area/evilreaver/security)
 "xzT" = (
 /obj/item/furniture_parts/bench/wooden,
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/inner/central)
+"xDW" = (
+/obj/storage/crate/bloody{
+	welded = 1
+	},
+/obj/item/mine/stun,
+/obj/item/mine/stun,
+/obj/item/mine/stun,
+/obj/item/mine/stun,
+/obj/item/mine/stun,
+/turf/space/fluid,
+/area/space)
 "xED" = (
 /obj/wingrille_spawn/auto,
 /turf/simulated/floor,
@@ -48812,6 +48039,12 @@
 	dir = 1
 	},
 /area/station/hallway/secondary/exit)
+"yiT" = (
+/obj/decal/cleanable/blood/gibs{
+	icon_state = "gib1"
+	},
+/turf/simulated/martian/floor,
+/area/evilreaver/bridge)
 
 (1,1,1) = {"
 cer
@@ -60063,12 +59296,12 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
+mSs
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -60086,12 +59319,12 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
+mSs
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -60364,37 +59597,37 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVq
 aVk
 bnt
 aWm
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
 aqn
-aUv
-aUv
-aUv
-aUv
-aUv
-aUv
-aUv
+ppn
+ppn
+ppn
+ppn
+ppn
+ppn
+ppn
 aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVr
 aVr
 bCi
 aVr
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -60665,39 +59898,39 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVe
 aVi
 aUL
 aUL
 aUL
 aVm
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
-aUv
+ppn
 aUB
 aUC
 bxz
 aUS
 aUX
-aUv
+ppn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVY
 aUL
 aUL
 aUL
 aUL
 aWk
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -60967,7 +60200,7 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVn
 aUL
 aUL
@@ -60976,21 +60209,21 @@ aWg
 aUL
 aUL
 aUL
-aUm
-aUm
+mSs
+mSs
 aUR
-aUm
-aUv
+mSs
+ppn
 aUC
 aUC
 aWi
 aUS
 aUC
-aUv
-aUm
+ppn
+mSs
 aVM
-aUm
-aUm
+mSs
+mSs
 aUW
 aUL
 aUL
@@ -60999,8 +60232,8 @@ aVX
 aUL
 aUL
 aUL
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -61269,7 +60502,7 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVp
 aVS
 aUL
@@ -61302,7 +60535,7 @@ aUL
 aUL
 aVS
 aVR
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -61571,7 +60804,7 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVd
 aVB
 aUL
@@ -61580,21 +60813,21 @@ aUL
 aUL
 aVB
 aVB
-aUm
-aUm
+mSs
+mSs
 aUR
-aUm
-aUv
+mSs
+ppn
 aUC
 aVZ
 aUC
 aVZ
 aUC
-aUv
-aUm
+ppn
+mSs
 aUR
-aUm
-aUm
+mSs
+mSs
 aUL
 aUL
 aUL
@@ -61603,8 +60836,8 @@ aUL
 aUL
 aVU
 aVV
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -61873,39 +61106,39 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aWc
 aWd
 aUK
 aVB
 aVB
 aWb
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
-aUv
+ppn
 aVF
 aUC
 bxy
 aUC
 aWa
-aUv
+ppn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVT
 aUU
 aUL
 aUL
 aUL
 aVW
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -62176,37 +61409,37 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aWe
 aVB
 bnz
 aVB
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
 aqn
-aUv
-aUv
-aUv
+ppn
+ppn
+ppn
 aVH
-aUv
-aUv
-aUv
+ppn
+ppn
+ppn
 aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aUJ
 aUL
 aVS
 aUL
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -62479,12 +61712,12 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
 aVM
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -62492,9 +61725,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -62502,12 +61735,12 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
 aVM
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -62783,9 +62016,9 @@ aqn
 aqn
 aqn
 aqn
-aUZ
+pVe
 aVx
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -62794,9 +62027,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -62806,9 +62039,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -63085,9 +62318,9 @@ aqn
 aqn
 aqn
 aqn
-aUZ
+pVe
 aVy
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -63096,9 +62329,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -63108,9 +62341,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -63389,7 +62622,7 @@ aVD
 aqn
 aqn
 aqn
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -63397,11 +62630,11 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVM
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -63412,7 +62645,7 @@ aqn
 aqn
 aUR
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -63691,7 +62924,7 @@ aqn
 aqn
 aVs
 aqn
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -63699,11 +62932,11 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aUI
 bnu
 aUI
-aUm
+mSs
 aqn
 aqn
 aad
@@ -63714,7 +62947,7 @@ aqn
 aqn
 aUR
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -64001,11 +63234,11 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aUM
 aVB
 aUl
-aUm
+mSs
 aqn
 aqn
 aad
@@ -64016,7 +63249,7 @@ aqn
 aqn
 aUR
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -64303,11 +63536,11 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVO
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aad
@@ -64318,7 +63551,7 @@ aqn
 aqn
 aUR
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -64606,9 +63839,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -64620,7 +63853,7 @@ aqn
 aqn
 aUR
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -64922,7 +64155,7 @@ aqn
 aqn
 aUR
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -65222,9 +64455,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -65524,9 +64757,9 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVB
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -65823,12 +65056,12 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
+mSs
 aVM
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -66124,14 +65357,14 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aVu
 aUL
 aUL
 aUL
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -66426,14 +65659,14 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVK
 aUL
 aUL
 aUY
 aUL
 aVt
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -66728,14 +65961,14 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVL
 aUL
 aVS
 aVP
 aVS
 aVt
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -67030,14 +66263,14 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aUT
 aUL
 aUL
 aVQ
 aUL
 aVt
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -67332,14 +66565,14 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
+mSs
+mSs
 aUL
 aUL
 aUL
 aUL
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -67635,12 +66868,12 @@ aqn
 aqn
 aqn
 aqn
-aUm
-aUm
-aUm
+mSs
+mSs
+mSs
 aUF
-aUm
-aUm
+mSs
+mSs
 aqn
 aqn
 aqn
@@ -67938,10 +67171,10 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aVj
 aVS
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -68542,10 +67775,10 @@ aqn
 aqn
 aqn
 aqn
-aUm
+mSs
 aUR
 aUR
-aUm
+mSs
 aqn
 aqn
 aqn
@@ -77066,7 +76299,7 @@ pJY
 boT
 bql
 boV
-brL
+qbA
 bss
 btc
 bsq
@@ -77344,7 +76577,7 @@ nFR
 aKB
 agY
 aLL
-uij
+uzC
 mip
 bfB
 aPZ
@@ -78171,10 +77404,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
-bnE
+kCq
+kCq
 bDR
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -78473,10 +77706,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
+kCq
 bCx
 bCx
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -78775,10 +78008,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
+kCq
 bDl
 bCx
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -79077,10 +78310,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
-bDx
+kCq
+qGc
 bEC
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -79379,10 +78612,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
+kCq
 bDQ
 bCx
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -79681,10 +78914,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
+kCq
 bCx
 bDV
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -79983,10 +79216,10 @@ aqn
 aqn
 aqn
 aqn
-bnE
-bnE
+kCq
+kCq
 bDR
-bnE
+kCq
 aqn
 aqn
 aqn
@@ -80397,7 +79630,7 @@ buI
 buL
 bvY
 bJw
-bHP
+sOK
 bys
 bzp
 bAv
@@ -80644,14 +79877,14 @@ ate
 auu
 avJ
 awY
-clV
+ncp
 azc
 aAl
 aBo
 aCg
 aCQ
 aBo
-aEH
+vsl
 aFp
 aFV
 aam
@@ -80678,7 +79911,7 @@ aLL
 bhG
 bir
 biC
-bjN
+pXh
 bkP
 blt
 blT
@@ -82233,7 +81466,7 @@ bSu
 bTt
 bUG
 bVE
-bUG
+eCh
 bUp
 bXP
 bXb
@@ -83648,7 +82881,7 @@ aie
 aha
 agY
 ahu
-ahT
+gYJ
 aiD
 ajq
 akg
@@ -85207,7 +84440,7 @@ hlJ
 bhl
 bhT
 biC
-ciU
+kTN
 bka
 aoO
 blA
@@ -85589,7 +84822,7 @@ boe
 boe
 boc
 boc
-bGj
+hfz
 boc
 boc
 boe
@@ -85783,7 +85016,7 @@ azt
 aAC
 aBE
 aar
-aDf
+vCt
 aEc
 aER
 aFw
@@ -86707,7 +85940,7 @@ ckZ
 aDr
 ciZ
 ciZ
-cjI
+lzx
 ciZ
 ciZ
 ciC
@@ -94014,7 +93247,7 @@ vex
 bWH
 gJy
 pij
-vLB
+fRp
 bTR
 bRU
 bLr
@@ -94610,7 +93843,7 @@ adj
 adj
 adl
 bQK
-bwr
+jsJ
 bSP
 bTU
 adh
@@ -94819,9 +94052,9 @@ axA
 afM
 agb
 chD
-acj
-acm
-agN
+sqO
+fjS
+iFw
 ahn
 ahI
 ajJ
@@ -97635,7 +96868,7 @@ bSV
 bTW
 bVi
 bWg
-bWT
+iHB
 aql
 bJR
 bLr
@@ -98155,7 +97388,7 @@ apE
 aoU
 aqT
 atP
-awE
+hdb
 ayM
 ave
 awm
@@ -99658,7 +98891,7 @@ akS
 akS
 asw
 ajb
-ajT
+ett
 alj
 aoh
 aog
@@ -103018,7 +102251,7 @@ cfS
 wFP
 ckK
 aDr
-ciK
+aDr
 aks
 aks
 bgD
@@ -103895,7 +103128,7 @@ arC
 arz
 aek
 azU
-avu
+nnQ
 acc
 arz
 clD
@@ -104982,7 +104215,7 @@ aqn
 aqn
 aqn
 aqn
-ces
+aqn
 cer
 "}
 (187,1,1) = {"
@@ -105284,7 +104517,7 @@ aqn
 aqn
 aqn
 aqn
-aqn
+ces
 cer
 "}
 (188,1,1) = {"
@@ -106190,7 +105423,7 @@ aqn
 aqn
 aqn
 aqn
-ces
+aqn
 cer
 "}
 (191,1,1) = {"
@@ -106492,7 +105725,7 @@ aqn
 aqn
 aqn
 aqn
-aqn
+ces
 cer
 "}
 (192,1,1) = {"
@@ -106634,7 +105867,7 @@ ayO
 beA
 aJH
 aJY
-aKq
+feB
 aKQ
 ayO
 beG
@@ -108156,7 +107389,7 @@ bfe
 akN
 abH
 awc
-aSN
+iGk
 aRi
 bge
 bge
@@ -109627,7 +108860,7 @@ aqn
 aqn
 anx
 anx
-abx
+sNn
 apg
 ape
 ape
@@ -109872,16 +109105,16 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
 aqn
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -110173,17 +109406,17 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
+pVe
+pVe
 aaA
 bOL
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
 bPF
 bPE
 bOo
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -110238,7 +109471,7 @@ aqv
 asX
 auk
 avE
-awS
+eNM
 axT
 ayX
 aAe
@@ -110475,17 +109708,17 @@ aqn
 aqn
 aqn
 aqn
-aUZ
+pVe
 bOo
 bOo
 bPD
 bOo
-bPx
-aUZ
+xfi
+pVe
 bOo
 aaD
 aaG
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -110777,17 +110010,17 @@ aqn
 aqn
 aqn
 aqn
-aUZ
+pVe
 bNJ
 bOo
 bSe
 bPD
 bOZ
-bNY
+jCr
 bOI
 aaE
 bPE
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -111079,17 +110312,17 @@ aqn
 aqn
 aqn
 aqn
-aUZ
+pVe
 bOo
 bPE
 bPD
 bOo
-bPx
-bPc
+xfi
+skB
 bOo
 bPz
 bPF
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -111381,17 +110614,17 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
+pVe
+pVe
 bRL
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
+pVe
+pVe
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -111682,16 +110915,16 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
+pVe
+pVe
 bPD
 bPD
 bOo
-aUZ
-aUZ
+pVe
+pVe
 bQX
 bQP
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -111981,10 +111214,10 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
 bPK
 bPD
 bPE
@@ -111993,11 +111226,11 @@ bPD
 bPE
 bPD
 bPD
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -112585,9 +111818,9 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
 bPE
 bPy
 bPD
@@ -112599,9 +111832,9 @@ bPD
 bPD
 bTp
 bPE
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -113189,10 +112422,10 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
 bPD
 bPD
 bPD
@@ -113201,11 +112434,11 @@ bPD
 bPD
 bPD
 bRp
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -113494,16 +112727,16 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
+pVe
+pVe
 bNw
 bQc
 bQz
-aUZ
+pVe
 bPD
 bPD
-aUZ
-aUZ
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -113797,14 +113030,14 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
+pVe
 bRL
-aUZ
-aUZ
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -114025,7 +113258,7 @@ aqn
 aqn
 aad
 aqn
-bFR
+xDW
 aqn
 aqn
 aqn
@@ -114102,10 +113335,10 @@ aqn
 aqn
 aqn
 aqn
-bRP
+kHD
 bRO
 bPD
-aUZ
+pVe
 aqn
 aqn
 aqn
@@ -114326,7 +113559,7 @@ aqn
 aqn
 aqn
 aad
-bFx
+sAv
 aqn
 aqn
 aqn
@@ -114404,10 +113637,10 @@ aqn
 aqn
 aqn
 aqn
-aUZ
-aUZ
-aUZ
-aUZ
+pVe
+pVe
+pVe
+pVe
 aqn
 aqn
 aqn
@@ -123423,7 +122656,6 @@ aqn
 aqn
 aqn
 aqn
-aUr
 aqn
 aqn
 aqn
@@ -123431,7 +122663,8 @@ aqn
 aqn
 aqn
 aqn
-aUr
+aqn
+aqn
 aqn
 aqn
 aqn
@@ -123724,17 +122957,17 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUo
+aqn
+tcn
+tcn
+tcn
 aWq
 aWq
-aWR
-aUo
-aUo
-aUo
-aXF
+aWq
+tcn
+tcn
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -124026,32 +123259,32 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUH
+aqn
+tcn
+tcn
+dlZ
 aWq
 aWq
 aWq
-aXf
-aUo
-aUo
-aXF
+uan
+tcn
+tcn
 aqn
 aqn
-aUr
+aqn
+aqn
 aqn
 aqn
 aqn
 aUp
 aUp
 aUp
-aUr
-aUr
-aUr
-aUr
-aUr
-aUr
+aqn
+aqn
+aqn
+aqn
+aqn
+aqn
 aqn
 aqn
 aqn
@@ -124328,34 +123561,34 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUN
-aWq
-aWq
-aWq
-aWR
-aUo
-aUo
 aqn
-aUr
+tcn
+tcn
+aWq
+aWq
+aWq
+aWq
+aWq
+tcn
+tcn
 aqn
-aYH
+aqn
+aqn
+iQu
 aYK
 aYK
 aYK
 aYK
 aYK
 bae
-aUo
-aUo
-aUo
-aUo
-aUo
-aUo
+tcn
+tcn
+tcn
+tcn
+tcn
+tcn
 aqn
-aUr
+aqn
 aqn
 aqn
 aqn
@@ -124630,35 +123863,35 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUN
+aqn
+tcn
+tcn
 aWq
 aWq
 aWq
-aXg
-aXx
-aUo
-aUo
-aUo
-aUo
-aYH
-aYH
-aZl
+aWq
+mxt
+sOP
+tcn
+tcn
+tcn
+tcn
+iQu
+iQu
+eYr
 aZu
-aZC
-aYH
+gyR
+iQu
 bae
-bat
-bat
-bat
-bat
-bat
-bat
-aUo
-aUo
-aXF
+kVh
+kVh
+kVh
+kVh
+kVh
+kVh
+tcn
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -124932,34 +124165,34 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aVb
-aWr
-aWD
-aWD
-aXh
-aXx
-aXy
-aXy
-aXy
-aXy
-aYH
-aYH
-aZm
+aqn
+tcn
+tcn
+vjB
+qGt
+aWq
+aWq
+hqk
+sOP
+ldH
+ldH
+ldH
+ldH
+iQu
+iQu
+gew
 aZv
-aZD
-aYH
+aZS
+iQu
 bae
-bau
-bgs
-bhF
-bjq
+oUR
+xdr
+vdc
+nqj
 bky
-bat
-bat
-aUo
+kVh
+kVh
+tcn
 aqn
 aqn
 aqn
@@ -125234,36 +124467,36 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUo
-aUs
+aqn
+tcn
+tcn
+tcn
+koh
 aTJ
-aUo
-aUo
-aXy
-aXy
+tcn
+tcn
+ldH
+ldH
 aXR
-aYj
-aYv
+gnw
+oqm
 aYI
-aZb
+aZn
 aZn
 aZx
 aZE
 aZP
 bae
-bav
+wHs
 bgR
 bia
 bjy
 bkz
 bky
-bat
-bat
-aUo
-aXF
+kVh
+kVh
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -125537,19 +124770,19 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUo
-aWE
-aUo
-aUo
-aXy
+aqn
+tcn
+tcn
+tcn
+aWv
+tcn
+tcn
+ldH
 aaf
 aXS
 aYk
-aYw
-aYH
+eXc
+iQu
 aYK
 aZo
 aZy
@@ -125561,10 +124794,10 @@ bgS
 bib
 bia
 bgR
-bli
-bat
-bat
-aUo
+jKP
+kVh
+kVh
+tcn
 aqn
 aqn
 aqn
@@ -125839,15 +125072,15 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
+aqn
+tcn
+tcn
 aUw
-aWF
-aUo
-aUo
-aXy
-aXJ
+aWv
+tcn
+tcn
+ldH
+hYS
 aXT
 aYl
 aYx
@@ -125858,16 +125091,16 @@ aZn
 aZn
 aZQ
 bae
-bax
+dNe
 bgU
 bic
 bib
 bgS
-blk
-bat
-bat
-aUo
-aUo
+ojI
+kVh
+kVh
+tcn
+tcn
 aqn
 aqn
 aqn
@@ -126141,14 +125374,14 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aWs
-aWG
-aUo
-aUo
-aUo
+aqn
+tcn
+tcn
+ugG
+aWv
+tcn
+tcn
+tcn
 aag
 aXU
 aYm
@@ -126157,19 +125390,19 @@ aYK
 aYK
 aZp
 aZz
-aZG
-aYH
+dsL
+iQu
 bae
 bae
 bae
 bie
 bae
-bkA
+klc
 bae
 bae
-bat
-bat
-aUo
+kVh
+kVh
+tcn
 aqn
 aqn
 aqn
@@ -126442,17 +125675,17 @@ aqn
 aqn
 aqn
 aqn
-aUq
-aUo
-aUo
-aUo
+aqn
+tcn
+tcn
+tcn
 aWt
-aUo
-aUo
-aUo
+tcn
+tcn
+tcn
 aUt
-aXL
-aXV
+tCu
+aYm
 aYo
 aYy
 aYK
@@ -126460,7 +125693,7 @@ aYK
 aZq
 aZo
 aZH
-aZR
+piG
 aYK
 aYK
 aZB
@@ -126470,8 +125703,8 @@ bkB
 bln
 aZB
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -126745,15 +125978,15 @@ aqn
 aqn
 aqn
 aqn
-aUo
-aUo
+tcn
+tcn
 aUw
-aWu
+aWv
 aWH
-aUs
-aUo
+koh
+tcn
 aUt
-aXM
+uId
 aXW
 aXT
 aXT
@@ -126763,17 +125996,17 @@ aYK
 aZA
 aZx
 aZx
-baf
-aYH
-aZM
-bgY
+sIA
+iQu
+pXx
+dkN
 bgV
 bgW
 blC
 bma
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -127046,36 +126279,36 @@ aqn
 aqn
 aqn
 aqn
-aUo
-aUo
+tcn
+tcn
 aUw
 aVc
 aWv
 aWv
-aWS
-aXi
+fLh
+cEP
 aUt
 aXN
-aXX
+aZd
 aXT
 aYz
 aYM
 aZc
 aYK
-aYH
-aZI
+iQu
+sAX
 aZS
-bag
-aYH
-aZM
-big
+gab
+iQu
+pXx
+tzP
 bgW
 bgW
 bak
 bmn
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -127347,18 +126580,18 @@ aqn
 aqn
 aqn
 aqn
-aUo
-aUo
-aUo
-aUx
+tcn
+tcn
+tcn
+ePO
 aVf
 aVf
 aVf
 aVf
 aVf
-aXq
+cYs
 aXN
-aXy
+ldH
 aYp
 aXT
 aYN
@@ -127368,16 +126601,16 @@ aYK
 aYK
 aZT
 aYK
-aYH
-aZM
-bih
+iQu
+pXx
+bjA
 bjA
 bjA
 blK
 bmo
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -127649,10 +126882,10 @@ aqn
 aqn
 aqn
 aqn
-aUo
-aUo
-aUs
-aUy
+tcn
+tcn
+koh
+oFb
 aVg
 aWw
 aWw
@@ -127660,26 +126893,26 @@ aWT
 aWv
 aXr
 aXN
-aXy
-aXy
-aYA
+ldH
+ldH
+nzy
 aYO
 aZd
 aYy
 aZB
 aZJ
 aZU
-bai
-aZM
-aZM
+vye
+pXx
+pXx
 baA
 bgW
 bgW
 bjB
 bmJ
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -127951,10 +127184,10 @@ aqn
 aqn
 aqn
 aqn
-aUo
-aUo
-aUo
-aUz
+tcn
+tcn
+tcn
+nHd
 aVh
 aWx
 aWv
@@ -127962,17 +127195,17 @@ aWv
 aWv
 aXs
 aXN
-aXY
-aXy
-aYB
+aLU
+ldH
+aXT
 aYP
 aXT
 aYy
 aZB
 aZK
 aZV
-baj
-aZM
+inS
+pXx
 bgV
 bgW
 bgW
@@ -127980,8 +127213,8 @@ bgW
 blU
 bmK
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -128254,27 +127487,27 @@ aqn
 aqn
 aqn
 aqn
-aUo
+tcn
 aUt
 aUA
-aVv
-aWy
+dMn
+waZ
 aWI
 aWv
 aWv
 aWA
 aXO
-aXZ
-aXy
+aYm
+ldH
 aYp
 aYM
 aXT
 aZr
 aZB
-aZL
+pEP
 aZV
 bak
-bay
+vdP
 bgW
 bgW
 bjB
@@ -128282,8 +127515,8 @@ aZV
 aZV
 bnp
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -128559,22 +127792,22 @@ aqn
 aqn
 aUt
 aUt
-aUo
-aUs
+tcn
+koh
 aWJ
 aWv
-aXj
+teZ
 aXt
 aXN
 aYb
-aXy
-aXy
-aYR
-aXZ
-aXy
+ldH
+ldH
+aYM
+aYm
+ldH
 aZB
-aZM
-aZW
+pXx
+xmj
 bak
 baA
 bgW
@@ -128584,8 +127817,8 @@ bkC
 aZB
 aZB
 aZB
-aZM
-aUo
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -128861,33 +128094,33 @@ aqn
 aqn
 aUt
 aUt
-aUo
-aUo
-aUo
-aWU
-aUo
+tcn
+tcn
+tcn
+aWv
+tcn
 aUt
 aXN
-aXy
-aXy
-aXy
-aYS
-aXZ
-aXy
+ldH
+ldH
+ldH
+aYM
+aYm
+ldH
 aZB
-aZM
-aZX
+pXx
+rYy
 bak
 bak
-bgX
-bij
-bjC
+opM
+aZV
+xyJ
 baC
 aZB
-aZM
-aZM
-aZM
-aUo
+pXx
+pXx
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -129170,25 +128403,25 @@ aWV
 aXk
 aUt
 aUG
-aXy
-aXy
-aXy
+ldH
+ldH
+ldH
 aag
-aZe
-aXy
+aYo
+ldH
 aZB
-aZM
+pXx
 aZY
 bal
 baC
-bgY
-aZM
+dkN
+pXx
 bjD
-aZM
+pXx
 aZB
-aZM
-aZM
-aUo
+pXx
+pXx
+tcn
 aqn
 aqn
 aqn
@@ -129472,24 +128705,24 @@ aWZ
 aXo
 aWz
 aUG
-aYc
-aYc
-aYc
-aYT
+tTr
+tTr
+tTr
+sLC
 aZf
-aYc
+tTr
 aZt
 aZN
 aZN
 bam
 aZN
 aZN
-aZO
-bjE
-aZO
+qwc
+ban
+qwc
 aZN
-aZO
-aUo
+qwc
+tcn
 aqn
 aqn
 aqn
@@ -129774,25 +129007,25 @@ aXa
 aXp
 aXz
 aUG
-aYd
+dJc
 aYq
 aYC
 aYV
-aZg
-aYc
+unB
+tTr
 aZt
-aZO
+qwc
 aZZ
 ban
 baE
-bhe
-aZO
+grF
+qwc
 bjJ
-aZO
+qwc
 aZN
-aZO
-aUo
-aXF
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -130083,18 +129316,18 @@ aYW
 aZh
 aZs
 aZt
-aZO
-baa
+qwc
+wZB
 bao
 bej
-bhf
-biM
-bjM
-bkD
+biW
+yiT
+bht
+dfN
 aZN
-aZO
-aUo
-aXF
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -130385,18 +129618,18 @@ aYY
 aZi
 aZs
 aZt
-aZO
-bab
+qwc
 bap
-bfv
+bap
+psk
 bhg
 biN
 bkc
 bkE
 aZN
-aZO
-aUo
-aXF
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -130687,18 +129920,18 @@ aYZ
 aZj
 aZs
 aZt
-aZO
-bac
-baq
-aZO
-bhq
+qwc
+vkg
+ddw
+qwc
+gRv
 biW
 bht
 bkJ
 aZN
-aZO
-aUo
-aXF
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -130983,24 +130216,24 @@ aXv
 aXG
 aVI
 aYh
-aYu
-aYG
-aZa
+wQb
+mvv
+noN
 aZk
 aZt
 aZt
-aZO
-bad
+qwc
+iQX
 bar
-bgc
+hAH
 bht
 biX
 bki
 blb
 aZN
-aZO
-aUo
-aXF
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -131285,10 +130518,10 @@ aXw
 aXH
 aUG
 aal
-aYc
-aYc
-aYc
-aYc
+tTr
+tTr
+tTr
+tTr
 aZt
 aZt
 aZN
@@ -131300,9 +130533,9 @@ aZN
 bkq
 aZN
 aZN
-aZO
-aUo
-aXF
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -131585,26 +130818,26 @@ aVI
 aUG
 aUG
 aUG
-aXQ
-aYc
-aUo
-aUo
-aUo
-aUo
-aUo
-aUo
-aZO
-aZO
+sSK
+tTr
+tcn
+tcn
+tcn
+tcn
+tcn
+tcn
+qwc
+qwc
 bas
 bgm
 bhE
-aZO
-aZO
-aZO
-aZO
-aZO
-aUo
-aXF
+qwc
+qwc
+qwc
+qwc
+qwc
+tcn
+aqn
 aqn
 aqn
 aqn
@@ -131883,28 +131116,28 @@ aUp
 aUp
 aUp
 aqn
-aUo
-aUo
-aUo
-aUo
-aUo
-aUo
+tcn
+tcn
+tcn
+tcn
+tcn
+tcn
 aqn
-aWQ
-aWQ
-aWQ
-aWQ
 aqn
-aUo
-aUo
-aUo
-aZw
-aUo
-aUo
-aUo
-aUo
-aUo
-aUo
+aqn
+aqn
+aqn
+aqn
+tcn
+tcn
+tcn
+oaa
+tcn
+tcn
+tcn
+tcn
+tcn
+tcn
 aqn
 aqn
 aqn
@@ -131947,10 +131180,10 @@ aqn
 aqn
 agn
 aCV
-bbv
+mer
 bcd
 aeM
-ase
+wWA
 avk
 bdi
 aQb
@@ -132185,12 +131418,6 @@ aqn
 aqn
 aqn
 aqn
-aWQ
-aWQ
-aWQ
-aWQ
-aWQ
-aWQ
 aqn
 aqn
 aqn
@@ -132198,14 +131425,20 @@ aqn
 aqn
 aqn
 aqn
-aUo
-aUo
-aUo
-aUo
-aUo
 aqn
 aqn
-aUo
+aqn
+aqn
+aqn
+aqn
+tcn
+tcn
+tcn
+tcn
+tcn
+aqn
+aqn
+tcn
 aqn
 aqn
 aqn
@@ -132554,7 +131787,7 @@ aGs
 bbx
 afw
 agt
-asg
+wdM
 awB
 bel
 aRO
@@ -133155,7 +132388,7 @@ aqn
 aqn
 aus
 aRf
-bby
+jHu
 bce
 amM
 asm

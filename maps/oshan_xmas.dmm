@@ -5972,18 +5972,6 @@
 	},
 /turf/simulated/floor/carpet,
 /area/station/chapel/sanctuary)
-"amT" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine/vacuum{
-	icon_state = "engine_caution_east"
-	},
-/area/research_outpost/toxins)
 "amU" = (
 /turf/simulated/floor/carpet{
 	dir = 8;
@@ -9542,20 +9530,6 @@
 "ave" = (
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/station/medical/medbay/lobby)
-"avf" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 4;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine/vacuum{
-	icon_state = "engine_caution_east"
-	},
-/area/research_outpost/toxins)
 "avg" = (
 /obj/machinery/vending/medical_public,
 /obj/disposalpipe/segment/mail,
@@ -21477,14 +21451,6 @@
 	},
 /turf/simulated/floor/plating/scorched,
 /area/evilreaver/genetics)
-"aXq" = (
-/obj/item/old_grenade/banana,
-/obj/item/bananapeel,
-/obj/item/old_grenade/banana,
-/obj/storage/cart/trash,
-/obj/lattice,
-/turf/simulated/martian/floor,
-/area/space)
 "aXr" = (
 /obj/decal/fakeobjects/teleport_pad,
 /obj/map/light/dimred,
@@ -28313,18 +28279,6 @@
 "bok" = (
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/station/engine/power)
-"bol" = (
-/obj/storage/crate{
-	desc = "A small, cuboid object with a hinged top and empty interior. It smells kinda bad and seems to have an odd stain on it.";
-	icon = 'icons/misc/halloween.dmi';
-	name = "Dented Crate"
-	},
-/obj/machinery/light/incandescent/cool/very,
-/obj/machinery/atmospherics/pipe/simple/junction{
-	dir = 1
-	},
-/turf/simulated/floor/specialroom/freezer,
-/area/station/crew_quarters/catering)
 "bom" = (
 /turf/simulated/wall/asteroid{
 	dir = 9
@@ -29875,16 +29829,6 @@
 /obj/machinery/firealarm{
 	pixel_y = 24;
 	text = "NF"
-	},
-/turf/simulated/floor/black,
-/area/station/crew_quarters/observatory)
-"brL" = (
-/obj/machinery/espresso_machine{
-	pixel_y = 4
-	},
-/obj/table/reinforced/bar/auto,
-/obj/cup_rack{
-	pixel_y = 32
 	},
 /turf/simulated/floor/black,
 /area/station/crew_quarters/observatory)
@@ -31740,30 +31684,6 @@
 	icon_state = "fgreen2"
 	},
 /area/station/bridge/hos)
-"bwr" = (
-/obj/table/reinforced/auto,
-/obj/item/chem_grenade/flashbang{
-	pixel_x = -7;
-	pixel_y = 6
-	},
-/obj/item/device/detective_scanner{
-	pixel_x = -6
-	},
-/obj/item/device/detective_scanner{
-	pixel_x = -3
-	},
-/obj/disposalpipe/junction/right/west,
-/obj/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/phone{
-	pixel_x = 9;
-	pixel_y = -3
-	},
-/turf/simulated/floor/red,
-/area/station/security/main)
 "bws" = (
 /obj/storage/secure/closet/command/hop,
 /obj/machinery/firealarm{
@@ -46678,9 +46598,6 @@
 	},
 /turf/simulated/floor,
 /area/station/crew_quarters/radio/lab)
-"ciK" = (
-/turf/simulated/floor/plating/random,
-/area/station/storage/eeva)
 "ciL" = (
 /obj/cable/reinforced{
 	icon_state = "1-2-thick"
@@ -46723,22 +46640,6 @@
 /obj/item/clothing/head/paper_hat,
 /turf/simulated/floor/grime,
 /area/station/maintenance/inner/central)
-"ciU" = (
-/obj/shrub{
-	dir = 4;
-	icon = 'icons/obj/stationobjs.dmi';
-	icon_state = "plant"
-	},
-/obj/decal/tile_edge/line/black{
-	dir = 10;
-	icon_state = "line1"
-	},
-/obj/machinery/light/incandescent/warm,
-/obj/item/old_grenade/banana,
-/turf/simulated/floor/darkblue{
-	dir = 10
-	},
-/area/station/crew_quarters/bar)
 "ciV" = (
 /obj/machinery/light/incandescent/blueish,
 /obj/table/round/auto,
@@ -47939,6 +47840,34 @@
 /obj/decal/garland,
 /turf/simulated/floor,
 /area/station/hangar/sec)
+"cVr" = (
+/obj/table/reinforced/auto,
+/obj/item/chem_grenade/flashbang{
+	pixel_x = -7;
+	pixel_y = 6
+	},
+/obj/item/device/detective_scanner{
+	pixel_x = -6
+	},
+/obj/item/hand_labeler{
+	pixel_x = 8;
+	pixel_y = 10
+	},
+/obj/item/device/detective_scanner{
+	pixel_x = -3
+	},
+/obj/disposalpipe/junction/right/west,
+/obj/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/phone{
+	pixel_x = 9;
+	pixel_y = -3
+	},
+/turf/simulated/floor/red,
+/area/station/security/main)
 "cXB" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 4
@@ -48141,6 +48070,16 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/research_outpost)
+"gdQ" = (
+/obj/machinery/espresso_machine{
+	pixel_y = 4
+	},
+/obj/table/reinforced/bar/auto,
+/obj/drink_rack/cup{
+	pixel_y = 32
+	},
+/turf/simulated/floor/black,
+/area/station/crew_quarters/observatory)
 "ghV" = (
 /obj/cable{
 	icon_state = "1-4"
@@ -48216,6 +48155,22 @@
 /obj/item/paper/book/from_file/ggcsftm,
 /turf/simulated/floor/black,
 /area/station/engine/inner)
+"gZe" = (
+/obj/shrub{
+	dir = 4;
+	icon = 'icons/obj/stationobjs.dmi';
+	icon_state = "plant"
+	},
+/obj/decal/tile_edge/line/black{
+	dir = 10;
+	icon_state = "line1"
+	},
+/obj/machinery/light/incandescent/warm,
+/obj/item/old_grenade/spawner/banana,
+/turf/simulated/floor/darkblue{
+	dir = 10
+	},
+/area/station/crew_quarters/bar)
 "hat" = (
 /obj/machinery/camera{
 	c_tag = "autotag";
@@ -48282,6 +48237,18 @@
 /obj/item/paper/book/from_file/medical_surgery_guide,
 /turf/simulated/floor/black,
 /area/station/medical/robotics)
+"hCQ" = (
+/obj/storage/crate{
+	desc = "A big metal box that you can put things into. It smells kinda bad and seems to have an odd stain on it.";
+	icon = 'icons/misc/halloween.dmi';
+	name = "Dented Crate"
+	},
+/obj/machinery/light/incandescent/cool/very,
+/obj/machinery/atmospherics/pipe/simple/junction{
+	dir = 1
+	},
+/turf/simulated/floor/specialroom/freezer,
+/area/station/crew_quarters/catering)
 "hFR" = (
 /obj/railing/orange/reinforced,
 /obj/railing/orange/reinforced{
@@ -48602,6 +48569,20 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/northwest)
+"mgU" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "engine_caution_east"
+	},
+/area/research_outpost/toxins)
 "mnx" = (
 /obj/disposalpipe/segment,
 /obj/cable{
@@ -49087,6 +49068,14 @@
 	},
 /turf/simulated/floor,
 /area/station/mining/staff_room)
+"uZT" = (
+/obj/item/old_grenade/spawner/banana,
+/obj/item/bananapeel,
+/obj/item/old_grenade/spawner/banana,
+/obj/storage/cart/trash,
+/obj/lattice,
+/turf/simulated/martian/floor,
+/area/space)
 "vcb" = (
 /obj/cable{
 	icon_state = "2-8"
@@ -49110,6 +49099,18 @@
 	},
 /turf/simulated/floor/plating/random,
 /area/station/maintenance/west)
+"vkV" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "engine_caution_east"
+	},
+/area/research_outpost/toxins)
 "voz" = (
 /obj/wingrille_spawn/auto/crystal,
 /obj/decal/wreath,
@@ -77025,7 +77026,7 @@ blo
 bil
 bmT
 bnD
-bol
+hCQ
 bpw
 bik
 aDm
@@ -77640,7 +77641,7 @@ uUM
 boT
 bql
 boV
-brL
+gdQ
 bss
 btc
 bsq
@@ -85781,7 +85782,7 @@ bgB
 bhl
 bhT
 biC
-ciU
+gZe
 bka
 aoO
 blA
@@ -94882,7 +94883,7 @@ adj
 adj
 adl
 bQK
-bwr
+cVr
 bSP
 bTU
 adh
@@ -103290,7 +103291,7 @@ cfS
 cfS
 ckK
 aDr
-ciK
+aDr
 aks
 aks
 bgD
@@ -127930,7 +127931,7 @@ aVf
 aVf
 aVf
 aVf
-aXq
+uZT
 aXN
 aXy
 aYp
@@ -135254,7 +135255,7 @@ aqn
 aqn
 agn
 aqx
-amT
+vkV
 auN
 afm
 aGs
@@ -136462,7 +136463,7 @@ aqn
 aqn
 asg
 afy
-avf
+mgU
 azj
 bbG
 bbO

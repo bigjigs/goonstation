@@ -115,6 +115,7 @@ INIT_TYPE(/obj/martianBiotech/biomassPool)
     victims += M
 
 /obj/martianBiotech/biomassPool/on_reagent_change()
+  ..()
   for(var/reagentId in src.reagents.reagent_list)
     if(reagentId in src.biomassPoolReagents)
       var/datum/reagent/R = src.reagents.reagent_list[reagentId]

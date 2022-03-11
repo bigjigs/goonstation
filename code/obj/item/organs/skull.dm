@@ -23,7 +23,7 @@
 
 	INIT(loc, datum/organHolder/nholder)
 		..()
-		SPAWN_DBG(0)
+		SPAWN(0)
 			if (istype(nholder) && nholder.donor)
 				src.holder = nholder
 				src.donor = nholder.donor

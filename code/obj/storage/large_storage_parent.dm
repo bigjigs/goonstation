@@ -19,6 +19,7 @@
 	throwforce = 10
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 	p_class = 2.5
+	layer = STORAGE_LAYER
 	var/intact_frame = 1 //Variable to create crates and fridges which cannot be closed anymore.
 	var/secure = 0
 	var/personal = 0
@@ -48,7 +49,6 @@
 	var/open_fail_prob = 50
 	var/crunches_contents = 0 // for the syndicate trashcart & hotdog stand
 	var/crunches_deliciously = 0 // :I
-	//var/mob/living/carbon/to_crunch = null
 	var/owner_ckey = null // owner of the crunchy cart, so they don't get crunched
 	var/opening_anim = null
 	var/closing_anim = null
@@ -64,7 +64,7 @@
 		weld_image = image(src.icon, src.icon_welded)
 		weld_image.pixel_x = weld_image_offset_X
 		weld_image.pixel_y = weld_image_offset_Y
-		SPAWN_DBG(1 DECI SECOND)
+		SPAWN(1 DECI SECOND)
 			src.UpdateIcon()
 
 			if (!src.open && grab_stuff_on_spawn)		// if closed, any item at src's loc is put in the contents
@@ -89,6 +89,11 @@
 				amt = abs(spawn_contents[thing])
 			do new thing(src)	//Two lines! I TOLD YOU I COULD DO IT!!!
 			while (--amt > 0)
+
+	Entered(atom/movable/Obj, OldLoc)
+		. = ..()
+		if(src.open || length(contents) >= src.max_capacity)
+			Obj.set_loc(get_turf(src))
 
 	update_icon()
 
@@ -142,7 +147,7 @@
 					sleep(0.1 SECONDS)
 				src.pixel_x = 0
 				src.pixel_y = 0
-				SPAWN_DBG(0.5 SECONDS)
+				SPAWN(0.5 SECONDS)
 					src.jiggled = 0
 
 			if (prob(10) && src.can_flip_bust)
@@ -174,17 +179,20 @@
 			return src.Attackby(null, user)
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/cargotele))
-			var/obj/item/cargotele/CT = W
-			CT.cargoteleport(src, user)
-			return
-
-		else if (istype(W, /obj/item/satchel/))
+		if (istype(W, /obj/item/satchel/))
+			if(secure && locked)
+				user.show_text("Access Denied", "red")
+				return
+			if (count_turf_items() >= max_capacity || length(contents) >= max_capacity)
+				user.show_text("[src] cannot fit any more items!", "red")
+				return
 			var/amt = length(W.contents)
 			if (amt)
 				user.visible_message("<span class='notice'>[user] dumps out [W]'s contents into [src]!</span>")
 				var/amtload = 0
 				for (var/obj/item/I in W.contents)
+					if(length(contents) >= max_capacity)
+						break
 					if (open)
 						I.set_loc(src.loc)
 					else
@@ -222,13 +230,13 @@
 				return
 
 		else if (!src.open && isweldingtool(W))
-			if(!W:try_weld(user, 1, burn_eyes = 1))
+			if(!W:try_weld(user, 1, burn_eyes = TRUE))
 				return
 			if (!src.welded)
-				src.weld(1, W, user)
+				src.weld(1, user)
 				src.visible_message("<span class='alert'>[user] welds [src] closed with [W].</span>")
 			else
-				src.weld(0, W, user)
+				src.weld(0, user)
 				src.visible_message("<span class='alert'>[user] unwelds [src] with [W].</span>")
 			return
 
@@ -279,6 +287,7 @@
 		var/turf/orig_turf = get_turf(thing)
 		if (orig_turf == dest_turf) return TRUE
 		var/no_go
+
 		//Mostly copy pasted from turf/Enter. Sucks, but we need an object rather than a boolean
 		//First, check for directional blockers on the entering object's tile
 		if (orig_turf.checkingexit > 0)
@@ -303,6 +312,7 @@
 				if(A != src && !A.Cross(L))
 					no_go = A
 					break
+
 		if(no_go)
 			if (istype(L))
 				L.show_text("You bump into \the [no_go] as you try to scoot over \the [src].", "red")
@@ -360,7 +370,7 @@
 		if (!src.open)
 			src.open()
 
-		if (T.contents.len >= src.max_capacity)
+		if (count_turf_items() >= max_capacity)
 			user.show_text("[src] is too full!", "red")
 			return
 
@@ -378,7 +388,7 @@
 			O.set_loc(get_turf(O))
 			storage.hud.remove_item(O)
 
-		SPAWN_DBG(0.5 SECONDS)
+		SPAWN(0.5 SECONDS)
 			var/stuffed = FALSE
 			var/list/draggable_types = list(
 				/obj/item/plant = "produce",
@@ -413,10 +423,10 @@
 						break
 					if (user.loc != staystill)
 						break
-					if (T.contents.len >= src.max_capacity)
+					if (length(T.contents) >= max_capacity)
 						break
 				user.show_text("You finish stuffing [type_name] into [src]!", "blue")
-				SPAWN_DBG(0.5 SECONDS)
+				SPAWN(0.5 SECONDS)
 					if (src.open)
 						src.close()
 			if(!stuffed)
@@ -425,7 +435,7 @@
 					if (user != O)
 						user.visible_message("<span class='alert'>[user] stuffs [O] into [src]!</span>",\
 						"<span class='alert'>You stuff [O] into [src]!</span>")
-					SPAWN_DBG(0.5 SECONDS)
+					SPAWN(0.5 SECONDS)
 						if (src.open)
 							src.close()
 		return ..()
@@ -582,11 +592,19 @@
 		if (src.welded || src.locked)
 			return 0
 
+	proc/count_turf_items()
+		var/turf/T = get_turf(src)
+		var/crate_contents = length(T.contents)
+		for(var/obj/O in T.contents)
+			if(!isitem(O) || O == src || O.anchored)
+				crate_contents--
+		return crate_contents
+
 	proc/can_close()
 		. = TRUE
 		var/turf/T = get_turf(src)
 		if (!T) return 0
-		if (T.contents.len > src.max_capacity)
+		if (count_turf_items() > max_capacity)
 			return 0
 		for (var/obj/storage/S in T)
 			if (S != src)
@@ -630,12 +648,12 @@
 		if (src.health <= 0)
 			src.visible_message("<span class='alert'>[src] breaks apart!</span>")
 			src.dump_contents()
-			SPAWN_DBG(1 DECI SECOND)
+			SPAWN(1 DECI SECOND)
 				var/newloc = get_turf(src)
 				make_cleanable( /obj/decal/cleanable/machine_debris,newloc)
 				qdel(src)
 
-	proc/weld(var/shut = 0, var/obj/item/weldingtool/W as obj, var/mob/weldman as mob)
+	proc/weld(var/shut = 0, var/mob/weldman as mob)
 		if (shut)
 			weldman.visible_message("<span class='alert'>[weldman] welds [src] shut.</span>")
 			src.welded = 1
@@ -645,7 +663,6 @@
 		src.UpdateIcon()
 		for (var/mob/M in src.contents)
 			src.log_me(weldman, M, src.welded ? "welds" : "unwelds")
-		return
 
 	proc/crunch(var/mob/M as mob)
 		if (!M || istype(M, /mob/living/carbon/wall))
@@ -653,35 +670,27 @@
 
 		if (M.ckey && (M.ckey == owner_ckey))
 			return
-		else
-			M.show_text("Is it getting... smaller in here?", "red")
-			SPAWN_DBG(5 SECONDS)
+		src.locked = TRUE
+		M.show_text("Is it getting... smaller in here?", "red")
+		SPAWN(5 SECONDS)
+			if (M in src.contents)
+				playsound(src.loc, 'sound/impact_sounds/Slimy_Splat_1.ogg', 75, 1)
+				M.show_text("<b>OH JESUS CHRIST</b>", "red")
+				bleed(M, 500, 5)
+				src.log_me(usr && ismob(usr) ? usr : null, M, "uses trash compactor")
+				var/mob/living/carbon/cube/meat/meatcube = M.make_cube(/mob/living/carbon/cube/meat, rand(10,15), get_turf(src))
+				if (src.crunches_deliciously)
+					meatcube.name = "hotdog"
+					var/obj/item/reagent_containers/food/snacks/hotdog/syndicate/snoopdog = new /obj/item/reagent_containers/food/snacks/hotdog/syndicate(src)
+					snoopdog.victim = meatcube
 
-				var/found = 0
-				for (var/mob/contained_mob in src.contents)
-					if (M == contained_mob)
-						found = 1
+				for (var/obj/item/I in M)
+					if (istype(I, /obj/item/implant))
+						I.set_loc(meatcube)
 
-				if (found)
-					playsound(src.loc, 'sound/impact_sounds/Slimy_Splat_1.ogg', 75, 1)
-					M.show_text("<b>OH JESUS CHRIST</b>", "red")
-					bleed(M, 500, 5)
-					src.log_me(usr && ismob(usr) ? usr : null, M, "uses trash compactor")
-					var/mob/living/carbon/cube/meat/W = M.make_cube(/mob/living/carbon/cube/meat, rand(10,15), get_turf(src))
-					if (src.crunches_deliciously)
-						W.name = "hotdog"
-						var/obj/item/reagent_containers/food/snacks/hotdog/syndicate/snoopdog = new /obj/item/reagent_containers/food/snacks/hotdog/syndicate(src)
-						snoopdog.victim = W
+					I.set_loc(src)
 
-					for (var/obj/item/I in M)
-						if (istype(I, /obj/item/implant))
-							I.set_loc(W)
-							continue
-
-						I.set_loc(src)
-
-					src.locked = 0
-					src.open()
+			src.locked = FALSE
 
 	// Added (Convair880).
 	proc/log_me(var/mob/user, var/mob/occupant, var/action = "")
@@ -885,7 +894,7 @@
 						reply.data["data"] = "badpass"
 				else
 					return //COMMAND NOT RECOGNIZED
-			SPAWN_DBG(0.5 SECONDS)
+			SPAWN(0.5 SECONDS)
 				SEND_SIGNAL(src, COMSIG_MOVABLE_POST_RADIO_PACKET, reply, 2)
 
 		else if (signal.data["address_1"] == "ping")
@@ -895,7 +904,7 @@
 			reply.data["command"] = "ping_reply"
 			reply.data["device"] = "WNET_SECLOCKER"
 			reply.data["netid"] = src.net_id
-			SPAWN_DBG(0.5 SECONDS)
+			SPAWN(0.5 SECONDS)
 				SEND_SIGNAL(src, COMSIG_MOVABLE_POST_RADIO_PACKET, reply, 2)
 
 	emag_act(var/mob/user, var/obj/item/card/emag/E)

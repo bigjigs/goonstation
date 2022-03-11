@@ -329,7 +329,7 @@
 		internal_sound(src.loc, 'sound/machines/boost.ogg', 100, 1, -1)
 		src.speed_mod -= 2
 		src.ramming += 8
-		SPAWN_DBG(10 SECONDS)
+		SPAWN(10 SECONDS)
 			src.speed_mod += 2
 			src.removePowerUse("rammingMode")
 			src.ramming = max(src.ramming - 8, 0)
@@ -341,7 +341,7 @@
 		src.addPowerUse("weaponOverload", 90, -1)
 		internal_sound(src.loc, 'sound/machines/weaponoverload.ogg', 80, 1, -1)
 		src.weapon_cooldown_mod -= 3
-		SPAWN_DBG(10 SECONDS)
+		SPAWN(10 SECONDS)
 			src.weapon_cooldown_mod += 3
 			src.removePowerUse("weaponOverload")
 		return
@@ -354,7 +354,7 @@
 		I.alpha = 150
 		shield_obj.overlays += I
 		internal_sound(src.loc, 'sound/machines/shieldoverload.ogg', 80, 0, -1)
-		SPAWN_DBG(15 SECONDS)
+		SPAWN(15 SECONDS)
 			src.removePowerUse("shieldOverload")
 			src.shield_regen_always -= 1
 			src.shield_regen_boost -= 5
@@ -663,7 +663,7 @@
 				S.setValues(percent_health, percent_shields, percent_power)
 		return
 
-	proc/recieveMovement(var/direction)
+	proc/receiveMovement(var/direction)
 		if(!hasPower() || !(direction == NORTH || direction == EAST || direction == SOUTH || direction == WEST))
 			return
 
@@ -941,7 +941,7 @@
 
 	proc/reboot() //Called when the device is rebooted / in override mode.
 		rebooting = 1
-		SPAWN_DBG(1 SECOND) rebooting = 0
+		SPAWN(1 SECOND) rebooting = 0
 		return "Reboot complete"
 
 	proc/adjustHealth(var/amount)
@@ -1045,7 +1045,7 @@
 				boutput(user, "<span class='alert'>Something is preventing the [src] from opening.</span>")
 		else
 			ready = 0
-			SPAWN_DBG(1 SECOND) ready = 1
+			SPAWN(1 SECOND) ready = 1
 			playsound(src.loc, 'sound/machines/hydraulic.ogg', 50, 0, -1)
 			open = 1
 			setIcon()
@@ -1059,7 +1059,7 @@
 			boutput(user, "<span class='alert'>This device is currently disabled.</span>")
 			return
 		ready = 0
-		SPAWN_DBG(1 SECOND) ready = 1
+		SPAWN(1 SECOND) ready = 1
 		playsound(src.loc, 'sound/machines/weapons-deploy.ogg', 60, 0, -1)
 		open = 0
 		setIcon()
@@ -1371,7 +1371,7 @@
 	relaymove(mob/user, direction)
 		var/obj/machinery/cruiser/C = interior.ship
 		if (C)
-			C.recieveMovement(direction)
+			C.receiveMovement(direction)
 		return
 
 /obj/machinery/cruiser_destroyable/cruiser_pod/security

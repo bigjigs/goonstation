@@ -3,7 +3,7 @@
 
 INIT_TYPE(/obj/machinery/filter_control)
 	..()
-	SPAWN_DBG(0.5 SECONDS)	//wait for world
+	SPAWN(0.5 SECONDS)	//wait for world
 		for(var/obj/machinery/inlet/filter/F as anything in machine_registry[MACHINES_INLETS])
 			if(F.control == src.control)
 				F.f_mask = src.f_mask
@@ -154,6 +154,6 @@ INIT_TYPE(/obj/machinery/filter_control)
 		status &= ~NOPOWER
 	else
 		status |= NOPOWER
-	SPAWN_DBG(rand(1,15))
+	SPAWN(rand(1,15))
 		src.UpdateIcon()
 	return

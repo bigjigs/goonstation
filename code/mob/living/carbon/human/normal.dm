@@ -1,238 +1,214 @@
 /mob/living/carbon/human/normal
-	INIT()
-		..()
-		SPAWN_DBG(0)
-			randomize_look(src, 1, 1, 1, 1, 1, 1, src)
-			src.gender = src.bioHolder?.mobAppearance?.gender
-			src.update_colorful_parts()
-
-		SPAWN_DBG(1 SECOND)
-			set_clothing_icon_dirty()
+	initializeBioholder()
+		. = ..()
+		randomize_look(src, 1, 1, 1, 1, 1, 1, src)
+		src.gender = src.bioHolder?.mobAppearance?.gender
+		src.update_colorful_parts()
+		set_clothing_icon_dirty()
 
 /mob/living/carbon/human/normal/assistant
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Staff Assistant")
+		JobEquipSpawned("Staff Assistant")
 
 /mob/living/carbon/human/normal/syndicate
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Syndicate")
+		JobEquipSpawned("Syndicate")
 
 /mob/living/carbon/human/normal/captain
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Captain")
+		JobEquipSpawned("Captain")
 
 /mob/living/carbon/human/normal/headofpersonnel
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Head of Personnel")
+		JobEquipSpawned("Head of Personnel")
 
 /mob/living/carbon/human/normal/chiefengineer
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Chief Engineer")
+		JobEquipSpawned("Chief Engineer")
 
 /mob/living/carbon/human/normal/researchdirector
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Research Director")
+		JobEquipSpawned("Research Director")
 
 /mob/living/carbon/human/normal/headofsecurity
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Head of Security")
+		JobEquipSpawned("Head of Security")
 
 /mob/living/carbon/human/normal/securityofficer
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Security Officer")
+		JobEquipSpawned("Security Officer")
 
 /mob/living/carbon/human/normal/securityassistant
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Security Assistant")
+		JobEquipSpawned("Security Assistant")
 
 /mob/living/carbon/human/normal/detective
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Detective")
+		JobEquipSpawned("Detective")
 
 /mob/living/carbon/human/normal/clown
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Clown")
+		JobEquipSpawned("Clown")
 
 /mob/living/carbon/human/normal/chef
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Chef")
+		JobEquipSpawned("Chef")
 
 /mob/living/carbon/human/normal/chaplain
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Chaplain")
+		JobEquipSpawned("Chaplain")
 
 /mob/living/carbon/human/normal/bartender
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Bartender")
+		JobEquipSpawned("Bartender")
 
 /mob/living/carbon/human/normal/botanist
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Botanist")
+		JobEquipSpawned("Botanist")
 
 /mob/living/carbon/human/normal/rancher
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Rancher")
+		JobEquipSpawned("Rancher")
 
 /mob/living/carbon/human/normal/janitor
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Janitor")
+		JobEquipSpawned("Janitor")
 
 /mob/living/carbon/human/normal/mechanic
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Mechanic")
+		JobEquipSpawned("Mechanic")
 
 /mob/living/carbon/human/normal/engineer
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Engineer")
+		JobEquipSpawned("Engineer")
 
 /mob/living/carbon/human/normal/miner
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Miner")
+		JobEquipSpawned("Miner")
 
 /mob/living/carbon/human/normal/quartermaster
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Quartermaster")
+		JobEquipSpawned("Quartermaster")
 
 /mob/living/carbon/human/normal/medicaldoctor
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Medical Doctor")
+		JobEquipSpawned("Medical Doctor")
 
 /mob/living/carbon/human/normal/geneticist
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Geneticist")
+		JobEquipSpawned("Geneticist")
 
 /mob/living/carbon/human/normal/pathologist
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Pathologist")
+		JobEquipSpawned("Pathologist")
 
 /mob/living/carbon/human/normal/roboticist
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Roboticist")
+		JobEquipSpawned("Roboticist")
 
 /mob/living/carbon/human/normal/chemist
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Chemist")
+		JobEquipSpawned("Chemist")
 
 /mob/living/carbon/human/normal/scientist
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			JobEquipSpawned("Scientist")
+		JobEquipSpawned("Scientist")
 
 /mob/living/carbon/human/normal/wizard
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			if (src.gender && src.gender == "female")
-				src.real_name = pick_string_autokey("names/wizard_female.txt")
-			else
-				src.real_name = pick_string_autokey("names/wizard_male.txt")
+		JobEquipSpawned("Nanotrasen Security Operative")
 
-			equip_wizard(src, 1)
-		return
+/mob/living/carbon/human/normal/inspector
+	New()
+		..()
+		JobEquipSpawned("Inspector")
 
 /mob/living/carbon/human/normal/rescue
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			src.equip_new_if_possible(/obj/item/clothing/shoes/red, slot_shoes)
-			src.equip_new_if_possible(/obj/item/clothing/under/color/red, slot_w_uniform)
-			src.equip_new_if_possible(/obj/item/card/id, slot_wear_id)
-			src.equip_new_if_possible(/obj/item/device/radio/headset, slot_ears)
-			src.equip_new_if_possible(/obj/item/storage/belt/utility/prepared, slot_belt)
-			src.equip_new_if_possible(/obj/item/storage/backpack/withO2, slot_back)
-			src.equip_new_if_possible(/obj/item/device/light/flashlight, slot_l_store)
-			src.equip_new_if_possible(/obj/item/clothing/suit/armor/vest, slot_wear_suit)
-			src.equip_new_if_possible(/obj/item/clothing/mask/gas, slot_wear_mask)
-			src.equip_new_if_possible(/obj/item/clothing/gloves/black, slot_gloves)
-			src.equip_new_if_possible(/obj/item/clothing/glasses/nightvision, slot_glasses)
+		if (src.gender && src.gender == "female")
+			src.real_name = pick_string_autokey("names/wizard_female.txt")
+		else
+			src.real_name = pick_string_autokey("names/wizard_male.txt")
 
-			var/obj/item/card/id/C = src.wear_id
-			if(C)
-				C.registered = src.real_name
-				C.assignment = "NT-SO Rescue Worker"
-				C.name = "[C.registered]'s ID Card ([C.assignment])"
-				C.access = get_all_accesses()
+		equip_wizard(src, 1)
 
-			update_clothing()
-
-/mob/living/carbon/human/normal/ntso
+/mob/living/carbon/human/normal/rescue
 	INIT()
 		..()
-		SPAWN_DBG(0)
-			src.equip_new_if_possible(/obj/item/clothing/shoes/swat, slot_shoes)
-			src.equip_new_if_possible(/obj/item/clothing/under/misc/NT, slot_w_uniform)
-			src.equip_new_if_possible(/obj/item/card/id, slot_wear_id)
-			src.equip_new_if_possible(/obj/item/device/radio/headset/command/captain, slot_ears)
-			src.equip_new_if_possible(/obj/item/storage/belt/security, slot_belt)
-			src.equip_new_if_possible(/obj/item/storage/backpack/NT, slot_back)
-			src.equip_new_if_possible(/obj/item/clothing/glasses/nightvision, slot_l_store)
-			src.equip_new_if_possible(/obj/item/crowbar, slot_r_store)
-			src.equip_new_if_possible(/obj/item/clothing/suit/armor/NT_alt, slot_wear_suit)
-			src.equip_new_if_possible(/obj/item/clothing/mask/gas/swat, slot_wear_mask)
-			src.equip_new_if_possible(/obj/item/clothing/head/NTberet, slot_head)
-			src.equip_new_if_possible(/obj/item/clothing/gloves/black, slot_gloves)
-			src.equip_new_if_possible(/obj/item/clothing/glasses/sunglasses/sechud, slot_glasses)
+		src.equip_new_if_possible(/obj/item/clothing/shoes/red, slot_shoes)
+		src.equip_new_if_possible(/obj/item/clothing/under/color/red, slot_w_uniform)
+		src.equip_new_if_possible(/obj/item/card/id, slot_wear_id)
+		src.equip_new_if_possible(/obj/item/device/radio/headset, slot_ears)
+		src.equip_new_if_possible(/obj/item/storage/belt/utility/prepared, slot_belt)
+		src.equip_new_if_possible(/obj/item/storage/backpack/withO2, slot_back)
+		src.equip_new_if_possible(/obj/item/device/light/flashlight, slot_l_store)
+		src.equip_new_if_possible(/obj/item/clothing/suit/armor/vest, slot_wear_suit)
+		src.equip_new_if_possible(/obj/item/clothing/mask/gas, slot_wear_mask)
+		src.equip_new_if_possible(/obj/item/clothing/gloves/black, slot_gloves)
+		src.equip_new_if_possible(/obj/item/clothing/glasses/nightvision, slot_glasses)
 
-			var/obj/item/card/id/C = src.wear_id
-			if(C)
-				C.registered = src.real_name
-				C.assignment = "NT-SO Special Operative"
-				C.name = "[C.registered]'s ID Card ([C.assignment])"
-				var/list/ntso_access = get_all_accesses()
-				ntso_access += access_maxsec // This makes sense, right? They're highly trained and trusted.
-				C.access = ntso_access
+		var/obj/item/card/id/C = src.wear_id
+		if(C)
+			C.registered = src.real_name
+			C.assignment = "NT-SO Rescue Worker"
+			C.name = "[C.registered]'s ID Card ([C.assignment])"
+			C.access = get_all_accesses()
 
-			update_clothing()
+		update_clothing()
+
+/mob/living/carbon/human/normal/ntso_old
+	New()
+		..()
+		src.equip_new_if_possible(/obj/item/clothing/shoes/swat, slot_shoes)
+		src.equip_new_if_possible(/obj/item/clothing/under/misc/NT, slot_w_uniform)
+		src.equip_new_if_possible(/obj/item/card/id, slot_wear_id)
+		src.equip_new_if_possible(/obj/item/device/radio/headset/command/captain, slot_ears)
+		src.equip_new_if_possible(/obj/item/storage/belt/security, slot_belt)
+		src.equip_new_if_possible(/obj/item/storage/backpack/NT, slot_back)
+		src.equip_new_if_possible(/obj/item/clothing/glasses/nightvision, slot_l_store)
+		src.equip_new_if_possible(/obj/item/crowbar, slot_r_store)
+		src.equip_new_if_possible(/obj/item/clothing/suit/armor/NT_alt, slot_wear_suit)
+		src.equip_new_if_possible(/obj/item/clothing/mask/gas/swat, slot_wear_mask)
+		src.equip_new_if_possible(/obj/item/clothing/head/NTberet, slot_head)
+		src.equip_new_if_possible(/obj/item/clothing/gloves/black, slot_gloves)
+		src.equip_new_if_possible(/obj/item/clothing/glasses/sunglasses/sechud, slot_glasses)
+
+		var/obj/item/card/id/C = src.wear_id
+		if(C)
+			C.registered = src.real_name
+			C.assignment = "NT-SO Special Operative"
+			C.name = "[C.registered]'s ID Card ([C.assignment])"
+			var/list/ntso_access = get_all_accesses()
+			ntso_access += access_maxsec // This makes sense, right? They're highly trained and trusted.
+			C.access = ntso_access
+
+		update_clothing()

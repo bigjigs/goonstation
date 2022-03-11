@@ -49,9 +49,9 @@ INIT_TYPE(/obj/effects/foam, loc, var/ismetal=0)
 	if(metal)
 		if(istype(loc, /turf/space))
 			loc:ReplaceWithMetalFoam(metal)
-	SPAWN_DBG(3 + metal*3)
+	SPAWN(3 + metal*3)
 		process()
-	SPAWN_DBG(12 SECONDS)
+	SPAWN(12 SECONDS)
 		expand = 0 // stop expanding
 		sleep(3 SECONDS)
 
@@ -150,7 +150,7 @@ INIT_TYPE(/obj/effects/foam, loc, var/ismetal=0)
 	if(!metal && prob(max(0, exposed_temperature - 475)))
 		flick("foam-disolve", src)
 
-		SPAWN_DBG(0.5 SECONDS)
+		SPAWN(0.5 SECONDS)
 			die()
 			expand = 0
 

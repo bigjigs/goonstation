@@ -130,7 +130,7 @@
 	INIT()
 		..()
 		if(start_on)
-			SPAWN_DBG(1 SECOND)
+			SPAWN(1 SECOND)
 				src.trigger("on")
 
 	trigger_actions()
@@ -166,7 +166,7 @@
 
 	INIT()
 		..()
-		SPAWN_DBG(1 DECI SECOND)
+		SPAWN(1 DECI SECOND)
 			for(var/obj/adventurepuzzle/invisible/target_link/T)
 				if (T.id == "UD-LANDING-ZONE")
 					target = get_turf(T)
@@ -178,7 +178,7 @@
 		if(!(user == usr))
 			return
 		if(istype(H) && slot == SLOT_GLASSES)
-			SPAWN_DBG(1 SECOND)
+			SPAWN(1 SECOND)
 				enter_urs_dungeon(user)
 		return
 
@@ -231,7 +231,7 @@
 		..()
 		var/mob/living/carbon/human/H = user
 		if(istype(H) && slot == SLOT_GLASSES)
-			SPAWN_DBG(1 SECOND)
+			SPAWN(1 SECOND)
 				exit_urs_dungeon(user)
 		return
 

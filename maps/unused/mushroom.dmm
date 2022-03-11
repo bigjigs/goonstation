@@ -19401,18 +19401,6 @@
 /area/station/ai_monitored/storage/secure{
 	name = "Mixing Room"
 	})
-"aQd" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine,
-/area/station/science/lab)
 "aQe" = (
 /obj/machinery/door/poddoor{
 	id = "mixingwaste";
@@ -21269,23 +21257,6 @@
 	dir = 2;
 	frequency = 1449;
 	id = "tox_airlock_pump"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/station/science/lab)
-"aTO" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/machinery/sparker{
-	id = "mixingroom";
-	name = "Mounted Igniter";
-	pixel_x = -24
 	},
 /turf/simulated/floor/engine/vacuum,
 /area/station/science/lab)
@@ -23271,19 +23242,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/station/maintenance/southeast)
-"aYA" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 1;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/lattice,
-/turf/space,
-/area/space)
 "aYB" = (
 /obj/wingrille_spawn/reinforced,
 /turf/simulated/floor/plating,
@@ -25800,16 +25758,6 @@
 /obj/stool,
 /turf/simulated/floor,
 /area/station/security/brig)
-"bee" = (
-/obj/cable{
-	icon_state = "4-8";
-	d1 = 4;
-	d2 = 8
-	},
-/obj/stool/bed/brig,
-/obj/machinery/light/small,
-/turf/simulated/floor,
-/area/station/security/brig)
 "bef" = (
 /obj/cable,
 /obj/cable{
@@ -26049,19 +25997,6 @@
 	},
 /turf/simulated/floor,
 /area/station/crew_quarters/courtroom)
-"beK" = (
-/obj/stool/bed/brig,
-/obj/machinery/camera{
-	c_tag = "Brig - Solitary 1";
-	dir = 4
-	},
-/obj/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor,
-/area/station/security/brig)
 "beL" = (
 /obj/cable{
 	icon_state = "4-8";
@@ -26494,15 +26429,6 @@
 /obj/disposalpipe/segment{
 	dir = 2;
 	icon_state = "pipe-c"
-	},
-/turf/simulated/floor,
-/area/station/security/brig)
-"bfC" = (
-/obj/stool/bed/brig,
-/obj/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
 	},
 /turf/simulated/floor,
 /area/station/security/brig)
@@ -29773,6 +29699,80 @@
 /obj/landmark/map{
 	name = "MUSHROOM"
 	},
+/turf/space,
+/area/space)
+"ern" = (
+/obj/stool/bed,
+/obj/machinery/camera{
+	c_tag = "Brig - Solitary 1";
+	dir = 4
+	},
+/obj/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/station/security/brig)
+"eUN" = (
+/obj/cable{
+	icon_state = "4-8";
+	d1 = 4;
+	d2 = 8
+	},
+/obj/stool/bed,
+/obj/machinery/light/small,
+/turf/simulated/floor,
+/area/station/security/brig)
+"mrf" = (
+/obj/stool/bed,
+/obj/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/station/security/brig)
+"ntE" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine,
+/area/station/science/lab)
+"sIk" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/machinery/sparker{
+	id = "mixingroom";
+	name = "Mounted Igniter";
+	pixel_x = -24
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/station/science/lab)
+"wSM" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/lattice,
 /turf/space,
 /area/space)
 
@@ -55347,11 +55347,11 @@ bdC
 bdW
 bet
 beA
-beK
+ern
 bcW
 bfg
 bfr
-bfC
+mrf
 bcW
 bfW
 bcQ
@@ -58295,7 +58295,7 @@ bcC
 bcW
 bdr
 bcQ
-bee
+eUN
 bcS
 aaa
 aaa
@@ -64866,7 +64866,7 @@ aVO
 aWA
 aXj
 aXM
-aYA
+wSM
 aaa
 aaa
 aaa
@@ -65990,7 +65990,7 @@ aaa
 aaa
 aOc
 aPb
-aQd
+ntE
 aPb
 aOc
 aSk
@@ -66449,7 +66449,7 @@ aaB
 aPc
 aSm
 aSn
-aTO
+sIk
 aPc
 aVS
 aVS

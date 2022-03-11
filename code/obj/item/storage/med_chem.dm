@@ -12,7 +12,7 @@
 
 	INIT()
 		..()
-		SPAWN_DBG(0.5 SECONDS)
+		SPAWN(0.5 SECONDS)
 			if (length(kit_styles))
 				icon_state = pick(kit_styles)
 				item_state = icon_state

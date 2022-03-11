@@ -66,6 +66,8 @@ var/global
 	var/cookieSent = 0
 	/// Contains the connection history passed from chat cookie
 	var/list/connectionHistory = list()
+	/// Last ping value reported by the client
+	var/last_ping = null
 
 INIT_TYPE(/datum/chatOutput, client/C)
 	..()
@@ -106,7 +108,7 @@ INIT_TYPE(/datum/chatOutput, client/C)
 		src.owner << browse(grabResource("html/browserOutput.html"), "window=browseroutput")
 
 		if (src.loadAttempts < 5) //To a max of 5 load attempts
-			SPAWN_DBG(20 SECONDS) //20 seconds
+			SPAWN(20 SECONDS) //20 seconds
 				if (src.owner && !src.loaded)
 					src.loadAttempts++
 					src.load()
@@ -140,7 +142,7 @@ INIT_TYPE(/datum/chatOutput, client/C)
 		else
 			src.sendClientData()
 			/* WIRE TODO: Fix this so the CDN dying doesn't break everyone
-			SPAWN_DBG(1 MINUTE) //60 seconds
+			SPAWN(1 MINUTE) //60 seconds
 				if (!src.cookieSent) //Client has very likely futzed with their local html/js chat file
 					out(src.owner, "<div class='fatalError'>Chat file tampering detected. Closing connection.</div>")
 					del(src.owner)
@@ -184,7 +186,7 @@ INIT_TYPE(/datum/chatOutput, client/C)
 				ircmsg["key"] = owner.key
 				ircmsg["name"] = stripTextMacros(owner.mob.name)
 				ircmsg["msg"] = "just attempted to crash the server using at least 5 '\['s in a row."
-				ircbot.export("admin", ircmsg)
+				ircbot.export_async("admin", ircmsg)
 			return
 
 		var/list/connData = json_decode(cookie)
@@ -212,7 +214,7 @@ INIT_TYPE(/datum/chatOutput, client/C)
 					ircmsg["key"] = owner.key
 					ircmsg["name"] = stripTextMacros(owner.mob.name)
 					ircmsg["msg"] = "has a cookie from banned account [found["ckey"]](IP: [found["ip"]], CompID: [found["compID"]])"
-					ircbot.export("admin", ircmsg)
+					ircbot.export_async("admin", ircmsg)
 
 				var/banData[] = new()
 				banData["ckey"] = src.owner.ckey
@@ -321,7 +323,10 @@ INIT_TYPE(/datum/chatOutput, client/C)
 	ehjax.send(src.owner, "browseroutput", data)
 
 /// Called by js client every 60 seconds
-/datum/chatOutput/proc/ping()
+/datum/chatOutput/proc/ping(last_ping)
+	last_ping = text2num(last_ping)
+	if(last_ping > 0)
+		src.last_ping = last_ping
 	return "pong"
 
 
@@ -380,17 +385,17 @@ INIT_TYPE(/datum/chatOutput, client/C)
 
 		return "<img style=\"position: relative; left: -1px; bottom: -3px;\" class=\"icon [obj:icon_state]\" src=\"data:image/png;base64,[baseData]\" />"
 
-/proc/boutput(target = 0, message = "", group = "")
+/proc/boutput(target = 0, message = "", group = "", forceScroll=FALSE)
 	if (target == world)
 		for (var/client/C in clients)
-			boutput(C, message)
+			boutput(C, message, group, forceScroll)
 		return
 
 	//If the target is a list, attempt to send the message to each item in the list
 	//(it's up to the caller to ensure the list contains actual things we can send to)
 	if (islist(target))
 		for (var/T in target)
-			boutput(T, message)
+			boutput(T, message, group, forceScroll)
 		return
 
 	//Otherwise, we're good to throw it at the user
@@ -429,9 +434,9 @@ INIT_TYPE(/datum/chatOutput, client/C)
 
 				if (C.chatOutput.burstCount > CHAT_BURST_START)
 					C.chatOutput.burstQueue = list(
-						list("message" = message, "group" = group)
+						list("message" = message, "group" = group, "forceScroll" = forceScroll)
 					)
-					SPAWN_DBG(CHAT_BURST_TIME)
+					SPAWN(CHAT_BURST_TIME)
 						target << output(list2params(list(
 							json_encode(C.chatOutput.burstQueue)
 						)), "browseroutput:outputBatch")
@@ -440,7 +445,9 @@ INIT_TYPE(/datum/chatOutput, client/C)
 
 			target << output(list2params(list(
 				message,
-				group
+				group,
+				0,
+				forceScroll
 			)), "browseroutput:output")
 
 //Aliases for boutput

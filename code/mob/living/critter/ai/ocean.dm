@@ -56,7 +56,7 @@ INIT_TYPE(/datum/aiHolder/trilobite)
 
 /datum/aiTask/timed/targeted/trilobite/on_tick()
 	var/mob/living/critter/owncritter = holder.owner
-	if (HAS_MOB_PROPERTY(owncritter, PROP_CANTMOVE))
+	if (HAS_ATOM_PROPERTY(owncritter, PROP_MOB_CANTMOVE))
 		return
 
 	if(!holder.target)
@@ -127,7 +127,7 @@ INIT_TYPE(/datum/aiHolder/trilobite)
 		. = 1
 
 /datum/aiTask/timed/targeted/escape_vehicles/on_tick()
-	if (HAS_MOB_PROPERTY(holder.owner, PROP_CANTMOVE))
+	if (HAS_ATOM_PROPERTY(holder.owner, PROP_MOB_CANTMOVE))
 		return
 
 	if(!holder.target)
@@ -184,7 +184,7 @@ INIT_TYPE(/datum/aiHolder/spike)
 
 /datum/aiTask/timed/targeted/flee_and_shoot/on_tick()
 	var/mob/living/critter/owncritter = holder.owner
-	if (HAS_MOB_PROPERTY(owncritter, PROP_CANTMOVE))
+	if (HAS_ATOM_PROPERTY(owncritter, PROP_MOB_CANTMOVE))
 		return
 
 	if(!holder.target && world.time > last_seek + 5 SECONDS)
@@ -291,7 +291,7 @@ INIT_TYPE(/datum/aiHolder/pikaia)
 
 /datum/aiTask/timed/targeted/pikaia/on_tick()
 	var/mob/living/critter/owncritter = holder.owner
-	if (HAS_MOB_PROPERTY(owncritter, PROP_CANTMOVE) || !isalive(owncritter))
+	if (HAS_ATOM_PROPERTY(owncritter, PROP_MOB_CANTMOVE) || !isalive(owncritter))
 		return
 
 	if(!holder.target)
@@ -334,7 +334,7 @@ INIT_TYPE(/datum/aiHolder/pikaia)
 							owncritter.drop_item()
 
 						if (G.state <= GRAB_PASSIVE)
-							G.attack_self(owncritter)
+							G.AttackSelf(owncritter)
 						else
 							owncritter.emote("flip")
 							holder.move_away(holder.target,1)

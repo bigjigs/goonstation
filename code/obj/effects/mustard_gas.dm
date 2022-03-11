@@ -13,7 +13,7 @@
 
 INIT_TYPE(/obj/effects/mustard_gas)
 	..()
-	SPAWN_DBG(10 SECONDS)
+	SPAWN(10 SECONDS)
 		dispose()
 	return
 

@@ -113,7 +113,7 @@ var/list/stinkThingies = list("ass","taint","armpit","excretions","leftovers","a
 				if (isrestrictedz(Z) || isrestrictedz(user:z))
 					boutput(user, "<span class='alert'>Your telekinetic powers don't seem to work here.</span>")
 					return 0
-				SPAWN_DBG(0)
+				SPAWN(0)
 					//I really shouldnt put this here but i dont have a better idea
 					var/obj/overlay/O = new /obj/overlay ( locate(X,Y,Z) )
 					O.name = "sparkles"
@@ -141,16 +141,18 @@ var/list/stinkThingies = list("ass","taint","armpit","excretions","leftovers","a
 				return TRUE
 
 
-var/obj/item/dummy/click_dummy = new
 /proc/test_click(turf/from, turf/target)
+	var/obj/item/dummy/click_dummy = get_singleton(/obj/item/dummy)
 	click_dummy.set_loc(from)
 	for (var/atom/A in from)
 		if (A.flags & ON_BORDER)
 			if (!A.CheckExit(click_dummy, target))
+				click_dummy.set_loc(null)
 				return FALSE
 	for (var/atom/A in target)
 		if ((A.flags & ON_BORDER))
 			if (!A.Cross(click_dummy))
+				click_dummy.set_loc(null)
 				return FALSE
 	click_dummy.set_loc(null)
 	return TRUE
@@ -178,9 +180,6 @@ var/obj/item/dummy/click_dummy = new
 		if (T1 == T2)
 			return 1
 		else
-			if (!click_dummy)
-				click_dummy = new
-
 			var/dir = get_dir(T1, T2)
 			if (dir & (dir-1))
 				var/dir1, dir2
@@ -222,12 +221,12 @@ var/obj/item/dummy/click_dummy = new
 	. = list()
 
 	var/turf/T = get_turf(center)
-	for_by_tcl(theAI, /mob/living/silicon/ai)
-		if (theAI.deployed_to_eyecam)
-			var/mob/dead/aieye/AIeye = theAI.eyecam
-			if(IN_RANGE(center, AIeye, distance) && T.cameras && length(T.cameras))
-				. += AIeye
-				. += theAI
+	if(length(T?.cameras))
+		for_by_tcl(theAI, /mob/living/silicon/ai)
+			if (theAI.deployed_to_eyecam)
+				var/mob/living/intangible/aieye/AIeye = theAI.eyecam
+				if(IN_RANGE(center, AIeye, distance))
+					. += theAI
 
 //Kinda sorta like viewers but includes observers. In theory.
 /proc/observersviewers(var/Dist=world.view, var/Center=usr)

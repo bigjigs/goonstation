@@ -201,6 +201,7 @@ A Flamethrower in various states of assembly
 
 	INIT()
 		..()
+		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 		src.create_reagents(4000)
 		inventory_counter.update_percent(src.reagents.total_volume, src.reagents.maximum_volume)
 
@@ -245,7 +246,7 @@ A Flamethrower in various states of assembly
 			boutput(usr, "<span class='notice'>The fuelpack's integrated jetpack is now off</span>")
 		return
 
-	MouseDrop(over_object, src_location, over_location)
+	mouse_drop(over_object, src_location, over_location)
 		..()
 		if(!isliving(usr))
 			return
@@ -281,6 +282,7 @@ A Flamethrower in various states of assembly
 
 	disposing()
 		linkedflamer?.gastank = null
+		STOP_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 		..()
 
 /obj/item/gun/flamethrower/backtank
@@ -300,6 +302,7 @@ A Flamethrower in various states of assembly
 
 
 	INIT()
+		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 		var/obj/item/tank/jetpack/backtank/B = new /obj/item/tank/jetpack/backtank(src.loc)
 		src.gastank = B
 		src.fueltank = B
@@ -312,6 +315,7 @@ A Flamethrower in various states of assembly
 		if(istype(gastank, /obj/item/tank/jetpack/backtank/))
 			var/obj/item/tank/jetpack/backtank/B = gastank
 			B.linkedflamer = null
+		STOP_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 		..()
 /obj/item/gun/flamethrower/backtank/napalm
 	INIT()
@@ -557,7 +561,7 @@ INIT_TYPE(/obj/item/assembly/w_r_ignite)
 	src.icon_state = "flamethrower[src.gastank ? "_oxy" : "_no_oxy"][src.fueltank ? "_fuel" : "_no_fuel"]"
 
 	src.updateSelfDialog()
-	SPAWN_DBG(0.5 SECONDS)
+	SPAWN(0.5 SECONDS)
 		playsound(src, "sound/effects/valve_creak.ogg", 40, 1)
 	return TRUE
 
@@ -652,7 +656,7 @@ INIT_TYPE(/obj/item/assembly/w_r_ignite)
 		var/remove_sound = "sound/items/pickup_[clamp(src.w_class, 1, 3)].ogg"
 		if(A?.pickup_sfx)
 			remove_sound = A.pickup_sfx
-		SPAWN_DBG(0.2 SECONDS)
+		SPAWN(0.2 SECONDS)
 			if(src)
 				playsound(src, remove_sound, 30, 1)
 
@@ -677,7 +681,7 @@ INIT_TYPE(/obj/item/assembly/w_r_ignite)
 		if(A?.pickup_sfx)
 			remove_sound = A.pickup_sfx
 		playsound(src, remove_sound, 30, 1)
-		SPAWN_DBG(0.5 SECONDS)
+		SPAWN(0.5 SECONDS)
 			if(src)
 				playsound(src, "sound/effects/valve_creak.ogg", 15, 1)
 

@@ -16,7 +16,7 @@
 		var/pulse_lifespan = null
 		var/turf/pulseloc = null
 
-		SPAWN_DBG(0)
+		SPAWN(0)
 			for (var/pulses = pulse_amt, pulses > 0, pulses--)
 				pulseloc = pick(wormholeturfs)
 				pulse_lifespan = rand(min_pulse_lifespan,max_pulse_lifespan)
@@ -45,7 +45,7 @@
 		animate(alpha = 100, time = rand(5,10), loop = -1, easing = LINEAR_EASING)
 		if(!particleMaster.CheckSystemExists(/datum/particleSystem/rads_warning, src))
 			particleMaster.SpawnSystem(new /datum/particleSystem/rads_warning(src))
-		SPAWN_DBG(lifespan)
+		SPAWN(lifespan)
 			playsound(src,pulse_sound,50,1)
 			irradiate_turf(get_turf(src))
 			for (var/turf/T in circular_range(src,pulse_range))
@@ -95,7 +95,7 @@
 		animate(alpha = 100, time = rand(5,10), loop = -1, easing = LINEAR_EASING)
 		if(!particleMaster.CheckSystemExists(/datum/particleSystem/rads_warning, src))
 			particleMaster.SpawnSystem(new /datum/particleSystem/rads_warning(src))
-		SPAWN_DBG(lifespan)
+		SPAWN(lifespan)
 			playsound(src,pulse_sound,50,1)
 			irradiate_turf(get_turf(src))
 			for (var/turf/T in circular_range(src,pulse_range))
@@ -137,7 +137,7 @@
 
 	event_effect(var/source)
 		..()
-		SPAWN_DBG(rand(100, 300))
+		SPAWN(rand(100, 300))
 		for (var/mob/living/carbon/human/H in mobs)
 			if (isdead(H))
 				continue

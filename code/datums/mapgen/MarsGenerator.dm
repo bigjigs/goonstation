@@ -163,7 +163,7 @@
 
 	INIT()
 		..()
-		SPAWN_DBG(3 SECONDS)
+		SPAWN(3 SECONDS)
 			if(istype(src))
 				src.UpdateIcon()
 

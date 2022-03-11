@@ -683,19 +683,6 @@
 /obj/access_spawn/security,
 /turf/simulated/floor/red,
 /area/station/security/main)
-"bA" = (
-/obj/morgue{
-	dir = 2;
-	icon_state = "morgue1"
-	},
-/obj/machinery/light{
-	dir = 8;
-	icon_state = "tube1";
-	layer = 9.1;
-	pixel_x = -10
-	},
-/turf/simulated/floor/specialroom/freezer,
-/area/station/security/main)
 "bB" = (
 /obj/disposalpipe/segment{
 	dir = 4
@@ -3514,18 +3501,6 @@
 /obj/machinery/atmospherics/pipe/simple/junction,
 /turf/simulated/floor/engine/vacuum,
 /area/station/engine/hotloop)
-"hP" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 4;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/station/engine/hotloop)
 "hQ" = (
 /obj/machinery/atmospherics/pipe/simple/insulated{
 	can_rupture = 0;
@@ -4441,12 +4416,6 @@
 /obj/machinery/door/unpowered/wood,
 /turf/simulated/floor/white,
 /area/station/crew_quarters/bathroom)
-"jA" = (
-/obj/crematorium{
-	id = "crematorium"
-	},
-/turf/simulated/floor/grass,
-/area/station/chapel/sanctuary)
 "jB" = (
 /obj/table/wood/auto,
 /obj/machinery/crema_switch{
@@ -4469,13 +4438,6 @@
 	dir = 4;
 	icon_state = "fred2"
 	},
-/area/station/chapel/sanctuary)
-"jD" = (
-/obj/morgue{
-	dir = 2;
-	icon_state = "morgue1"
-	},
-/turf/simulated/floor/grass,
 /area/station/chapel/sanctuary)
 "jE" = (
 /obj/machinery/door/airlock/pyro/medical{
@@ -7078,6 +7040,18 @@
 	},
 /turf/simulated/floor/white,
 /area/station/medical/medbay)
+"pk" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/station/engine/hotloop)
 "qo" = (
 /obj/storage/secure/closet/security/forensics,
 /obj/item/reagent_containers/glass/bottle/formaldehyde,
@@ -7138,6 +7112,12 @@
 	},
 /turf/simulated/floor/white,
 /area/station/medical/research)
+"Cg" = (
+/obj/machinery/traymachine/locking/crematorium{
+	id = "crematorium"
+	},
+/turf/simulated/floor/grass,
+/area/station/chapel/sanctuary)
 "Ct" = (
 /obj/machinery/clonepod,
 /turf/simulated/floor/white,
@@ -7147,6 +7127,26 @@
 /obj/item/reagent_containers/food/snacks/cake/chocolate/gateau,
 /turf/simulated/floor/specialroom/bar,
 /area/station/crew_quarters/bar)
+"It" = (
+/obj/machinery/traymachine/morgue{
+	dir = 2;
+	icon_state = "morgue1"
+	},
+/turf/simulated/floor/grass,
+/area/station/chapel/sanctuary)
+"Mj" = (
+/obj/machinery/traymachine/morgue{
+	dir = 2;
+	icon_state = "morgue1"
+	},
+/obj/machinery/light{
+	dir = 8;
+	icon_state = "tube1";
+	layer = 9.1;
+	pixel_x = -10
+	},
+/turf/simulated/floor/specialroom/freezer,
+/area/station/security/main)
 "Ri" = (
 /obj/machinery/recharger/wall/sticky{
 	dir = 1
@@ -45364,7 +45364,7 @@ hI
 cE
 iE
 ji
-jA
+Cg
 ji
 ky
 aa
@@ -46270,7 +46270,7 @@ cE
 cE
 iE
 ji
-jD
+It
 ji
 ky
 dM
@@ -53514,7 +53514,7 @@ gi
 gL
 hh
 hz
-hP
+pk
 ip
 iT
 jq
@@ -56216,7 +56216,7 @@ bb
 as
 br
 as
-bA
+Mj
 bJ
 bQ
 cK

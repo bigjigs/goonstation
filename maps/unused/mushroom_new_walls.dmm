@@ -7385,18 +7385,6 @@
 	},
 /turf/simulated/floor,
 /area/station/crew_quarters/courtroom)
-"aDx" = (
-/obj/machinery/driver_button{
-	id = "chapelgun";
-	name = "Chapel Mass Driver Button";
-	pixel_y = 24;
-	req_access_txt = "22";
-	text = "chapel"
-	},
-/turf/simulated/floor/specialroom/chapel{
-	dir = 8
-	},
-/area/station/chapel/sanctuary)
 "aDy" = (
 /turf/simulated/floor/specialroom/chapel,
 /area/station/chapel/sanctuary)
@@ -7718,10 +7706,6 @@
 /area/station/quartermaster/office)
 "aET" = (
 /obj/storage/closet/coffin,
-/turf/simulated/floor/black,
-/area/station/chapel/office)
-"aEU" = (
-/obj/crematorium,
 /turf/simulated/floor/black,
 /area/station/chapel/office)
 "aEV" = (
@@ -8286,10 +8270,6 @@
 	dir = 8
 	},
 /area/station/quartermaster/office)
-"aHw" = (
-/obj/morgue,
-/turf/simulated/floor/black,
-/area/station/chapel/office)
 "aHx" = (
 /obj/machinery/light/small,
 /turf/simulated/floor/black,
@@ -9909,13 +9889,6 @@
 	},
 /turf/space,
 /area/space)
-"aNF" = (
-/obj/mug_rack{
-	pixel_x = -26;
-	pixel_y = 6
-	},
-/turf/simulated/floor/black,
-/area/station/engine/engineering/breakroom)
 "aNH" = (
 /obj/wingrille_spawn/auto,
 /obj/cable,
@@ -10385,36 +10358,6 @@
 /obj/stool/chair,
 /turf/simulated/floor,
 /area/station/hallway/primary/central)
-"aPx" = (
-/obj/machinery/disposal/morgue{
-	desc = "A pneumatic chute used to transport corpses.";
-	name = "mortician's chute"
-	},
-/obj/disposalpipe/trunk/morgue{
-	dir = 4
-	},
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
-"aPy" = (
-/obj/machinery/light{
-	dir = 1;
-	tag = "icon-tube1 (NORTH)"
-	},
-/obj/disposalpipe/segment/morgue{
-	dir = 4
-	},
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
-"aPz" = (
-/obj/cable{
-	icon_state = "1-2"
-	},
-/obj/disposalpipe/segment/morgue{
-	dir = 2;
-	icon_state = "pipe-c"
-	},
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
 "aPB" = (
 /obj/disposalpipe/segment/mail,
 /turf/simulated/floor/specialroom/chapel{
@@ -10643,18 +10586,7 @@
 /obj/disposalpipe/segment/produce,
 /turf/simulated/floor/wood/two,
 /area/station/crew_quarters/cafeteria)
-"aQt" = (
-/obj/morgue,
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
 "aQu" = (
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
-"aQv" = (
-/obj/cable{
-	icon_state = "1-2"
-	},
-/obj/disposalpipe/segment/morgue,
 /turf/simulated/floor/black,
 /area/station/medical/morgue)
 "aQx" = (
@@ -10808,18 +10740,6 @@
 	},
 /turf/simulated/wall/auto/supernorn,
 /area/station/medical/morgue)
-"aRi" = (
-/obj/machinery/atmospherics/pipe/simple{
-	dir = 4;
-	layer = 3
-	},
-/obj/morgue,
-/obj/machinery/camera{
-	c_tag = "Morgue";
-	dir = 4
-	},
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
 "aRj" = (
 /obj/table/reinforced/bar/auto,
 /obj/random_item_spawner/tableware,
@@ -10909,12 +10829,6 @@
 	icon_state = "exposed-f";
 	tag = "icon-exposed-f (WEST)"
 	},
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
-"aRC" = (
-/obj/cable,
-/obj/disposalpipe/segment/morgue,
-/obj/machinery/power/apc/autoname_east,
 /turf/simulated/floor/black,
 /area/station/medical/morgue)
 "aRD" = (
@@ -11211,13 +11125,6 @@
 	dir = 4
 	},
 /area/station/security/brig)
-"aSK" = (
-/obj/machinery/light/small{
-	dir = 4
-	},
-/obj/disposalpipe/segment/morgue,
-/turf/simulated/floor/black,
-/area/station/medical/morgue)
 "aSL" = (
 /obj/shrub,
 /obj/machinery/light,
@@ -16174,10 +16081,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/station/maintenance/east)
-"biJ" = (
-/obj/morgue,
-/turf/simulated/floor/black,
-/area/station/medical/research)
 "biK" = (
 /obj/landmark/start{
 	name = "predator"
@@ -19519,6 +19422,18 @@
 /obj/disposalpipe/segment/mail,
 /turf/simulated/floor/plating,
 /area/station/maintenance/west)
+"bFd" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/lattice,
+/turf/space,
+/area/space)
 "bFg" = (
 /obj/machinery/power/data_terminal,
 /obj/machinery/computer3/terminal/network{
@@ -21027,6 +20942,10 @@
 	tag = "icon-grass1"
 	},
 /area/station/hydroponics/bay)
+"dGF" = (
+/obj,
+/turf/simulated/floor/black,
+/area/station/chapel/office)
 "dGS" = (
 /obj/cable{
 	icon_state = "4-8"
@@ -21206,6 +21125,19 @@
 	dir = 4
 	},
 /area/station/medical/medbay)
+"dUy" = (
+/obj/machinery/door/poddoor/pyro/podbay_autoclose{
+	dir = 4;
+	id = "gititout"
+	},
+/obj/forcefield/energyshield/perma/doorlink{
+	desc = "A door-linked force field that prevents gasses from passing through it.";
+	dir = 4;
+	name = "Door-linked Atmospheric Forcefield";
+	powerlevel = 1
+	},
+/turf/simulated/floor/plating,
+/area/station/science/artifact)
 "dVu" = (
 /turf/simulated/wall/auto/supernorn,
 /area/space)
@@ -23248,6 +23180,17 @@
 /obj/machinery/crusher,
 /turf/simulated/floor/plating,
 /area/station/maintenance/disposal)
+"gzp" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/station/science/lab)
 "gzD" = (
 /obj/cable{
 	icon_state = "4-8"
@@ -23537,6 +23480,12 @@
 	},
 /turf/simulated/floor,
 /area/station/security/main)
+"gUr" = (
+/obj/disposalpipe/segment/morgue{
+	dir = 4
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "gUS" = (
 /obj/storage/secure/closet/medical/medicine,
 /obj/health_scanner/wall{
@@ -23786,6 +23735,14 @@
 	},
 /turf/simulated/floor/specialroom/cafeteria,
 /area/station/crew_quarters/kitchen)
+"hjU" = (
+/obj/machinery/activation_button/ignition_switch{
+	dir = 4;
+	id = "combustion_ignition";
+	pixel_x = -22
+	},
+/turf/simulated/floor/plating/airless,
+/area/station/engine/proto)
 "hkc" = (
 /obj/table/wood/auto,
 /obj/item/reagent_containers/food/drinks/bottle/wine{
@@ -24450,6 +24407,15 @@
 	dir = 8
 	},
 /area/station/medical/medbay/lobby)
+"ica" = (
+/obj/machinery/activation_button/ignition_switch{
+	desc = "There is a big red button here with many big red arrows pointing to it";
+	id = getitout;
+	name = "Emergancy Ejector Button";
+	pixel_y = 23
+	},
+/turf/simulated/floor,
+/area/station/science/artifact)
 "icD" = (
 /obj/machinery/navbeacon{
 	codes_txt = "patrol";
@@ -24990,6 +24956,10 @@
 "iFD" = (
 /turf/simulated/wall/auto/supernorn,
 /area/station/hydroponics/lobby)
+"iFR" = (
+/obj/machinery/traymachine/morgue,
+/turf/simulated/floor/black,
+/area/station/medical/research)
 "iGF" = (
 /obj/cable{
 	icon_state = "0-8"
@@ -25639,6 +25609,11 @@
 	dir = 8
 	},
 /area/station/medical/medbay/lobby)
+"jsp" = (
+/obj/cable,
+/obj/machinery/power/apc/autoname_east,
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "jsr" = (
 /obj/machinery/light,
 /turf/simulated/floor/red/side,
@@ -25935,6 +25910,17 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/station/engine/proto)
+"jOx" = (
+/obj/machinery/activation_button/ignition_switch{
+	desc = "There's a note taped over it that says Fire!";
+	id = chapelgun;
+	name = "Chapel Mass Driver Launch Button";
+	pixel_y = 23
+	},
+/turf/simulated/floor/specialroom/chapel{
+	dir = 8
+	},
+/area/station/chapel/sanctuary)
 "jOO" = (
 /obj/wingrille_spawn/auto,
 /turf/simulated/floor/plating,
@@ -26028,15 +26014,6 @@
 /obj/stool,
 /turf/simulated/floor/specialroom/arcade,
 /area/station/turret_protected/Zeta)
-"jUG" = (
-/obj/machinery/driver_button{
-	desc = "An emergency ejection button.  Maybe some antique gizmo turns out to be a very loud siren or something.  Maybe you want it away from you so the crew don't bash down your door to remove it for you.";
-	id = "artlabgun";
-	name = "Emergency Ejection Button";
-	pixel_y = 24
-	},
-/turf/simulated/floor,
-/area/station/science/artifact)
 "jUT" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 8
@@ -26055,28 +26032,6 @@
 	dir = 5
 	},
 /area/station/turret_protected/AIsat)
-"jXg" = (
-/obj/machinery/mass_driver{
-	desc = "A device that launches objects, like ANCIENT SIRENS, for example, on it at great velocity when activated.";
-	dir = 4;
-	drive_range = 100;
-	id = "artlabgun"
-	},
-/turf/simulated/floor/plating,
-/area/station/science/artifact)
-"jXE" = (
-/obj/machinery/door/poddoor/pyro/podbay_autoclose{
-	dir = 4;
-	id = "artlabgun"
-	},
-/obj/forcefield/energyshield/perma/doorlink{
-	desc = "A door-linked force field that prevents gasses from passing through it.";
-	dir = 4;
-	name = "Door-linked Atmospheric Forcefield";
-	powerlevel = 1
-	},
-/turf/simulated/floor/plating,
-/area/station/science/artifact)
 "jYh" = (
 /obj/machinery/atmospherics/pipe/simple{
 	dir = 9;
@@ -26957,6 +26912,17 @@
 	dir = 1
 	},
 /area/station/medical/medbay/lobby)
+"leu" = (
+/obj/machinery/atmospherics/pipe/simple{
+	dir = 4;
+	layer = 3
+	},
+/obj/machinery/camera{
+	c_tag = "Morgue";
+	dir = 4
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "lfe" = (
 /obj/machinery/light,
 /obj/disposalpipe/segment/mail{
@@ -27222,6 +27188,17 @@
 	dir = 8
 	},
 /area/station/turret_protected/AIsat)
+"lwf" = (
+/obj/machinery/atmospherics/valve{
+	dir = 4
+	},
+/obj/machinery{
+	id = "mixingroom";
+	pixel_x = 24;
+	pixel_y = 10
+	},
+/turf/simulated/floor/purple,
+/area/station/science/lab)
 "lwm" = (
 /obj/machinery/firealarm{
 	dir = 8;
@@ -28522,6 +28499,12 @@
 	},
 /turf/space,
 /area/station/turret_protected/AIbaseoutside)
+"nnU" = (
+/obj/cable{
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "noz" = (
 /obj/disposalpipe/segment/mail{
 	dir = 4
@@ -29445,6 +29428,22 @@
 /obj/cable,
 /turf/simulated/floor/plating,
 /area/station/medical/medbay/lobby)
+"oqi" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	external_pressure_bound = 0;
+	icon_state = "in";
+	internal_pressure_bound = 4000;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/machinery/sparker{
+	id = "mixingroom";
+	name = "Mounted Igniter";
+	pixel_x = -24
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/station/science/lab)
 "oqt" = (
 /obj/machinery/power/data_terminal,
 /obj/machinery/sleeper{
@@ -29722,13 +29721,6 @@
 	dir = 8
 	},
 /area/station/science/artifact)
-"oHa" = (
-/obj/machinery/ignition_switch{
-	id = "combustion_ignition";
-	pixel_x = -24
-	},
-/turf/simulated/floor/plating/airless,
-/area/station/engine/proto)
 "oIX" = (
 /obj/cable{
 	icon_state = "0-2"
@@ -29881,6 +29873,13 @@
 	},
 /turf/space,
 /area/station/engine/proto_gangway)
+"oQw" = (
+/obj/machinery/light{
+	dir = 1;
+	tag = "icon-tube1 (NORTH)"
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "oQx" = (
 /obj/disposalpipe/segment/mail{
 	dir = 4
@@ -29932,6 +29931,13 @@
 	},
 /turf/simulated/floor/white,
 /area/station/crew_quarters/pool)
+"oTp" = (
+/obj/drink_rack/mug{
+	pixel_x = -26;
+	pixel_y = 6
+	},
+/turf/simulated/floor/black,
+/area/station/engine/engineering/breakroom)
 "oTM" = (
 /obj/cable{
 	icon_state = "4-8"
@@ -30622,6 +30628,16 @@
 	},
 /turf/simulated/floor/orangeblack,
 /area/station/science/lobby)
+"pIo" = (
+/obj/disposalpipe/trunk/morgue{
+	dir = 4
+	},
+/obj/machinery/disposal/morgue{
+	desc = "A pneumatic chute used to transport corpses.";
+	name = "mortician's chute"
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "pIu" = (
 /obj/machinery/power/data_terminal,
 /obj/machinery/guardbot_dock,
@@ -31617,6 +31633,16 @@
 	dir = 10
 	},
 /area/station/mining/magnet)
+"qKS" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/disposalpipe/segment/morgue{
+	dir = 2;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "qLi" = (
 /turf/simulated/floor/purple,
 /area/station/science/lobby)
@@ -31849,6 +31875,15 @@
 /obj/machinery/atmospherics/pipe/simple/insulated,
 /turf/simulated/floor/engine/vacuum,
 /area/station/engine/proto)
+"qUZ" = (
+/obj/machinery/mass_driver{
+	desc = "A device that launches objects, like ANCIENT SIRENS, for example, on it at great velocity when activated.";
+	dir = 4;
+	drive_range = 100;
+	id = "getitout"
+	},
+/turf/simulated/floor/plating,
+/area/station/science/artifact)
 "qVk" = (
 /obj/pool/perspective{
 	dir = 4;
@@ -32291,17 +32326,6 @@
 	},
 /turf/simulated/floor/greenwhite/corner,
 /area/station/turret_protected/AIsat)
-"ruk" = (
-/obj/machinery/atmospherics/valve{
-	dir = 4
-	},
-/obj/machinery/ignition_switch{
-	id = "mixingroom";
-	pixel_x = 24;
-	pixel_y = 10
-	},
-/turf/simulated/floor/purple,
-/area/station/science/lab)
 "run" = (
 /obj/decal/tile_edge/line/white{
 	dir = 5;
@@ -35854,17 +35878,6 @@
 	},
 /turf/simulated/floor,
 /area/station/security/main)
-"voT" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/station/science/lab)
 "vqf" = (
 /obj/stool/bar,
 /turf/simulated/floor{
@@ -36559,6 +36572,13 @@
 	},
 /turf/simulated/floor,
 /area/station/security/brig)
+"wcZ" = (
+/obj/machinery/crema_switch{
+	id = "crematorium";
+	pixel_x = -22
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "wdp" = (
 /obj/machinery/light/small/floor/cool,
 /obj/cable{
@@ -36798,6 +36818,12 @@
 "wuu" = (
 /turf/simulated/wall/auto/supernorn,
 /area/station/hallway/primary/south)
+"wuw" = (
+/obj/machinery/traymachine/locking/crematorium{
+	id = "crematorium"
+	},
+/turf/simulated/floor/black,
+/area/station/medical/morgue)
 "wuW" = (
 /obj/lattice,
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
@@ -37203,22 +37229,6 @@
 /area/station/engine/engineering/private)
 "wSO" = (
 /turf/simulated/floor/purple,
-/area/station/science/lab)
-"wTX" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/machinery/sparker{
-	id = "mixingroom";
-	name = "Mounted Igniter";
-	pixel_x = -24
-	},
-/turf/simulated/floor/engine/vacuum,
 /area/station/science/lab)
 "wUa" = (
 /obj/table/reinforced/bar/auto,
@@ -38186,18 +38196,6 @@
 	},
 /turf/simulated/floor/airless/plating/jen,
 /area/station/turret_protected/AIbaseoutside)
-"ydb" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 1;
-	external_pressure_bound = 0;
-	icon_state = "in";
-	internal_pressure_bound = 4000;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/lattice,
-/turf/space,
-/area/space)
 "ydc" = (
 /turf/simulated/wall/auto/supernorn,
 /area/station/crew_quarters/arcade)
@@ -69600,7 +69598,7 @@ uQl
 ePe
 tjm
 pMi
-aNF
+oTp
 adZ
 lFW
 aef
@@ -81976,17 +81974,17 @@ aCU
 aDW
 aET
 aGr
-aHw
+dGF
 aDW
 aET
 aKK
 aLI
 aNa
 aOf
-aPx
-aQt
-aRi
-aQt
+wuw
+wcZ
+leu
+pIo
 aOf
 aPu
 aPu
@@ -82276,7 +82274,7 @@ axJ
 aCo
 aCV
 aDW
-aEU
+dGF
 aGs
 aHx
 aDW
@@ -82285,10 +82283,10 @@ aKN
 aKK
 aNb
 aOf
-aPy
+oQw
 aQu
 aRB
-aQu
+gUr
 aOf
 aPu
 aPu
@@ -82587,10 +82585,10 @@ aKO
 aLN
 aNc
 aOg
-aPz
-aQv
-aRC
-aSK
+nnU
+nnU
+jsp
+qKS
 aTI
 aUv
 aVs
@@ -86804,7 +86802,7 @@ auB
 auB
 aBS
 aCs
-aDx
+jOx
 aEw
 aFa
 aHm
@@ -95292,8 +95290,8 @@ aaB
 bft
 bgt
 bhL
-biJ
-biJ
+iFR
+iFR
 bnT
 bpe
 bqj
@@ -98046,7 +98044,7 @@ iwQ
 gmN
 hOp
 oLS
-ydb
+bFd
 aaa
 aaa
 aaa
@@ -98630,7 +98628,7 @@ aaa
 aaa
 aaa
 ivd
-jUG
+ica
 lJG
 nIV
 jLz
@@ -98946,7 +98944,7 @@ lnh
 lQg
 ydz
 wSO
-ruk
+lwf
 iIu
 sXL
 tKf
@@ -99234,7 +99232,7 @@ aaa
 aaa
 aaa
 ivd
-jXg
+qUZ
 ivd
 aaa
 aaa
@@ -99536,7 +99534,7 @@ aaa
 aaa
 aaa
 ivd
-jXE
+dUy
 ivd
 aaa
 aaa
@@ -99545,7 +99543,7 @@ aaa
 aaa
 sXL
 tWn
-voT
+gzp
 tWn
 sXL
 yfD
@@ -100154,7 +100152,7 @@ aaB
 tZW
 ptB
 tWn
-wTX
+oqi
 tZW
 tWD
 tWD
@@ -119964,7 +119962,7 @@ xIv
 vuR
 oWj
 ezt
-oHa
+hjU
 sro
 spq
 abm

@@ -9,7 +9,7 @@
 
 INIT_TYPE(/obj/item/assembly/shock_kit)
 	..()
-	SPAWN_DBG(2 SECONDS)
+	SPAWN(2 SECONDS)
 		if (src)
 			if (!(src.part1 && istype(src.part1)))
 				src.part1 = new /obj/item/clothing/head/helmet(src)

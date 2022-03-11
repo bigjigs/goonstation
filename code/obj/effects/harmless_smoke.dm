@@ -13,12 +13,12 @@
 /*
 INIT_TYPE(/obj/effects/harmless_smoke)
 	..()
-	SPAWN_DBG(10 SECONDS)
+	SPAWN(10 SECONDS)
 		qdel(src)
 	return
 */
 /obj/effects/harmless_smoke/proc/kill(var/time)
-	SPAWN_DBG(time)
+	SPAWN(time)
 		qdel(src)
 
 

@@ -1,5 +1,6 @@
 /obj/decal
 	text = ""
+	plane = PLANE_NOSHADOW_BELOW
 	var/list/random_icon_states = list()
 	var/random_dir = 0
 
@@ -18,8 +19,6 @@
 		src.flags |= UNCRUSHABLE
 
 	proc/setup(var/L,var/list/viral_list)
-		set_loc(L)
-
 		if (random_icon_states && length(src.random_icon_states) > 0)
 			src.icon_state = pick(src.random_icon_states)
 		if (src.random_dir)
@@ -63,6 +62,7 @@
 	pixel_x = 0
 	mouse_opacity = 0
 	blend_mode = 2
+	plane = PLANE_NOSHADOW_ABOVE
 
 	INIT()
 		add_filter("motion blur", 1, motion_blur_filter(x=0, y=3))
@@ -76,6 +76,7 @@
 	anchored = 1
 	icon = 'icons/obj/adventurezones/void.dmi'
 	icon_state = "skeleton_l"
+	plane = PLANE_DEFAULT
 
 	decomposed_corpse
 		name = "decomposed corpse"
@@ -120,9 +121,10 @@
 	pixel_y = -16
 	pixel_x = -16
 	mouse_opacity = 0
+	plane = PLANE_NOSHADOW_ABOVE
 	INIT(var/atom/location)
 		src.set_loc(location)
-		SPAWN_DBG(2 SECONDS) qdel(src)
+		SPAWN(2 SECONDS) qdel(src)
 		return ..(location)
 
 /obj/decal/shockwave
@@ -135,9 +137,10 @@
 	pixel_y = -16
 	pixel_x = -16
 	mouse_opacity = 0
+	plane = PLANE_NOSHADOW_ABOVE
 	INIT(var/atom/location)
 		src.set_loc(location)
-		SPAWN_DBG(2 SECONDS) qdel(src)
+		SPAWN(2 SECONDS) qdel(src)
 		return ..(location)
 
 /obj/decal/point
@@ -157,7 +160,7 @@ proc/make_point(atom/movable/target, pixel_x=0, pixel_y=0, color="#ffffff", time
 	point.color = color
 	point.invisibility = invisibility
 	target.vis_contents += point
-	SPAWN_DBG(time)
+	SPAWN(time)
 		if(target)
 			target.vis_contents -= point
 		qdel(point)
@@ -182,6 +185,7 @@ proc/make_point(atom/movable/target, pixel_x=0, pixel_y=0, color="#ffffff", time
 	density = 0
 	desc = "Barber poles historically were signage used to convey that the barber would perform services such as blood letting and other medical procedures, with the red representing blood, and the white representing the bandaging. In America, long after the time when blood-letting was offered, a third colour was added to bring it in line with the colours of their national flag. This one is in space."
 	layer = OBJ_LAYER
+	plane = PLANE_DEFAULT
 
 /obj/decal/oven
 	name = "Oven"
@@ -191,6 +195,7 @@ proc/make_point(atom/movable/target, pixel_x=0, pixel_y=0, color="#ffffff", time
 	anchored = 1
 	density = 1
 	layer = OBJ_LAYER
+	plane = PLANE_DEFAULT
 
 /obj/decal/sink
 	name = "Sink"
@@ -200,9 +205,11 @@ proc/make_point(atom/movable/target, pixel_x=0, pixel_y=0, color="#ffffff", time
 	anchored = 1
 	density = 1
 	layer = OBJ_LAYER
+	plane = PLANE_DEFAULT
 
 obj/decal/fakeobjects
 	layer = OBJ_LAYER
+	plane = PLANE_DEFAULT
 	var/true_name = "fuck you erik"	//How else will players banish it or place curses on it?? honestly people
 
 	INIT()
@@ -232,7 +239,7 @@ obj/decal/fakeobjects
 
 obj/decal/fakeobjects/cargopad
 	name = "Cargo Pad"
-	desc = "Used to recieve objects transported by a Cargo Transporter."
+	desc = "Used to receive objects transported by a Cargo Transporter."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "cargopad"
 	anchored = 1
@@ -408,6 +415,7 @@ obj/decal/fakeobjects/teleport_pad
 	anchored = 1
 	icon = 'icons/obj/decoration.dmi'
 	icon_state = "ringrope"
+	plane = PLANE_DEFAULT
 	layer = OBJ_LAYER
 	event_handler_flags = USE_FLUID_ENTER | USE_CHECKEXIT
 
@@ -416,7 +424,7 @@ obj/decal/fakeobjects/teleport_pad
 			return 1
 		if (src.dir == SOUTHWEST || src.dir == SOUTHEAST || src.dir == NORTHWEST || src.dir == NORTHEAST || src.dir == SOUTH || src.dir == NORTH)
 			return 0
-		if(get_dir(loc, mover) == dir)
+		if(get_dir(loc, mover) & dir)
 
 			return !density
 		else
@@ -425,7 +433,7 @@ obj/decal/fakeobjects/teleport_pad
 	CheckExit(atom/movable/O as mob|obj, target as turf)
 		if (!src.density)
 			return 1
-		if (get_dir(O.loc, target) == src.dir)
+		if (get_dir(O.loc, target) & src.dir)
 			return 0
 		return 1
 
@@ -463,7 +471,7 @@ obj/decal/fakeobjects/teleport_pad
 			return 1
 		if (src.dir == SOUTHWEST || src.dir == SOUTHEAST || src.dir == NORTHWEST || src.dir == NORTHEAST || src.dir == SOUTH || src.dir == NORTH)
 			return 0
-		if(get_dir(loc, mover) == dir)
+		if(get_dir(loc, mover) & dir)
 
 			return !density
 		else
@@ -472,7 +480,7 @@ obj/decal/fakeobjects/teleport_pad
 	CheckExit(atom/movable/O as mob|obj, target as turf)
 		if (!src.density)
 			return 1
-		if (get_dir(O.loc, target) == src.dir)
+		if (get_dir(O.loc, target) & src.dir)
 			return 0
 		return 1
 
@@ -491,6 +499,7 @@ obj/decal/fakeobjects/teleport_pad
 	icon = 'icons/obj/decals/misc.dmi'
 	icon_state = "alienflower"
 	random_dir = 8
+	plane = PLANE_DEFAULT
 
 	INIT()
 		..()
@@ -503,6 +512,7 @@ obj/decal/fakeobjects/teleport_pad
 	icon = 'icons/obj/decals/misc.dmi'
 	icon_state = "avine_l1"
 	random_icon_states = list("avine_l1", "avine_l2", "avine_l3")
+	plane = PLANE_DEFAULT
 	INIT()
 		..()
 		src.set_dir(pick(cardinal))
@@ -618,6 +628,7 @@ obj/decal/fakeobjects/teleport_pad
 	density = 0
 	opacity = 0
 	anchored = 1
+	plane = PLANE_DEFAULT
 
 
 

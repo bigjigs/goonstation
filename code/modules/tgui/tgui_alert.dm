@@ -84,7 +84,7 @@ INIT_TYPE(/datum/tgui_modal, mob/user, message, title, list/buttons, timeout, co
 	if (timeout)
 		src.timeout = timeout
 		src.start_time = TIME
-		SPAWN_DBG(timeout)
+		SPAWN(timeout)
 			qdel(src)
 	. = ..()
 

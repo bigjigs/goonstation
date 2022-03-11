@@ -308,7 +308,7 @@ For hairball DynAssemblies see: jonescity.dm
 
 	INIT()
 		..()
-		SPAWN_DBG(0)
+		SPAWN(0)
 			update_appearance()
 
 	proc/update_appearance()

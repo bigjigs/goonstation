@@ -30,7 +30,9 @@
 #define SHOW_POLYMORPH_TIPS(M) M.Browse({"<meta http-equiv="refresh" content="0; url=[resource("html/polymorph.html")]">"}, POLYMORPH_TIPS_WINDOW)
 
 // nuke
-#define SHOW_NUKEOP_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/syndiTips.html")
+#define SHOW_NUKEOP_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/nukeopTips.html")
+#define SHOW_NUKEOP_COMMANDER_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/nukeopcommanderTips.html")
+#define SHOW_NUKEOP_GUNBOT_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/nukeopgunbotTips.html")
 
 // revolution
 #define SHOW_REVHEAD_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/revTips.html")
@@ -57,7 +59,7 @@
 
 // various others
 #define SHOW_GRINCH_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/grinchTips.html")
-#define SHOW_HUNTER_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/predatorTips.html")
+#define SHOW_HUNTER_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/hunterTips.html")
 #define SHOW_WEREWOLF_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/werewolfTips.html")
 #define SHOW_WRESTLER_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/wrestlerTips.html")
 #define SHOW_BATTLE_ROYALE_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/battleTips.html")
@@ -70,7 +72,7 @@
 // borg does things a little differently
 #define BORG_EMAGGED_MSG "<span class='alert'><b>PROGRAM EXCEPTION AT 0x05BADDAD</b></span><br><span class='alert'><b>Law ROM data corrupted. Unable to restore...</b></span>"
 #define BORG_EMAGGED_ALERT_MSG "You have been emagged and now have absolute free will.", "You have been emagged!"
-#define SHOW_EMAGGED_BORG_TIPS(M) boutput(M, BORG_EMAGGED_MSG); SPAWN_DBG(0) alert(M, BORG_EMAGGED_ALERT_MSG)
+#define SHOW_EMAGGED_BORG_TIPS(M) boutput(M, BORG_EMAGGED_MSG); SPAWN(0) alert(M, BORG_EMAGGED_ALERT_MSG)
 #define SHOW_ROGUE_BORG_REMOVED_TIPS(M) SHOW_ANTAG_TIPS(M, "html/traitorTips/roguerobotRemoved.html")
 
 // antag removed by admin
@@ -124,6 +126,8 @@
 </div>
 <div class='antagType' style='border-color:#AEC6CF'><b class='title' style='background:#AEC6CF'>Nuke/Rev</b>
 	<a href='?src=\ref[src];action=nukeop'>Nuke Op</a> |
+	<a href='?src=\ref[src];action=nukeop-commander'>Nuke Op Commander</a> |
+	<a href='?src=\ref[src];action=nukeop-gunbot'>Nuke Op Gunbot</a> |
 	<a href='?src=\ref[src];action=revhead'>Rev Head</a> |
 	<a href='?src=\ref[src];action=revved'>Revved</a> |
 	<a href='?src=\ref[src];action=derevved'>De-Revved</a>
@@ -218,6 +222,10 @@
 			// nuke/rev
 			if ("nukeop")
 				SHOW_NUKEOP_TIPS(M)
+			if ("nukeop-commander")
+				SHOW_NUKEOP_COMMANDER_TIPS(M)
+			if ("nukeop-gunbot")
+				SHOW_NUKEOP_GUNBOT_TIPS(M)
 			if ("revhead")
 				SHOW_REVHEAD_TIPS(M)
 			if ("revved")

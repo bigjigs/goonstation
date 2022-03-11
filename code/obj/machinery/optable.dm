@@ -15,7 +15,7 @@
 
 INIT_TYPE(/obj/machinery/optable)
 	..()
-	SPAWN_DBG(0.5 SECONDS)
+	SPAWN(0.5 SECONDS)
 		src.computer = locate(/obj/machinery/computer/operating, orange(2,src))
 
 /obj/machinery/optable/ex_act(severity)

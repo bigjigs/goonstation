@@ -67,10 +67,11 @@
 	var/clear_invalid_targets = 1 // In relation to world time. Clear list periodically.
 	var/clear_invalid_targets_interval = 30 SECONDS // How frequently?
 
+	var/list/chase_lines = list("Gimme!", "Hey!", "Oi!", "Mine!", "Want!", "Need!")
 
 INIT_TYPE(/obj/machinery/bot/floorbot)
 	..()
-	SPAWN_DBG(0.5 SECONDS)
+	SPAWN(0.5 SECONDS)
 		if (src)
 			src.UpdateIcon()
 	return
@@ -159,7 +160,9 @@ INIT_TYPE(/obj/machinery/bot/floorbot)
 			src.updateUsrDialog()
 		else
 			..()
-
+			src.health -= W.force * 0.5
+			if (src.health <= 0)
+				src.explode()
 
 /obj/machinery/bot/floorbot/Topic(href, href_list)
 	if (..())
@@ -278,6 +281,9 @@ INIT_TYPE(/obj/machinery/bot/floorbot)
 	if (!src.on || src.repairing || !isturf(src.loc))
 		return
 
+	if (src.target?.disposed || !isturf(get_turf(src.target)))
+		src.target = null
+
 	// Invalid targets may not be unreachable anymore. Clear list periodically.
 	if (src.clear_invalid_targets && !ON_COOLDOWN(src, FLOORBOT_CLEARTARGET_COOLDOWN, src.clear_invalid_targets_interval))
 		src.targets_invalid = list()
@@ -312,6 +318,11 @@ INIT_TYPE(/obj/machinery/bot/floorbot)
 				src.KillPathAndGiveUp(1)
 				return
 		src.point(src.target)
+		var/obj/A = src.target
+		while(!isnull(A) && !istype(A.loc, /turf) && !ishuman(A.loc))
+			A = A.loc
+		if (ishuman(A?.loc) && prob(30))
+			speak(pick(src.chase_lines))
 		src.doing_something = 1
 		src.search_range = 1
 	else
@@ -461,6 +472,9 @@ INIT_TYPE(/obj/machinery/bot/floorbot)
 	src.visible_message("<span class='alert'><B>[src] blows apart!</B></span>", 1)
 	playsound(src.loc, "sound/impact_sounds/Machinery_Break_1.ogg", 40, 1)
 	elecflash(src, radius=1, power=3, exclude_center = 0)
+	new /obj/item/tile/steel(src.loc)
+	new /obj/item/device/prox_sensor(src.loc)
+	new /obj/item/storage/toolbox/mechanical/empty(src.loc)
 	qdel(src)
 	return
 
