@@ -42,12 +42,13 @@ obj/machinery/atmospherics/binary/volume_pump
 				icon_state = "exposed_2_off"
 			else
 				icon_state = "exposed_3_off"
-			on = 0
 
 		return
 
 	process()
 		..()
+		if(!(node1&&node2))
+			on = FALSE
 		if(!on)
 			return 0
 

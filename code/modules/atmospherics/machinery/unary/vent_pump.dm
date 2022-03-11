@@ -97,12 +97,13 @@
 				icon_state = "[level == 1 && istype(loc, /turf/simulated) ? "h" : "" ]in"
 		else
 			icon_state = "[level == 1 && istype(loc, /turf/simulated) ? "h" : "" ]off"
-			on = 0
 
 		return
 
 	process()
 		..()
+		if(!node)
+			on = FALSE
 		if(!loc || !on)
 			return 0
 

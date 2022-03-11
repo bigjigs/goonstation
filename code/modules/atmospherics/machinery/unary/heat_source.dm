@@ -19,12 +19,12 @@
 		else
 			icon_state = "exposed"
 
-			on = 0
-
 		return
 
 	process()
 		..()
+		if(!node)
+			on = FALSE
 		if(!on)
 			return 0
 		var/air_heat_capacity = HEAT_CAPACITY(air_contents)

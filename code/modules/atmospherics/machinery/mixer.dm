@@ -48,8 +48,6 @@ obj/machinery/atmospherics/mixer
 
 			icon_state = "exposed_[node_in1_direction|node_in2_direction]_[node_out_bit]_off"
 
-			on = 0
-
 		return
 
 	network_disposing(datum/pipe_network/reference)
@@ -228,6 +226,9 @@ obj/machinery/atmospherics/mixer
 
 	process()
 		..()
+
+		if(!(node_in1&&node_in2&&node_out))
+			on = FALSE
 
 		src.report_status()
 

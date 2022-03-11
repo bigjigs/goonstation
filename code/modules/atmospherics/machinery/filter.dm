@@ -133,8 +133,6 @@ Filter types:
 
 			icon_state = "exposed_[node_out1_direction|node_out2_direction]_[node_in_bit]_off"
 
-			on = 0
-
 		return
 
 	network_disposing(datum/pipe_network/reference)
@@ -147,6 +145,8 @@ Filter types:
 
 	process()
 		..()
+		if(!(node_out1&&node_out2&&node_in))
+			on = FALSE
 		if(!on)
 			return 0
 
