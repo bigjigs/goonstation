@@ -194,7 +194,8 @@ INIT_TYPE(/obj/item/device/radio/intercom)
 	device_color = "#820A16"
 	hardened = TRUE
 
-	initialize()
+	INIT()
+		..()
 		if(istype(ticker.mode, /datum/game_mode/nuclear))
 			var/datum/game_mode/nuclear/N = ticker.mode
 			if(N.agent_radiofreq)
