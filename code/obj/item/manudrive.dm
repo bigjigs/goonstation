@@ -23,7 +23,7 @@
 	/// -1 Means it can be used unlimited time, its a lazy solution yet an effective one, numbers above 0 can only have things fabricated from those manudrives x amount of times.
 	var/fablimit = -1
 
-	New(var/loc)
+	INIT(var/loc)
 		..()
 		if(src.fablimit <= 0)
 			src.root.add_file( new /datum/computer/file/manudrive(src))

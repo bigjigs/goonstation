@@ -819,7 +819,7 @@ var/datum/action_controller/actions
 	/// a list of args for the proc thats called once the action bar finishes, if needed.
 	var/list/proc_args = null
 
-	New(owner, target, duration, proc_path, proc_args, icon, icon_state, end_message, interrupt_flags, call_proc_on)
+	INIT(owner, target, duration, proc_path, proc_args, icon, icon_state, end_message, interrupt_flags, call_proc_on)
 		..()
 		if (owner)
 			src.owner = owner
@@ -1323,7 +1323,7 @@ var/datum/action_controller/actions
 	var/list/proc_args = null
 	bar_on_owner = FALSE
 
-	New(owner, target, duration, proc_path, proc_args, end_message, start, stop)
+	INIT(owner, target, duration, proc_path, proc_args, end_message, start, stop)
 		..()
 		src.owner = owner
 		src.target = target
@@ -1698,7 +1698,7 @@ var/datum/action_controller/actions
 	var/mob/consumer
 	var/obj/item/reagent_containers/food/snacks/foodish //only works with food for now, will generalize for organs and glasses and such later
 
-	New(var/mob/consumer, var/foodish, var/icon, var/icon_state)
+	INIT(var/mob/consumer, var/foodish, var/icon, var/icon_state)
 		..()
 		src.consumer = consumer
 		src.foodish = foodish

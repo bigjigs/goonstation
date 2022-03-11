@@ -992,7 +992,7 @@
 	cell_type = /obj/item/ammo/power_cell/med_power
 	uses_multiple_icon_states = 1
 
-	New()
+	INIT()
 		set_current_projectile(new/datum/projectile/bioeffect_beam/stinky)
 		projectiles = list(current_projectile)
 		..()
@@ -1072,7 +1072,7 @@
 	var/hunter_key = "" // The owner of this rifle.
 	mats = null
 
-	New()
+	INIT()
 		..()
 		if(istype(src.loc, /mob/living))
 			var/mob/M = src.loc

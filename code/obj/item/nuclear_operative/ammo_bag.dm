@@ -33,7 +33,7 @@
 	var/spec_ammo = FALSE
 	var/deployed = FALSE
 
-	New()
+	INIT()
 		..()
 		if(!deployed)
 			src.desc = "A folded up bag that, once deployed, can fabricate magazines for standard syndicate weapons. It has [src.charge] charge left."
@@ -123,6 +123,6 @@
 	icon_state = "ammobag-sp"
 	spec_ammo = TRUE
 
-	New()
+	INIT()
 		..()
 		desc = "A bag that can fabricate specialist magazines for standard syndicate weapons. Technology! It has [charge] charge left."

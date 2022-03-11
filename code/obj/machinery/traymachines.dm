@@ -49,7 +49,7 @@ ABSTRACT_TYPE(/obj/machinery/traymachine)
 	var/icon_occupied = "morgue2" //When the machine has things in contents that aren't the tray or in non_tray_contents
 
 
-/obj/machinery/traymachine/New()
+INIT_TYPE(/obj/machinery/traymachine)
 	my_tray = new tray_type(src) //Heck this lazy init tray spawning,
 	my_tray.set_dir(src.dir)
 	my_tray.my_machine = src
@@ -291,7 +291,7 @@ ABSTRACT_TYPE(/obj/machine_tray)
 	icon_unoccupied = "crema1"
 	icon_occupied = "crema2"
 
-	New()
+	INIT()
 		. = ..()
 		START_TRACKING
 
@@ -382,7 +382,7 @@ ABSTRACT_TYPE(/obj/machine_tray)
 		src.crematoriums = null
 		. = ..()
 
-/obj/machinery/crema_switch/New()
+INIT_TYPE(/obj/machinery/crema_switch)
 	..()
 	UnsubscribeProcess()
 
@@ -425,7 +425,7 @@ ABSTRACT_TYPE(/obj/machine_tray)
 	var/tanningmodifier = 0.03 //How fast do you want to go to your tanningcolor?
 	var/obj/machinery/computer/tanning/linked = null
 
-	New()
+	INIT()
 		..()
 		START_TRACKING
 
@@ -531,7 +531,7 @@ ABSTRACT_TYPE(/obj/machine_tray)
 			var/obj/machinery/traymachine/locking/tanning/tanningbed = my_machine
 			tanningbed.tanningcolor = tubecolor
 
-	New()
+	INIT()
 		..()
 		tanningtube = new /obj/item/light/tube(src)
 		tanningtube.name = "stock tanning light tube"
@@ -595,7 +595,7 @@ ABSTRACT_TYPE(/obj/machine_tray)
 	var/state_str = ""
 	var/obj/machinery/traymachine/locking/tanning/linked = null //The linked tanning bed
 
-	New()
+	INIT()
 		..()
 		get_link()
 

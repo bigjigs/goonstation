@@ -558,7 +558,7 @@
 		icon_state += "[rand(1,5)]"
 
 /obj/item/raw_material/scrap_metal/steel
-	New()
+	INIT()
 		..()
 		src.setMaterial(getMaterial("steel"))
 

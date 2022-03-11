@@ -972,7 +972,7 @@ Note: Add new traitor items to syndicate_buylist.dm, not here.
 	var/list/commander_buylist = list()
 	var/datum/syndicate_buylist/reading_about = null
 
-	New()
+	INIT()
 		..()
 		var/num_players
 		for(var/client/C in clients)

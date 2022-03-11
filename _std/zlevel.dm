@@ -17,7 +17,7 @@ var/global/list/datum/zlevel/zlevels = null
 	/// Z coordinate of this z-level
 	var/z
 
-	New(path, z)
+	INIT(path, z)
 		..()
 		src.path = path
 		src.z = z

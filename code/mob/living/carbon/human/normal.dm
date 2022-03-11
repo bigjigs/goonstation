@@ -147,7 +147,7 @@
 		JobEquipSpawned("Nanotrasen Security Operative")
 
 /mob/living/carbon/human/normal/inspector
-	New()
+	INIT()
 		..()
 		JobEquipSpawned("Inspector")
 
@@ -186,7 +186,7 @@
 		update_clothing()
 
 /mob/living/carbon/human/normal/ntso_old
-	New()
+	INIT()
 		..()
 		src.equip_new_if_possible(/obj/item/clothing/shoes/swat, slot_shoes)
 		src.equip_new_if_possible(/obj/item/clothing/under/misc/NT, slot_w_uniform)

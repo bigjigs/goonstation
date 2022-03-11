@@ -292,7 +292,7 @@
 		..()
 
 /obj/machinery/cargo_router/Router15 // undeliverable cargo outlet
-	New()
+	INIT()
 		destinations = list("Airbridge" = WEST, "Cafeteria" = WEST, "EVA" = WEST, "Disposals" = WEST, "QM" = WEST, "Engine" = WEST, "Catering" = WEST, "MedSci" = WEST, "Security" = WEST)
 		default_direction = SOUTH
 		..()

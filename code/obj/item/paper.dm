@@ -559,7 +559,7 @@ ASC: Aux. Solar Control<BR>
 	<br><i>Client wil&nbsp;&nbsp;██rate a late or damaged shipment</i>
 	"}
 
-	New()
+	INIT()
 		. = ..()
 		src.stamp(200, 20, rand(-5,5), "stamp-qm.png", "stamp-qm")
 
@@ -1677,7 +1677,7 @@ That clump of dirt has a metal substrate, we can just ask Rachid to weld it to t
 	name = "Shipping Manifest"
 	icon_state = "paper"
 
-	New()
+	INIT()
 		. = ..()
 		if(!length(syndi_buylist_cache))
 			SPAWN(30 SECONDS) //This spawns empty on-map otherwise, 30s is a safe bet

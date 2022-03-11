@@ -548,7 +548,7 @@
 	auto_type = /obj/table/syndicate
 	parts_type = /obj/item/furniture_parts/table/syndicate
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

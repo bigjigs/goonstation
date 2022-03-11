@@ -1111,7 +1111,7 @@
 	team_num = TEAM_SYNDICATE
 	item_function_flags = IMMUNE_TO_ACID
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 
@@ -1383,7 +1383,7 @@
 		icon_state = "indusred"
 		item_state = "indusred"
 
-		New()
+		INIT()
 			..()
 			START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

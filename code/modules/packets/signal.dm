@@ -11,7 +11,7 @@
 
 	var/mob/author
 
-	New(mob/author=null)
+	INIT(mob/author=null)
 		..()
 		src.author = author || usr
 

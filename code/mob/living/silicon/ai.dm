@@ -2400,7 +2400,7 @@ proc/get_mobs_trackable_by_AI()
 	var/image/image_background_overlay = null
 // no clue why this used FLY_LAYER before when this is an obj, what the heck
 
-	New()
+	INIT()
 		. = ..()
 		image_glass_overlay = image(icon, "ai_frame-glass", OBJ_LAYER+0.6)
 		image_wire_overlay = image(icon, "ai_frame-wires", OBJ_LAYER+0.5)

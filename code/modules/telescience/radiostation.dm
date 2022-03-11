@@ -543,7 +543,7 @@ ABSTRACT_TYPE(/obj/item/record/random/chronoquest)
 	song = "sound/radio_station/music/second_reality.s3m"
 	add_overlay = FALSE
 
-	New()
+	INIT()
 		..()
 		var/image/overlay = new /image(src.icon, "record_3")
 		overlay.color = list(1.5, 0, 0, 0, 0, 0, 0, 0, 0) // very red

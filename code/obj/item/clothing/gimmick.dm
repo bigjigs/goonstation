@@ -1716,7 +1716,7 @@ ABSTRACT_TYPE(/obj/item/clothing/gloves/ring)
 	icon_state = "dinosaur"
 	item_state = "dinosaur"
 
-	New()
+	INIT()
 		..()
 		src.AddComponent(/datum/component/toggle_hood, hood_style="dinosaur")
 

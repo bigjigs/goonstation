@@ -428,7 +428,7 @@ Custom Books
 	icon_state = "syndiebook"
 	file_path = "strings/books/syndies_guide.txt"
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 
@@ -438,7 +438,7 @@ Custom Books
 
 	stolen //crew obtainable version
 
-		New()
+		INIT()
 			..()
 			STOP_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE) //ugly but oh well
 

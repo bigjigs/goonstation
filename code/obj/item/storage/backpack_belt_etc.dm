@@ -239,7 +239,7 @@
 	item_state = "Syndiesatchel"
 	spawn_contents = list(/obj/item/storage/box/starter/withO2)
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 
@@ -429,7 +429,7 @@
 	item_state = "syndie"
 	slots = 7
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

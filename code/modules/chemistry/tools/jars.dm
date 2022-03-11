@@ -287,7 +287,7 @@ proc/load_intraround_jars()
 	var/list/form_fields
 	var/field_counter
 
-	New(newloc, obj/item/paper/pickled)
+	INIT(newloc, obj/item/paper/pickled)
 		..()
 		if (istype(pickled))
 			src.sizex = pickled.sizex

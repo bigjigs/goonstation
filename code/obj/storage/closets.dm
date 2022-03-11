@@ -124,7 +124,7 @@
 	icon_closed = "syndicate"
 	icon_opened = "syndicate-open"
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

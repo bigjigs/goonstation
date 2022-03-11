@@ -48,7 +48,7 @@
 		force = 12
 		arm_icon = "chainsaw-A"
 
-		New()
+		INIT()
 			..()
 			hitsound = "sound/machines/chainsaw_green.ogg"
 

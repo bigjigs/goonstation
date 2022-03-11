@@ -2290,7 +2290,7 @@ obj/item/clothing/gloves/concussive
 /datum/cargo_pad_manager
 	var/list/pads = list()
 
-	New()
+	INIT()
 		..()
 		RegisterSignal(GLOBAL_SIGNAL, COMSIG_GLOBAL_CARGO_PAD_ENABLED, .proc/add_pad)
 		RegisterSignal(GLOBAL_SIGNAL, COMSIG_GLOBAL_CARGO_PAD_DISABLED, .proc/remove_pad)

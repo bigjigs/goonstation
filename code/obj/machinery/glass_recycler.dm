@@ -10,7 +10,7 @@
 	var/static/list/product_name_cache = list()
 	var/static/list/product_base64_cache = list()
 
-	New(type, path, cost=1)
+	INIT(type, path, cost=1)
 		..()
 		src.product_type = type
 

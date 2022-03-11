@@ -224,7 +224,7 @@
 	team_num = TEAM_SYNDICATE
 	blocked_from_petasusaphilic = TRUE
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

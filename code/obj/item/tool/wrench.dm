@@ -46,7 +46,7 @@
 	force = 10.0
 	stamina_damage = 35
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

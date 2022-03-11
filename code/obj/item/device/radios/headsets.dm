@@ -349,7 +349,7 @@
 	icon_override = "syndie"
 	icon_tooltip = "Syndicate Operative"
 
-	New()
+	INIT()
 		..()
 		SPAWN(1 SECOND)
 			var/the_frequency = R_FREQ_SYNDICATE
@@ -369,7 +369,7 @@
 		secure_classes = list("z" = RADIOCL_SYNDICATE, "l"=RADIOC_OTHER)
 		icon_state = "comtac"
 
-		New()
+		INIT()
 			..()
 			START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 
@@ -397,7 +397,7 @@
 		icon_state = "comtac"
 		desc = "A two-way radio headset designed to protect the wearer from dangerous levels of noise during gunfights."
 
-		New()
+		INIT()
 			..()
 			START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

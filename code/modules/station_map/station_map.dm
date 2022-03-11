@@ -10,7 +10,7 @@
 
 	var/border_width = 20
 
-	New()
+	INIT()
 		..()
 		x_min = world.maxx
 		y_min = world.maxy

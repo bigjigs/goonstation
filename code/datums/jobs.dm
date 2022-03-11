@@ -1417,7 +1417,7 @@ ABSTRACT_TYPE(/datum/job/civilian)
 	alt_names = list("Neurological Specialist", "Ophthalmic Specialist", "Thoracic Specialist", "Orthopaedic Specialist", "Maxillofacial Specialist",
 	  "Vascular Specialist", "Anaesthesiologist", "Acupuncturist", "Medical Director's Assistant")
 
-	New()
+	INIT()
 		..()
 		src.access = get_access("Medical Specialist")
 

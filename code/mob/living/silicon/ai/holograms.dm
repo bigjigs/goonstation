@@ -243,7 +243,7 @@
 	glitch
 		icon_state = "d_glitch1"
 
-		New()
+		INIT()
 			..()
 			if(prob(33))
 				icon_state = pick("d_glitch2", "d_glitch3")
@@ -257,7 +257,7 @@
 	var/obj/effect/distort/hologram/E
 	hologram_type = HOLOGRAM_TEXT
 
-	New(loc, owner, msg)
+	INIT(loc, owner, msg)
 		..(owner, null)
 		if(msg)
 			phrase_log.log_phrase("holograms", msg)

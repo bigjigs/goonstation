@@ -322,7 +322,7 @@
 	initial_reagents = null
 	initial_volume = 50
 
-	New()
+	INIT()
 		..()
 
 	setup_soda()

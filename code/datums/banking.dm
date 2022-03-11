@@ -727,7 +727,7 @@
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "atm"
 
-	New()
+	INIT()
 		..()
 		START_TRACKING
 

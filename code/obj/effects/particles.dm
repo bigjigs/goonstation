@@ -20,7 +20,7 @@ obj/effects/welding
 	var/emitters = list(new/obj/spark_generator, new/obj/spark_generator/flame)
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "fire1"
-	New(var/atom/newloc, var/dirn)
+	INIT(var/atom/newloc, var/dirn)
 		..()
 		for(var/obj/E in emitters)
 			E.mouse_opacity = 0

@@ -212,7 +212,7 @@
 		name = "syndicate field protective mask"
 		item_function_flags = IMMUNE_TO_ACID
 
-		New()
+		INIT()
 			..()
 			START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

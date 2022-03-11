@@ -91,7 +91,7 @@
 	token_accepted = /obj/item/requisition_token/syndicate
 	log_purchase = TRUE
 
-	New()
+	INIT()
 		..()
 		// List of avaliable objects for purchase
 		materiel_stock += new/datum/materiel/sidearm/smartgun

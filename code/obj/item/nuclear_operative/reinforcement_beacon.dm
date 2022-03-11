@@ -10,7 +10,7 @@
 	var/uses = 1
 	var/ghost_confirmation_delay = 30 SECONDS
 
-	New()
+	INIT()
 		..()
 		desc = "A handheld beacon that allows you to call a Syndicate gunbot to the user's current location. It has [src.uses] charge left."
 

@@ -20,7 +20,7 @@ proc/get_weakref(datum/dat)
 /datum/weakref
 	var/addr = null
 
-	New(datum/dat)
+	EXPLICIT_NEW(datum/dat)
 		. = ..()
 		addr = ref(dat)
 

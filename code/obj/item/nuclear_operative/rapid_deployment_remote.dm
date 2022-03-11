@@ -13,7 +13,7 @@
 	var/image/valid_overlay_area = null //5 second overlay to indicate the area that will grab people & the nuke
 	var/list/turf/overlayed_turfs = list()
 
-	New()
+	INIT()
 		..()
 		valid_overlay_area = image('icons/effects/alert.dmi', "green")
 

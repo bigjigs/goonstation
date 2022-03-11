@@ -57,7 +57,7 @@ ABSTRACT_TYPE(/obj/item/turret_deployer)
 	quick_deploy_fuel = 2
 	associated_turret = /obj/deployable_turret/syndicate
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 
@@ -430,7 +430,7 @@ ABSTRACT_TYPE(/obj/deployable_turret)
 	icon_tag = "st"
 	associated_deployer = /obj/item/turret_deployer/syndicate
 
-	New()
+	INIT()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 		..()
 

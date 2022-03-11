@@ -9,7 +9,7 @@ Left Mouse Button                      = FIRE!<br>
 	var/tmp/datum/projectile/P
 	var/proj_type = null
 
-	New(datum/buildmode_holder/H)
+	INIT(datum/buildmode_holder/H)
 		. = ..()
 		if(!isnull(proj_type))
 			src.P = new proj_type()

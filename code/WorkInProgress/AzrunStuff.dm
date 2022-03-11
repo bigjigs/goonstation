@@ -3,7 +3,7 @@
 	name = "(de/re)-construction device"
 	desc = "A magical saw-like device for unmaking things. Is that a soldering iron on the back?"
 
-	New()
+	INIT()
 		..()
 		setMaterial(getMaterial("miracle"))
 
@@ -41,7 +41,7 @@
 )
 
 /obj/table/wood/auto/desk/azrun
-	New()
+	INIT()
 		..()
 		var/obj/item/storage/desk_drawer/azrun/L = new(src)
 		src.desk_drawer = L

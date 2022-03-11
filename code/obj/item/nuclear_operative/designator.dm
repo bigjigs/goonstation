@@ -21,7 +21,7 @@
 	/// Overlay sprite for where the strike will land, set to null for no overlay
 	var/image/target_overlay = null
 
-	New()
+	INIT()
 		..()
 		designatormove = new/datum/movement_controller/designator_look()
 		desc = "A handheld monocular device with a laser built into it, used for calling in fire support. It has [src.uses] charge left."
@@ -102,7 +102,7 @@
 	uses = 2
 	ship_looking_for = "Cairngorm"
 
-	New()
+	INIT()
 		..()
 		desc = "A handheld monocular device with a laser built into it, used for calling in fire support from the Cairngorm. It has [src.uses] charge left."
 
@@ -165,7 +165,7 @@
 	proc/bombard(var/atom/target, var/mob/user)
 		return
 
-	New()
+	INIT()
 		. = ..()
 		START_TRACKING
 		target_overlay = image('icons/effects/effects.dmi', "spinny_red")
@@ -225,7 +225,7 @@
 	syndicate
 		firingfrom = "Cairngorm"
 
-		New()
+		INIT()
 			..()
 			START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

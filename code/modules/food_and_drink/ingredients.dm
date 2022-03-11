@@ -39,7 +39,7 @@
 	var/subjectjob = "Human Being"
 	amount = 1
 
-	New(var/turf/newloc,var/mob/living/meatsource)
+	INIT(var/turf/newloc,var/mob/living/meatsource)
 		. = ..(newloc)
 		if(!meatsource)
 			return

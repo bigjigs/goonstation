@@ -999,7 +999,7 @@
 		constantly_overhead
 			appearance_flags = TILE_BOUND | RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM | KEEP_APART | PIXEL_SCALE
 
-			New()
+			INIT()
 				..()
 				src.pixel_y += 34
 

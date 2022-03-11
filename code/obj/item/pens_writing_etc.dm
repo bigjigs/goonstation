@@ -956,7 +956,7 @@
 	name = "inspector's clipboard"
 	desc = "An official Nanotrasen Inspector's clipboard."
 	var/inspector_name = null
-	New()
+	INIT()
 		..()
 		src.inhand_color = "#3F3F3F"
 		START_TRACKING

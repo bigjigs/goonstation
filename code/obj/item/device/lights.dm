@@ -476,7 +476,7 @@
 	col_b = 0.9
 	brightness = 0.8
 
-	New()
+	INIT()
 		..()
 		on = 1
 		set_icon_state(src.icon_on)

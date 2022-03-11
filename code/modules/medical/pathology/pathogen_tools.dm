@@ -273,7 +273,7 @@
 	desc = "A 3D-printed vial. Can hold up to 5 units. Barely."
 	can_recycle = FALSE
 
-	New()
+	INIT()
 		. = ..()
 		AddComponent(/datum/component/biodegradable)
 

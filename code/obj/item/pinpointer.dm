@@ -195,7 +195,7 @@
 	hudarrow_color = "#14ad00"
 	target_criteria = /obj/item/disk/data/floppy/read_only/authentication
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

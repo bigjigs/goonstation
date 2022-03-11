@@ -19,7 +19,7 @@
 	stamina_crit_chance = 15
 	contraband = 6
 
-	New()
+	INIT()
 		..()
 		src.icon_state = base_icon_state + "0"
 
@@ -111,7 +111,7 @@
 		base_icon_state = "hunter_cloak"
 		var/hunter_key = "" // The owner of this cloak.
 
-		New()
+		INIT()
 			..()
 			if(istype(src.loc, /mob/living))
 				var/mob/M = src.loc

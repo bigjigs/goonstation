@@ -346,7 +346,7 @@
 
 // temporary blindness overlay until the other one is fixed
 /datum/overlayComposition/limited_sight
-	New()
+	INIT()
 		var/datum/overlayDefinition/dither = new()
 		dither.d_icon = 'icons/effects/overlays/knockout2t.dmi'
 		dither.d_icon_state = "knockout2t"

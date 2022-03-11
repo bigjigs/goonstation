@@ -765,7 +765,7 @@ INIT_TYPE(/obj/item/knife/butcher)
 	makemeat = 0
 	var/hunter_key = "" // The owner of this spear.
 
-	New()
+	INIT()
 		..()
 		if(istype(src.loc, /mob/living))
 			var/mob/M = src.loc

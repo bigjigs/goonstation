@@ -26,7 +26,7 @@
 	p_class = 3 /// H E H
 	mats = 5
 
-	New()
+	INIT()
 		..()
 		RegisterSignal(src, COMSIG_BOMB_SIGNAL_START, .proc/signal_start)
 		RegisterSignal(src, COMSIG_BOMB_SIGNAL_CANCEL, .proc/signal_cancel)

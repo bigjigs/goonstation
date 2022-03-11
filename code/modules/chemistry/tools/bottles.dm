@@ -43,7 +43,7 @@
 	desc = "A small 3D-printed bottle."
 	can_recycle = FALSE
 
-	New()
+	INIT()
 		. = ..()
 		AddComponent(/datum/component/biodegradable)
 
@@ -299,7 +299,7 @@
 	desc = "A 3D-printed reagent storage bottle."
 	can_recycle = FALSE
 
-	New()
+	INIT()
 		. = ..()
 		AddComponent(/datum/component/biodegradable)
 

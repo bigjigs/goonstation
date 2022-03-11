@@ -342,7 +342,7 @@ ABSTRACT_TYPE(/obj/item/clothing/gloves)
 	protective_temperature = 1100
 	material_prints = "high-quality synthetic fibers"
 
-	New()
+	INIT()
 		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 

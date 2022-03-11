@@ -214,7 +214,7 @@
 	/// The type of the item we are stuffing into the target.
 	var/load_type
 
-	New(atom/target, load_type)
+	INIT(atom/target, load_type)
 		..()
 		src.target = target
 		src.load_type = load_type
