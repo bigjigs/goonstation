@@ -55,7 +55,7 @@ INIT_TYPE(/mob/living/critter/flock/drone, var/atom/location, var/datum/flock/F=
 			controller = new/mob/living/intangible/flock/trace(src, src.flock)
 			src.is_npc = 0
 		else
-			SPAWN_DBG(0)
+			SPAWN(0)
 				emote("beep")
 				say(pick_string("flockmind.txt", "flockdrone_created"))
 

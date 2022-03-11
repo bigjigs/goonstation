@@ -15,7 +15,7 @@
 
 INIT_TYPE(/mob/living/silicon/hive_mainframe)
 	. = ..()
-	SPAWN_DBG(0)
+	SPAWN(0)
 		Namepick()
 
 /mob/living/silicon/hive_mainframe/Life(datum/controller/process/mobs/parent)

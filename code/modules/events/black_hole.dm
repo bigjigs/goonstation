@@ -50,7 +50,7 @@
 			shake_camera(M, 5, 16)
 		playsound(src,'sound/effects/creaking_metal1.ogg',100,0,5,0.5)
 
-		SPAWN_DBG(lifespan / 2)
+		SPAWN(lifespan / 2)
 			if (!stable)
 				src.visible_message("<span class='alert'><b>[src] begins to collapse in on itself!</b></span>")
 				playsound(src,'sound/machines/engine_alert3.ogg',100,0,5,0.5)

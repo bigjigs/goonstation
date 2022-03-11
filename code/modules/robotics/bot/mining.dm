@@ -28,7 +28,7 @@ INIT_TYPE(/obj/machinery/bot/mining)
 	..()
 	src.ui = new/datum/digbot_ui(src)
 	setupOverlayVars()
-	SPAWN_DBG(5)
+	SPAWN(5)
 		if(on)
 			turnOn()
 		else

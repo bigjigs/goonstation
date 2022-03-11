@@ -121,7 +121,7 @@
 				for(var/mob/M in view(7, src.loc))
 					shake_camera(M, 20, 16)
 
-				SPAWN_DBG(2 SECONDS)
+				SPAWN(2 SECONDS)
 					new /obj/item/electronics/frame/press_frame(src.loc)
 					src.visible_message("[src] finishes deploying its you-blew-it payload and folds back up into a frame so you can try again.")
 					qdel(src)

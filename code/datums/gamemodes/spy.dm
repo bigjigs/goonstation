@@ -284,7 +284,7 @@
 
 		if (M == Implanter)
 			boutput(M, "<span class='alert'>This was a great idea! You always have the best ideas!  You feel more self-control than you ever have before!</span>")
-			SPAWN_DBG(0)
+			SPAWN(0)
 				alert(M, "This was a great idea! You always have the best ideas!  You feel more self-control than you ever have before!", "YOUR BEST IDEA YET!!")
 			return
 
@@ -312,11 +312,11 @@
 					if (I.loc == oldLeader.current)
 						qdel(I)
 						break
-			SPAWN_DBG(0)
+			SPAWN(0)
 				alert(M, "Your loyalties have shifted! You now know that it is [leader_name] that is truly deserving of your obedience!", "YOU HAVE A NEW MASTER!")
 		else
 			boutput(M, "<h1><font color=red>You feel an unwavering loyalty to [leader_name]! You feel you must obey \his every order! Do not tell anyone about this unless your master tells you to!</font></h1>")
-			SPAWN_DBG(0)
+			SPAWN(0)
 				alert(M, "You feel an unwavering loyalty to [leader_name]! You feel you must obey \his every order! Do not tell anyone about this unless your master tells you to!", "YOU HAVE BEEN MADE A MINDSLAVE!")
 
 		if (M.mind)
