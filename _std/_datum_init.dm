@@ -43,7 +43,7 @@ proc/process_pending_inits(update_title=FALSE)
 			D.init_finished = TRUE
 			if(update_title && ++i % 1000)
 				game_start_countdown.update_status("Initializing map\n([i], [round(i / finalCount * 100)]%)")
-			LAGCHECK(LAG_HIGH)
+			LAGCHECK(60)
 	for(var/list/L as anything in post_inits_to_process)
 		var/datum/D = L[1]
 		if(!QDELETED(D))
@@ -52,7 +52,7 @@ proc/process_pending_inits(update_title=FALSE)
 			call(D, proc_path)(arglist(proc_args))
 			if(update_title && ++i % 1000)
 				game_start_countdown.update_status("Initializing map\n([i], [round(i / finalCount * 100)]%)")
-			LAGCHECK(LAG_HIGH)
+			LAGCHECK(60)
 	global.init_unpausing = FALSE
 
 /datum/New(...)
