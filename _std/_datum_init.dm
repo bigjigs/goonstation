@@ -41,7 +41,7 @@ proc/process_pending_inits(update_title=FALSE)
 		if(!QDELETED(D))
 			D.Init(arglist(inits_to_process[D]))
 			D.init_finished = TRUE
-			if(update_title && ++i % 1000)
+			if(update_title && ++i % 1000 == 0)
 				game_start_countdown.update_status("Initializing map\n([i], [round(i / finalCount * 100)]%)")
 			LAGCHECK(60)
 	for(var/list/L as anything in post_inits_to_process)
@@ -50,7 +50,7 @@ proc/process_pending_inits(update_title=FALSE)
 			var/proc_path = L[2]
 			var/list/proc_args = L[3]
 			call(D, proc_path)(arglist(proc_args))
-			if(update_title && ++i % 1000)
+			if(update_title && ++i % 1000 == 0)
 				game_start_countdown.update_status("Initializing map\n([i], [round(i / finalCount * 100)]%)")
 			LAGCHECK(60)
 	global.init_unpausing = FALSE
