@@ -46,7 +46,7 @@ var/global/list/mapNames = list(
 	icon_state = "x3"
 	add_to_landmarks = FALSE
 
-	INIT()
+	EXPLICIT_NEW()
 		if (src.name != "map_setting")
 			map_setting = src.name
 
