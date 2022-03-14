@@ -1,3 +1,7 @@
+#define INIT_UNPAUSING_NO 0
+#define INIT_UNPAUSING_WAITING 1
+#define INIT_UNPAUSING_PROCESSING 2
+
 var/global/waiting_inits = null
 var/global/post_init_procs = null
 var/global/init_paused = 0
@@ -13,19 +17,32 @@ proc/pause_init()
 		return
 	global.waiting_inits = list()
 
-proc/unpause_init()
+proc/unpause_init(process_inits=TRUE)
+	if(global.init_unpausing)
+		return
 	global.init_paused--
 	if(global.init_paused > 0)
 		return
-	global.init_unpausing = TRUE
+	global.init_unpausing = INIT_UNPAUSING_WAITING
+	if(process_inits)
+		process_pending_inits()
+
+proc/process_pending_inits(update_title=FALSE)
+	if(global.init_unpausing != INIT_UNPAUSING_WAITING)
+		CRASH("process_pending_inits called without init_unpausing being INIT_UNPAUSING_WAITING")
+	global.init_unpausing = INIT_UNPAUSING_PROCESSING
 	var/list/inits_to_process = global.waiting_inits
 	global.waiting_inits = null // to make sure things happen correctly if some Init() pauses again but that will still lead to awful things, don't do it
 	var/list/post_inits_to_process = global.post_init_procs
 	global.post_init_procs = null
+	var/i = 0
+	var/finalCount = length(inits_to_process) + length(post_inits_to_process)
 	for(var/datum/D as anything in inits_to_process)
 		if(!QDELETED(D))
 			D.Init(arglist(inits_to_process[D]))
 			D.init_finished = TRUE
+			if(update_title && ++i % 1000)
+				game_start_countdown.update_status("Initializing map\n([i], [round(i / finalCount * 100)]%)")
 			LAGCHECK(LAG_HIGH)
 	for(var/list/L as anything in post_inits_to_process)
 		var/datum/D = L[1]
@@ -33,6 +50,8 @@ proc/unpause_init()
 			var/proc_path = L[2]
 			var/list/proc_args = L[3]
 			call(D, proc_path)(arglist(proc_args))
+			if(update_title && ++i % 1000)
+				game_start_countdown.update_status("Initializing map\n([i], [round(i / finalCount * 100)]%)")
 			LAGCHECK(LAG_HIGH)
 	global.init_unpausing = FALSE
 

@@ -350,10 +350,8 @@ var/f_color_selector_handler/F_Color_Selector
 		Z_LOG_DEBUG("Preload", "Preload stage complete")
 
 /world/New()
+	unpause_init(process_inits=FALSE)
 	Z_LOG_DEBUG("World/New", "World New()")
-	unpause_init()
-	Z_LOG_DEBUG("World/New", "  unpaused Init")
-	end_big_map_change()
 	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
 	tick_lag = MIN_TICKLAG//0.4//0.25
 //	loop_checks = 0
@@ -368,10 +366,6 @@ var/f_color_selector_handler/F_Color_Selector
 	diary = file("data/logs/[time2text(world.realtime, "YYYY/MM-Month/DD-Day")].log")
 	diary_name = "data/logs/[time2text(world.realtime, "YYYY/MM-Month/DD-Day")].log"
 	logDiary("\n----------------------\nStarting up. [time2text(world.timeofday, "hh:mm.ss")]\n----------------------\n")
-
-	//This is also used pretty early
-	Z_LOG_DEBUG("World/New", "Setting up powernets...")
-	makepowernets()
 
 
 	Z_LOG_DEBUG("World/New", "Setting up changelogs...")
@@ -416,13 +410,8 @@ var/f_color_selector_handler/F_Color_Selector
 	Z_LOG_DEBUG("World/Init", "Loading playercap bypass keys...")
 	load_playercap_bypass()
 
-	Z_LOG_DEBUG("World/Init", "Starting input loop")
-	start_input_loop()
-
 	if(!delete_queue)
 		delete_queue = new /datum/dynamicQueue(100)
-
-	sun = new /datum/sun()
 
 	Z_LOG_DEBUG("World/Init", "Vox init")
 	init_vox()
@@ -480,6 +469,20 @@ var/f_color_selector_handler/F_Color_Selector
 	var/datum/controller/process/ticker/ticker_process = processScheduler.addNowSkipSetup(/datum/controller/process/ticker)
 	tgui_process.setup()
 	ticker_process.setup()
+
+	UPDATE_TITLE_STATUS("Initializing map")
+	process_pending_inits(update_title=TRUE)
+	Z_LOG_DEBUG("World/Init", "  unpaused Init")
+	end_big_map_change()
+
+	//This is also used pretty early
+	Z_LOG_DEBUG("World/New", "Setting up powernets...")
+	makepowernets()
+
+	Z_LOG_DEBUG("World/Init", "Starting input loop")
+	start_input_loop()
+
+	sun = new /datum/sun()
 
 	Z_LOG_DEBUG("World/Init", "Building area sims scores...")
 	if (global_sims_mode)
