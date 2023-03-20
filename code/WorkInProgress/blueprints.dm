@@ -1,5 +1,4 @@
 /obj/abcuMarker
-	name = "ABCU Marker"
 	desc = "Denotes a valid tile."
 	icon = 'icons/obj/objects.dmi'
 	name = "Building marker (valid)"
@@ -9,7 +8,6 @@
 	layer = TURF_LAYER
 
 /obj/abcuMarker/red
-	name = "ABCU Marker"
 	desc = "Denotes an invalid tile."
 	icon = 'icons/obj/objects.dmi'
 	name = "Building marker (invalid)"
@@ -46,7 +44,7 @@
 		boutput(user, "<span class='alert'>This machine is not linked to your network.</span>")
 		return
 
-	attackby(obj/item/W as obj, mob/user as mob)
+	attackby(obj/item/W, mob/user)
 		if(istype(W, /obj/item/blueprint))
 			if(currentBp)
 				boutput(user, "<span class='alert'>Theres already a blueprint in the machine.</span>")
@@ -64,7 +62,7 @@
 			return
 		return
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		if(building)
 			boutput(user, "<span class='alert'>The machine is currently constructing something. Best not touch it until it's done.</span>")
 			return
@@ -260,7 +258,11 @@
 
 	save.cd = "/"
 
-	var/input = input(usr,"Select save:","Blueprints") in bps
+	if(!length(bps))
+		boutput(usr, "<span class='alert'>No blueprints found.</span>")
+		return
+	var/input = tgui_input_list(usr, "Select a blueprint to create.", "Blueprints", bps)
+	if(!input) return
 	var/list/split = splittext(input, "/")
 	var/key = input
 	if(save.dir.Find("[split[1]]"))
@@ -314,7 +316,11 @@
 
 	save.cd = "/"
 
-	var/input = input(usr,"Select save:","Blueprints") in bps
+	if(!length(bps))
+		boutput(usr, "<span class='alert'>No blueprints found.</span>")
+		return
+	var/input = tgui_input_list(usr, "Select a blueprint to create.", "Blueprints", bps)
+	if(!input) return
 	var/list/split = splittext(input, "/")
 	if(save.dir.Find("[split[1]]"))
 		save.cd = "/[split[1]]"
@@ -431,7 +437,7 @@
 	var/static/savefile/save = new/savefile("data/blueprints.dat")
 
 	afterattack(atom/target as mob|obj|turf, mob/user as mob)
-		if(get_dist(src,target) > 2) return
+		if(GET_DIST(src,target) > 2) return
 
 		if(!isturf(target)) target = get_turf(target)
 
@@ -599,7 +605,7 @@
 					tf.tiletype = save["type"]
 					tf.state = save["state"]
 					tf.direction = save["dir"]
-					bp.req_metal += 1.0
+					bp.req_metal += 1
 					bp.req_glass += 0.5
 					for (var/B in save.dir)
 						if(B == "type" || B == "state") continue
@@ -638,6 +644,8 @@
 
 
 	attack_self(mob/user as mob)
+		if(!user.client)
+			return
 		var/list/options = list("Reset", "Set Blueprint Name", "Print Saved Blueprint", "Save Blueprint", "Delete Blueprint" , "Information")
 		var/input = input(user,"Select option:","Option") in options
 

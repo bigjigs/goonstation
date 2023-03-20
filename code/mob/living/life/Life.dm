@@ -2,8 +2,10 @@
 	var/mob/living/owner
 	var/last_process = 0
 
-	var/const/tick_spacing = 20 //This should pretty much *always* stay at 20, for it is the one number that all do-over-time stuff should be balanced around
-	var/const/cap_tick_spacing = 100 //highest TIME allowance between ticks to try to play catchup with realtime thingo
+	/// This should pretty much *always* stay at 20, for it is the one number that all do-over-time stuff should be balanced around
+	var/const/tick_spacing = LIFE_PROCESS_TICK_SPACING
+	/// highest TIME allowance between ticks to try to play catchup with realtime thingo
+	var/const/cap_tick_spacing = LIFE_PROCESS_CAP_TICK_SPACING
 
 	var/mob/living/carbon/human/human_owner = null
 	var/mob/living/silicon/hivebot/hivebot_owner = null
@@ -39,6 +41,7 @@
 
 	proc/process(datum/gas_mixture/environment)
 		PROTECTED_PROC(TRUE)
+		//SHOULD_NOT_SLEEP(TRUE)
 
 	proc/get_multiplier()
 		.= clamp(TIME - last_process, tick_spacing, cap_tick_spacing) / tick_spacing
@@ -72,16 +75,48 @@
 		qdel(L)
 
 	proc/get_heat_protection()
-		.= 0
+		var/thermal_protection = 10 // base value
+
+		// Resistance from Bio Effects
+		if (src.bioHolder)
+			if (src.bioHolder.HasEffect("dwarf"))
+				thermal_protection += 10
+
+		// Resistance from Clothing
+		thermal_protection += GET_ATOM_PROPERTY(src, PROP_MOB_HEATPROT)
+		thermal_protection = clamp(thermal_protection, 0, 100)
+		return thermal_protection
+
 	proc/get_cold_protection()
-		.= 0
+		// Sealed space suit? If so, consider it to be full protection
+		if (src.protected_from_space())
+			return 100
+
+		var/thermal_protection = 10 // base value
+
+		// Resistance from Clothing
+		thermal_protection += GET_ATOM_PROPERTY(src, PROP_MOB_COLDPROT)
+
+		thermal_protection = clamp(thermal_protection, 0, 100)
+		return thermal_protection
+
 	proc/get_rad_protection()
-		.= 0
+		return (tanh(0.02*(GET_ATOM_PROPERTY(src, PROP_MOB_RADPROT_EXT)+GET_ATOM_PROPERTY(src, PROP_MOB_RADPROT_INT)))**2)
+
+	proc/get_chem_protection()
+		return clamp(GET_ATOM_PROPERTY(src, PROP_MOB_CHEMPROT), 0, 100)
 
 /mob/living/New()
 	..()
 	//wel gosh, its important that we do this otherwisde the crew could spawn into an airless room and then immediately die
 	last_life_tick = TIME
+	restore_life_processes()
+
+/mob/living/full_heal()
+	. = ..()
+	src.remove_ailments()
+	src.change_misstep_chance(-INFINITY)
+	restore_life_processes()
 
 /mob/living/disposing()
 	for (var/datum/lifeprocess/L in lifeprocesses)
@@ -94,7 +129,7 @@
 	var/list/heartbeatOverlays = list()
 	var/last_human_life_tick = 0
 
-/mob/living/critter/New()
+/mob/living/critter/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/blood)
 	//add_lifeprocess(/datum/lifeprocess/bodytemp) //maybe enable per-critter
@@ -112,8 +147,9 @@
 	add_lifeprocess(/datum/lifeprocess/stuns_lying)
 	add_lifeprocess(/datum/lifeprocess/viruses)
 	add_lifeprocess(/datum/lifeprocess/blindness)
+	add_lifeprocess(/datum/lifeprocess/radiation)
 
-/mob/living/carbon/human/New()
+/mob/living/carbon/human/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/arrest_icon)
 	add_lifeprocess(/datum/lifeprocess/blood)
@@ -135,8 +171,9 @@
 	add_lifeprocess(/datum/lifeprocess/stuns_lying)
 	add_lifeprocess(/datum/lifeprocess/viruses)
 	add_lifeprocess(/datum/lifeprocess/blindness)
+	add_lifeprocess(/datum/lifeprocess/radiation)
 
-/mob/living/carbon/cube/New()
+/mob/living/carbon/cube/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/canmove)
 	add_lifeprocess(/datum/lifeprocess/chems)
@@ -147,13 +184,14 @@
 	add_lifeprocess(/datum/lifeprocess/statusupdate)
 	add_lifeprocess(/datum/lifeprocess/stuns_lying)
 	add_lifeprocess(/datum/lifeprocess/blindness)
+	add_lifeprocess(/datum/lifeprocess/radiation)
 
-/mob/living/silicon/ai/New()
+/mob/living/silicon/ai/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/sight)
 	add_lifeprocess(/datum/lifeprocess/blindness)
 
-/mob/living/silicon/hivebot/New()
+/mob/living/silicon/hivebot/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/canmove)
 	add_lifeprocess(/datum/lifeprocess/hud)
@@ -162,7 +200,7 @@
 	add_lifeprocess(/datum/lifeprocess/stuns_lying)
 	add_lifeprocess(/datum/lifeprocess/blindness)
 
-/mob/living/silicon/robot/New()
+/mob/living/silicon/robot/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/canmove)
 	add_lifeprocess(/datum/lifeprocess/hud)
@@ -174,7 +212,7 @@
 	add_lifeprocess(/datum/lifeprocess/robot_locks)
 
 
-/mob/living/silicon/drone/New()
+/mob/living/silicon/drone/restore_life_processes()
 	..()
 	add_lifeprocess(/datum/lifeprocess/canmove)
 	add_lifeprocess(/datum/lifeprocess/stuns_lying)
@@ -208,7 +246,7 @@
 			if(src.disposed) return
 			L = src.lifeprocesses?[thing]
 			if(!L)
-				logTheThing("debug", src, null, "had lifeprocess [thing] removed during Life() probably.")
+				logTheThing(LOG_DEBUG, src, "had lifeprocess [thing] removed during Life() probably.")
 				continue
 			L.Process(environment)
 
@@ -216,8 +254,6 @@
 			I.on_life(life_mult)
 
 		update_item_abilities()
-
-		update_objectives()
 
 		if (!isdead(src)) //still breathing
 			//do on_life things for components?
@@ -231,12 +267,19 @@
 					animate(src, transform = matrix(), time = 1)
 				last_no_gravity = src.no_gravity
 
+			// Zephyr-class interdictor: carbon mobs in range gain a buff to stamina recovery, which can accumulate to linger briefly
+			if (iscarbon(src))
+				for_by_tcl(IX, /obj/machinery/interdictor)
+					if (IX.expend_interdict(10,src,TRUE,ITDR_ZEPHYR))
+						src.changeStatus("zephyr_field", 3 SECONDS * life_mult)
+						break
+
 		clamp_values()
 
 		//Regular Trait updates
 		if(src.traitHolder)
 			for(var/id in src.traitHolder.traits)
-				var/obj/trait/O = src.traitHolder.traits[id]
+				var/datum/trait/O = src.traitHolder.traits[id]
 				O.onLife(src, life_mult)
 
 		update_icons_if_needed()
@@ -335,11 +378,6 @@
 	src.mainframe_check()
 
 	if (!isdead(src)) //Alive.
-		// AI-controlled cyborgs always use the global lawset, so none of this applies to them (Convair880).
-		if ((src.emagged || src.syndicate) && src.mind && !src.dependent)
-			if (!src.mind.special_role)
-				src.handle_robot_antagonist_status()
-
 		if (src.health < 0)
 			death()
 
@@ -366,10 +404,6 @@
 			// sure keep trying to use power i guess.
 			use_power()
 
-	// Assign antag status if we don't have any yet (Convair880).
-	if (src.mind && (src.emagged || src.syndicate))
-		if (!src.mind.special_role)
-			src.handle_robot_antagonist_status()
 
 	hud.update()
 	process_killswitch()
@@ -395,9 +429,6 @@
 		hud.update_health()
 		hud.update_tools()
 
-	if (src.client)
-		src.updateStatic()
-
 /mob/living/silicon/drone/Life(datum/controller/process/mobs/parent)
 	if (..(parent))
 		return 1
@@ -406,7 +437,7 @@
 		hud.update_charge()
 		hud.update_tools()
 
-/mob/living/seanceghost/Life(parent)
+/mob/living/intangible/seanceghost/Life(parent)
 	if (..(parent))
 		return 1
 	if (!src.abilityHolder)
@@ -417,27 +448,6 @@
 /mob/living/object/Life(datum/controller/process/mobs/parent)
 	if (..(parent))
 		return 1
-
-	if (!src.item)
-		src.death(FALSE)
-
-	if (src.item && src.item.loc != src) //ZeWaka: Fix for null.loc
-		if (isturf(src.item.loc))
-			src.item.set_loc(src)
-		else
-			src.death(FALSE)
-
-	for (var/atom/A as obj|mob in src)
-		if (A != src.item && A != src.dummy && A != src.owner && !istype(A, /atom/movable/screen))
-			if (isobj(A) || ismob(A)) // what the heck else would this be?
-				A:set_loc(src.loc)
-
-	src.set_density(src.item ? src.item.density : 0)
-	src.item.set_dir(src.dir)
-	src.icon = src.item.icon
-	src.icon_state = src.item.icon_state
-	src.color = src.item.color
-	src.overlays = src.item.overlays
 
 /mob/living/carbon/cube
 	Life(datum/controller/process/mobs/parent)
@@ -505,36 +515,6 @@
 					C.changeStatus("stunned", 2 SECONDS)
 					boutput(C, "<span class='alert'>[stinkString()]</span>")
 
-
-	proc/update_objectives()
-		if (!src.mind)
-			return
-		if (!src.mind.objectives)
-			return
-		if (!istype(src.mind.objectives, /list))
-			return
-		if (src.mind.stealth_objective)
-			for (var/datum/objective/O in src.mind.objectives)
-				if (istype(O, /datum/objective/specialist/stealth))
-					var/turf/T = get_turf(src)
-					if (T && isturf(T) && (istype(T, /turf/space) || T.loc.name == "Space" || T.loc.name == "Ocean" || T.z != 1))
-						O:score = max(0, O:score - 1)
-						if (prob(20))
-							boutput(src, "<span class='alert'><B>Being away from the station is making you lose your composure...</B></span>")
-						src << sound('sound/effects/env_damage.ogg')
-						continue
-					if (T && isturf(T) && T.RL_GetBrightness() < 0.2)
-						O:score++
-					else
-						var/spotted_by_mob = 0
-						for (var/mob/living/M in oviewers(src, 5))
-							if (M.client && M.sight_check(1))
-								O:score = max(0, O:score - 5)
-								spotted_by_mob = 1
-								break
-						if (!spotted_by_mob)
-							O:score++
-
 	proc/update_sight()
 		var/datum/lifeprocess/L = lifeprocesses?[/datum/lifeprocess/sight]
 		if (L)
@@ -560,7 +540,7 @@
 
 		if (src.client)
 			updateOverlaysClient(src.client)
-		if (src.observers.len)
+		if (length(src.observers))
 			for (var/mob/x in src.observers)
 				if (x.client)
 					src.updateOverlaysClient(x.client)
@@ -568,12 +548,12 @@
 
 	handle_stamina_updates()
 		if (stamina == STAMINA_NEG_CAP)
-			setStatus("paralysis", max(getStatusDuration("paralysis"), STAMINA_NEG_CAP_STUN_TIME))
+			setStatusMin("paralysis", STAMINA_NEG_CAP_STUN_TIME)
 
 		//Modify stamina.
 		var/stam_time_passed = max(tick_spacing, TIME - last_stam_change)
 
-		var/final_mod = (src.stamina_regen + GET_ATOM_PROPERTY(src, PROP_MOB_STAMINA_REGEN_BONUS)) * (stam_time_passed / tick_spacing)
+		var/final_mod = (max(1, src.stamina_regen + GET_ATOM_PROPERTY(src, PROP_MOB_STAMINA_REGEN_BONUS))) * (stam_time_passed / tick_spacing)
 		if (final_mod > 0)
 			src.add_stamina(abs(final_mod))
 		else if (final_mod < 0)
@@ -609,42 +589,6 @@
 			var/datum/pathogen/P = src.pathogens[uid]
 			P.disease_act()
 
-	get_cold_protection()
-		// calculate 0-100% insulation from cold environments
-		if (!src)
-			return 0
-
-		// Sealed space suit? If so, consider it to be full protection
-		if (src.protected_from_space())
-			return 100
-
-		var/thermal_protection = 10 // base value
-
-		// Resistance from Clothing
-		thermal_protection += GET_ATOM_PROPERTY(src, PROP_MOB_COLDPROT)
-
-/*
-		for (var/obj/item/C as anything in src.get_equipped_items())
-			thermal_protection += C.getProperty("coldprot")*/
-
-		/*
-		// Resistance from covered body parts
-		// Commented out - made certain covering items (winter coats) basically spaceworthy all on their own, and made tooltips inaccurate
-		// Besides, the protected_from_space check above covers wearing a full spacesuit.
-		if (w_uniform && (w_uniform.body_parts_covered & TORSO))
-			thermal_protection += 10
-
-		if (wear_suit)
-			if (wear_suit.body_parts_covered & TORSO)
-				thermal_protection += 10
-			if (wear_suit.body_parts_covered & LEGS)
-				thermal_protection += 10
-			if (wear_suit.body_parts_covered & ARMS)
-				thermal_protection += 10
-		*/
-
-		thermal_protection = clamp(thermal_protection, 0, 100)
-		return thermal_protection
 
 	proc/get_disease_protection(var/ailment_path=null, var/ailment_name=null)
 		if (!src)
@@ -681,12 +625,6 @@
 		resist_prob = clamp(resist_prob,0,100)
 		return resist_prob
 
-	get_rad_protection()
-		// calculate 0-100% insulation from rads
-		if (!src)
-			return 0
-		return clamp(GET_ATOM_PROPERTY(src, PROP_MOB_RADPROT), 0, 100)
-
 	get_ranged_protection()
 		if (!src)
 			return 0
@@ -708,7 +646,7 @@
 			//protection from clothing
 		if(a_zone == "All")
 			protection = (5 * GET_ATOM_PROPERTY(src, PROP_MOB_MELEEPROT_BODY) + GET_ATOM_PROPERTY(src, PROP_MOB_MELEEPROT_HEAD))/6
-		if (a_zone == "chest")
+		else if (a_zone == "chest")
 			protection = GET_ATOM_PROPERTY(src, PROP_MOB_MELEEPROT_BODY)
 		else //can only be head
 			protection = GET_ATOM_PROPERTY(src, PROP_MOB_MELEEPROT_HEAD)
@@ -727,39 +665,6 @@
 			return 0
 		return min(GET_ATOM_PROPERTY(src, PROP_MOB_DISARM_RESIST), 90)
 
-
-	get_heat_protection()
-		// calculate 0-100% insulation from cold environments
-		if (!src)
-			return 0
-
-		var/thermal_protection = 10 // base value
-
-		// Resistance from Bio Effects
-		if (src.bioHolder)
-			if (src.bioHolder.HasEffect("dwarf"))
-				thermal_protection += 10
-
-		// Resistance from Clothing
-		thermal_protection += GET_ATOM_PROPERTY(src, PROP_MOB_HEATPROT)
-
-		/*
-		// Resistance from covered body parts
-		// See get_cold_protection for comment out reasoning
-		if (w_uniform && (w_uniform.body_parts_covered & TORSO))
-			thermal_protection += 10
-
-		if (wear_suit)
-			if (wear_suit.body_parts_covered & TORSO)
-				thermal_protection += 10
-			if (wear_suit.body_parts_covered & LEGS)
-				thermal_protection += 10
-			if (wear_suit.body_parts_covered & ARMS)
-				thermal_protection += 10
-		*/
-
-		thermal_protection = clamp(thermal_protection, 0, 100)
-		return thermal_protection
 
 	proc/add_fire_protection(var/temp)
 		var/fire_prot = 0

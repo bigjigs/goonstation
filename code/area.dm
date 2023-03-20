@@ -20,6 +20,8 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
   *
   * A grouping of tiles into a logical space. The sworn enemy of mappers.
   */
+TYPEINFO(/area)
+	var/valid_bounty_area = FALSE
 /area
 
 	/// TRUE if a dude is here (DOES NOT APPLY TO THE "SPACE" AREA)
@@ -34,6 +36,11 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 	var/skip_sims = 0
 	var/tmp/sims_score = 100
 	var/virtual = 0
+
+	/// A flag system for determining which minimap types this area should be rendered on. For available flags, see `_std/defines/minimap.dm`.
+	var/minimaps_to_render_on = null
+	/// What colour should be displayed for this tile on the station map?
+	var/station_map_colour = MAPC_DEFAULT
 
 	// some semi-random turf in the area to guide spy thieves
 	var/turf/spyturf = null
@@ -121,7 +128,10 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 	var/waking_critters = 0
 
 	// this chunk zone is for Area Ambience
+
+	/// Set to a sound you want to loop in an area
 	var/sound_loop = null
+	/// Volume for [sound_loop]
 	var/sound_loop_vol = 50
 	var/sound_fx_1 = null
 	var/sound_fx_2 = null
@@ -138,8 +148,6 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 	/// set to TRUE to inhibit entrance into this area, may not work completely yet.
 	var/blocked = 0
 
-	/// if set and a blocked person makes their way into here via Bad Ways, they'll be teleported here instead of nullspace. use a path!
-	var/blocked_waypoint
 	var/list/blockedTimers
 
 	/// for Battle Royale gamemode
@@ -152,6 +160,9 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 
 	///This datum, if set, allows terrain generation behavior to be ran on world/proc/init()
 	var/datum/map_generator/map_generator
+
+	/// Are mobs normally excluded from restricted Z levels allowed to exist here even on restricted Z levels?
+	var/allowed_restricted_z = FALSE
 
 	proc/CanEnter(var/atom/movable/A)
 		if( blocked )
@@ -206,9 +217,7 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 						if( !CanEnter( enteringM ) )
 
 							var/target = get_turf(oldloc)
-							if( !target && blocked_waypoint )
-								target = get_turf(locate(blocked_waypoint) in world)
-							enteringM.loc = target
+							enteringM.set_loc(target)
 						var/area/oldarea = get_area(oldloc)
 						if( sanctuary && !blocked && !(oldarea.sanctuary))
 							boutput( enteringM, "<b style='color:#31BAE8'>You are entering a sanctuary zone. You cannot be harmed by other players here.</b>" )
@@ -296,7 +305,7 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 				return null
 		return R
 
-	/*
+	/**
 	 * returns a list of objects matching type in an area
 	 */
 	proc/get_type(var/type)
@@ -333,7 +342,7 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 			C.wake_from_hibernation()
 		if(enteringM?.client)
 			for (var/mob/living/M as anything in src.mobs_not_in_global_mobs_list)
-				if(!M.skipped_mobs_list)
+				if(!M.skipped_mobs_list && get_area(M) == src)
 					stack_trace("Attempting to add [M] to global mobs list but its flag is not set.")
 				if(M.skipped_mobs_list & SKIPPED_AI_MOBS_LIST)
 					global.ai_mobs |= M
@@ -348,12 +357,13 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 
 	proc/calculate_area_value()
 		var/value = 0
-		for (var/turf/simulated/floor/F in src.contents)
+		var/list/atom/our_contents = src.contents.Copy()
+		for (var/turf/simulated/floor/F in our_contents)
 			if (F.broken || F.burnt || F.icon_state == "plating")
 				continue
 			value++
 
-		for (var/obj/machinery/M in src.contents)
+		for (var/obj/machinery/M in our_contents)
 			if (M.status & BROKEN || M.status & NOPOWER)
 				continue
 			value++
@@ -362,18 +372,26 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 
 	proc/calculate_structure_value()
 		var/value = 0
-		for (var/turf/simulated/wall/W in src.contents)
-			value++
-		for (var/turf/simulated/floor/F in src.contents)
-			if (F.broken || F.burnt)
-				continue
-			value++
-		for (var/obj/machinery/light/L in src.contents)
-			if (L.current_lamp.light_status != 0) //See LIGHT_OK
-				continue
-			value++
-		for (var/obj/window/W in src.contents)
-			value++
+		var/list/atom/our_contents = src.contents.Copy()
+
+		for (var/atom/A as anything in our_contents)
+			if (length(flocks))
+				if (isfeathertile(A) || istype(A, /obj/machinery/light/flock) || istype(A, /obj/window/auto/feather))
+					continue
+			if (istype(A, /turf/simulated/wall))
+				value++
+			else if (istype(A, /turf/simulated/floor))
+				var/turf/simulated/floor/F = A
+				if (F.broken || F.burnt)
+					continue
+				value++
+			else if (istype(A, /obj/machinery/light))
+				var/obj/machinery/light/L = A
+				if (L.current_lamp.light_status != 0) //See LIGHT_OK
+					continue
+				value++
+			else if (istype(A, /obj/window))
+				value++
 
 		return value
 
@@ -384,6 +402,8 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 		var/list/dirtyStuff = list(/obj/decal/cleanable,/obj/fluid)
 
 		for (var/turf/simulated/T in src.contents)
+			if (isfeathertile(T))
+				continue
 			dirty = 0
 			total_count++
 			for (var/thing in T.contents)
@@ -443,6 +463,7 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 
 	Del()
 		STOP_TRACKING
+		dispose()
 		..()
 
 /area/space // the base area you SHOULD be using for space/ocean/etc.
@@ -462,7 +483,7 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 
 	Entered(atom/movable/O) // TODO: make this better and not copy n pasted from area_that_kills_you_if_you_enter_it
 		..()
-		if (isobserver(O))
+		if (isobserver(O) || istype(O, /obj/arrival_missile))
 			return
 		if (isintangible(O) || iswraith(O))
 			O.set_loc(pick_landmark(LANDMARK_LATEJOIN))
@@ -471,10 +492,14 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 			var/mob/jerk = O
 			if ((jerk.client && jerk.client.flying) || (ismob(jerk) && HAS_ATOM_PROPERTY(jerk, PROP_MOB_NOCLIP)))
 				return
-			logTheThing("combat", jerk, null, "(of type [jerk.type]) was ghosted by a CORDON at [log_loc(jerk)]")
+			logTheThing(LOG_COMBAT, jerk, "(of type [jerk.type]) was ghosted by a CORDON at [log_loc(jerk)]")
 			setdead(jerk)
 			jerk.remove()
-		else if (isobj(O) && !istype(O, /obj/overlay/tile_effect))
+		else if (isobj(O) && !(istype(O, /obj/overlay/tile_effect) || O.anchored == 2 || istype(O, /obj/landmark)))
+			#ifdef CHECK_MORE_RUNTIMES
+			if(current_state <= GAME_STATE_WORLD_NEW)
+				CRASH("[identify_object(O)] got deleted by a cordon at [O.x],[O.y],[O.z] ([O.loc.loc] [O.loc.type]) during world initialization")
+			#endif
 			qdel(O)
 		return
 
@@ -490,6 +515,13 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 	ambient_light = rgb(79, 164, 184)
 	dont_log_combat = TRUE
 	// filler_turf = "/turf/unsimulated/floor/setpieces/gauntlet"
+
+	fullbright
+		ambient_light = null
+		force_fullbright = 1
+
+	dark
+		ambient_light = null
 
 /area/cavetiny
 	name = "Caves"
@@ -524,13 +556,16 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 			var/mob/jerk = O
 			if ((jerk.client && jerk.client.flying) || (ismob(jerk) && HAS_ATOM_PROPERTY(jerk, PROP_MOB_NOCLIP)))
 				return
-			logTheThing("combat", jerk, null, "(of type [jerk.type]) was ghosted by the area that kills you if you enter it at [log_loc(jerk)]")
-			setdead(jerk)
+			logTheThing(LOG_COMBAT, jerk, "(of type [jerk.type]) was ghosted by the area that kills you if you enter it at [log_loc(jerk)]")
+			jerk.death(TRUE)
+			// ghostize the mob first to punt them out of their body
+			// before removing the old body, so that we can boot the ghost out
+			var/mob/dead/dead_jerk = jerk.ghostize()
+			dead_jerk.set_loc(pick_landmark(LANDMARK_OBSERVER, locate(150, 150, 1)))
 			jerk.remove()
-		else if (isobj(O) && !istype(O, /obj/overlay/tile_effect) && !istype(O, /obj/landmark))
+		else if (isobj(O) && !(istype(O, /obj/overlay/tile_effect) || O.anchored == 2 || istype(O, /obj/landmark)))
 			qdel(O)
-		return
-
+		. = ..()
 /area/battle_royale_spawn //People entering VR or exiting VR with stupid exploits are jerks.
 	name = "Battle Royale warp zone"
 	skip_sims = 1
@@ -546,7 +581,7 @@ ABSTRACT_TYPE(/area) // don't instantiate this directly dummies, use /area/space
 		if (ismob(O))
 			var/mob/jerk = O
 			var/list/found_areas = get_area_turfs(current_battle_spawn,1)
-			if (isnull(found_areas))
+			if (length(found_areas) == 0)
 				jerk.set_loc(pick(get_area_turfs(/area/station/maintenance/,1)))
 				boutput(jerk, "You somehow land in maintenance! Weird!")
 			else
@@ -623,6 +658,7 @@ ABSTRACT_TYPE(/area/shuttle)
 	flags = ALWAYS_SOLID_FLUID
 
 /area/shuttle/escape
+	allowed_restricted_z = TRUE
 	name = "Emergency Shuttle"
 
 /area/shuttle/escape/station
@@ -643,97 +679,132 @@ ABSTRACT_TYPE(/area/shuttle)
 	name = "Emergency Shuttle Transit"
 	icon_state = "shuttle_escape"
 
-/area/shuttle/prison/
+/area/shuttle/prison
 	name = "Prison Shuttle"
 
 /area/shuttle/prison/station
 	icon_state = "shuttle"
 
 /area/shuttle/prison/prison
+	name = "Prison Shuttle Prison Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/brig/station
+	name = "Brig Shuttle Station Dock"
 	icon_state = "shuttle"
 
 /area/shuttle/brig/prison
+	name = "Brig Shuttle Prison Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/brig/outpost
+	name = "Brig Shuttle Outpost Dock"
 	icon_state = "shuttle3"
 
 /area/shuttle/research/station
+	name = "Research Shuttle Station Dock"
 	icon_state = "shuttle"
 
 /area/shuttle/research/outpost
-	icon_state = "shuttle2"
-
-/area/shuttle/attack2/prison
+	name = "Research Shuttle Outpost Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/mining/station
+	name = "Mining Shuttle Station Dock"
 	icon_state = "shuttle"
 
-/area/shuttle/mining/space
-	icon_state = "shuttle2"
+/area/shuttle/mining/diner
+	name = "Mining Shuttle Diner Dock"
+	icon_state = "shuttle"
+
+/area/shuttle/mining/outpost
+	name = "Mining Shuttle Outpost Dock"
+	icon_state = "shuttle"
 
 /area/shuttle/john/diner
+	name = "John's Bus Diner Dock"
 	icon_state = "shuttle"
 
+/area/shuttle/john/diner/nadir
+	filler_turf = "/turf/space/fluid/acid/clear"
+
 /area/shuttle/john/owlery
+	name = "John's Bus Owlery Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/john/mining
+	name = "John's Bus Outpost Dock"
 	icon_state = "shuttle2"
 
 /area/shuttle/john/grillnasium
+	name = "John's Bus Factory Dock"
 	icon_state = "shuttle"
 
 /area/shuttle/icebase_elevator/upper
+	name = "Chasm Lift Upper Section"
 	icon_state = "shuttle"
 	filler_turf = "/turf/simulated/floor/arctic/abyss"
 	force_fullbright = 0
 	sound_group = "ice_moon"
 
 /area/shuttle/icebase_elevator/lower
+	name = "Chasm Lift Lower Section"
 	icon_state = "shuttle2"
 	filler_turf = "/turf/simulated/floor/arctic/snow/ice"
 	force_fullbright = 0
 	sound_group = "ice_moon"
 
 /area/shuttle/biodome_elevator/upper
+	name = "Biodome Lift Upper Section"
 	icon_state = "shuttle"
 	force_fullbright = 0
-	name = "Elevator"
 
 /area/shuttle/biodome_elevator/lower
+	name = "Biodome Lift Lower Section"
 	icon_state = "shuttle2"
 	force_fullbright = 0
-	name = "Elevator"
+
+/area/shuttle/centcom_elevator/upper
+	name = "Centcom Lift Upper Section"
+	icon_state = "shuttle"
+	force_fullbright = 0
+
+/area/shuttle/centcom_elevator/lower
+	name = "Centcom Lift Lower Section"
+	icon_state = "shuttle2"
+	force_fullbright = 0
 
 /area/shuttle/recovery_shuttle
+	name = "Recovery Shuttle Dock"
 	icon_state = "shuttle2"
-	name = "Recovery Shuttle"
+
 ABSTRACT_TYPE(/area/shuttle/merchant_shuttle)
 /area/shuttle/merchant_shuttle
 	icon_state = "shuttle2"
-	name = "Merchant Shuttle"
-	teleport_blocked = 1
+	name = "Merchant Shuttle Dock"
+	teleport_blocked = TRUE
 
 /area/shuttle/merchant_shuttle/left_centcom
-	is_centcom = 1
+	name = "Centcom Merchant Shuttle Dock Alpha"
+	is_centcom = TRUE
 
 /area/shuttle/merchant_shuttle/right_centcom
-	is_centcom = 1
+	name = "Centcom Merchant Shuttle Dock Beta"
+	is_centcom = TRUE
 
 /area/shuttle/merchant_shuttle/diner_centcom
-	is_centcom = 1
+	name = "Centcom Merchant Shuttle Dock Gamma"
+	is_centcom = TRUE
 
 /area/shuttle/merchant_shuttle/diner_station
+	name = "Station Merchant Shuttle Dock Gamma"
 
 /area/shuttle/merchant_shuttle/left_station
+	name = "Station Merchant Shuttle Dock Alpha"
 	icon_state = "shuttle2"
 
 /area/shuttle/merchant_shuttle/right_station
+	name = "Station Merchant Shuttle Dock Beta"
 	icon_state = "shuttle2"
 
 /area/shuttle/spacebus
@@ -744,7 +815,7 @@ ABSTRACT_TYPE(/area/shuttle/merchant_shuttle)
 	sound_group = "eshuttle_transit"
 	var/warp_dir = NORTH // fuck you
 
-	Entered(atom/movable/Obj,atom/OldLoc)
+	Entered(atom/movable/Obj, atom/OldLoc)
 		..()
 		if (ismob(Obj))
 			var/mob/M = Obj
@@ -778,6 +849,7 @@ ABSTRACT_TYPE(/area/shuttle_transit_space)
 	teleport_blocked = 1
 	var/throw_dir = NORTH // goddamnit x2
 	expandable = 0
+	allowed_restricted_z = TRUE
 
 	Entered(atom/movable/Obj,atom/OldLoc)
 		..()
@@ -813,8 +885,9 @@ ABSTRACT_TYPE(/area/shuttle_transit_space)
 
 ABSTRACT_TYPE(/area/shuttle_particle_spawn)
 /area/shuttle_particle_spawn
+	name = "Shuttle Particles"
 	icon_state = "shuttle_transit_stars_n"
-	teleport_blocked = 1
+	teleport_blocked = TRUE
 	var/star_dir = null // particle system defaults to northbound stars
 
 	proc/start_particles()
@@ -838,8 +911,10 @@ ABSTRACT_TYPE(/area/shuttle_particle_spawn)
 	star_dir = "_w"
 
 /area/shuttle_sound_spawn
+	name = "Shuttle Subwoofers"
 	icon_state = "shuttle_transit_sound"
-	teleport_blocked = 1
+	teleport_blocked = TRUE
+	requires_power = FALSE
 
 // zewaka - actual areas below //
 
@@ -1077,7 +1152,7 @@ ABSTRACT_TYPE(/area/adventure)
 	icon_state = "yellow"
 
 /area/abandonedoutpostthing
-	name = "Abandoned Outpost"
+	name = "Abandoned Laboratory"
 	icon_state = "yellow"
 
 /area/abandonedmedicalship/robot_trader
@@ -1123,7 +1198,7 @@ ABSTRACT_TYPE(/area/adventure)
 #ifdef SUBMARINE_MAP
 	force_fullbright = 1
 #endif
-#ifdef MAP_OVERRIDE_OSHAN
+#ifdef UNDERWATER_MAP
 	requires_power = FALSE
 #endif
 
@@ -1159,6 +1234,8 @@ ABSTRACT_TYPE(/area/adventure)
 
 
 ABSTRACT_TYPE(/area/diner)
+TYPEINFO(/area/diner)
+	valid_bounty_area = TRUE
 /area/diner
 	sound_environment = 12
 #ifdef UNDERWATER_MAP
@@ -1226,6 +1303,36 @@ ABSTRACT_TYPE(/area/diner)
 	name = "Tech Outpost"
 	icon_state = "storage"
 
+/area/pasiphae
+	name = "Pasiphae Primary Zone"
+	icon_state = "hallC"
+	do_not_irradiate = 0
+
+/area/pasiphae/hangar
+	name = "Pasiphae Hangar"
+	icon_state = "hangar"
+
+/area/pasiphae/maint
+	name = "Pasiphae Maintenance"
+	icon_state = "maintcentral"
+	do_not_irradiate = 1
+
+/area/pasiphae/sys
+	name = "Pasiphae Systems Control"
+	icon_state = "engineering"
+
+/area/pasiphae/survey
+	name = "Pasiphae Survey Room"
+	icon_state = "science"
+
+/area/pasiphae/crew
+	name = "Pasiphae Crew Quarters"
+	icon_state = "green"
+
+/area/pasiphae/bridge
+	name = "Pasiphae Command Center"
+	icon_state = "blue"
+
 // Gore's Z5 Space generation areas //
 ABSTRACT_TYPE(/area/prefab)
 /area/prefab
@@ -1233,6 +1340,8 @@ ABSTRACT_TYPE(/area/prefab)
 	icon_state = "orange"
 	requires_power = FALSE
 
+/area/prefab/vault
+	name = "Secure Vault"
 /area/prefab/discount_dans_asteroid
 	name = "Discount Dan's Delivery Asteroid"
 	icon_state = "orange"
@@ -1257,6 +1366,7 @@ ABSTRACT_TYPE(/area/prefab)
 	name = "Sequestered Cloner"
 
 /area/prefab/sequestered_cloner/puzzle
+	name = "Sequestered Cloner Engineer"
 	requires_power = TRUE
 
 /area/prefab/von_ricken
@@ -1286,13 +1396,12 @@ ABSTRACT_TYPE(/area/prefab)
 	icon_state = "purple"
 
 /area/prefab/lesbeeans/interior
-	name = "Lesbian Bee Farm"
+	name = "Lesbian Bee Farm Interior"
 	icon_state = "ranch"
 
 /area/prefab/lesbeeans/exterior
 	name = "Lesbian Bee Farm"
 	icon_state = "park"
-	force_fullbright = 1
 
 /area/prefab/crashed_hop_shuttle
 	name = "HoP Shuttle"
@@ -1326,6 +1435,11 @@ ABSTRACT_TYPE(/area/prefab)
 /area/prefab/art_workshop
 	name = "The Pastel Space Workshop"
 	icon_state = "purple"
+
+/area/prefab/adrift_cargorouter
+	name = "Adrift Cargo Router"
+	icon_state = "yellow"
+
 // Sealab trench areas //
 
 /area/shuttle/sea_elevator_room
@@ -1380,6 +1494,10 @@ ABSTRACT_TYPE(/area/prefab)
 	icon_state = "red"
 	sound_environment = 2
 
+/area/prefab/martian_glomp
+	name = "Martian Mass"
+	icon_state = "red"
+
 /area/prefab/mobius
 	name = "Mobius Strip Mall"
 	icon_state = "purple"
@@ -1431,6 +1549,8 @@ ABSTRACT_TYPE(/area/prefab)
 	name = "Mining Outpost"
 	icon_state = "purple"
 
+TYPEINFO(/area/station/turret_protected/sea_crashed)
+	valid_bounty_area = FALSE
 /area/station/turret_protected/sea_crashed //dumb area pathing aRRGHHH
 	name = "Crashed Transport"
 	icon_state = "purple"
@@ -1485,10 +1605,23 @@ ABSTRACT_TYPE(/area/sim)
 	name = "B-Ball Court"
 	icon_state="vr"
 
+ABSTRACT_TYPE(/area/sim/gunsim)
 /area/sim/gunsim
 	name = "Gun Sim"
 	icon_state = "gunsim"
 
+	arena
+		name = "Gun Sim Arena"
+
+	lobby
+		name = "Gun Sim Lobby"
+		icon_state = "gunsim-lobby"
+		sanctuary = TRUE
+	maintenance
+		name = "Gun Sim Maintenance"
+		force_fullbright = FALSE
+		icon_state = "gunsim-maint"
+		sanctuary = TRUE
 
 /area/sim/test_area
 	name = "Toxin Test Area"
@@ -1526,25 +1659,24 @@ ABSTRACT_TYPE(/area/sim)
 
 /// Base station area
 ABSTRACT_TYPE(/area/station)
+TYPEINFO(/area/station)
+	valid_bounty_area = TRUE
 /area/station
 	do_not_irradiate = 0
 	sound_fx_1 = 'sound/ambience/station/Station_VocalNoise1.ogg'
+	minimaps_to_render_on = MAP_ALL
 	var/tmp/initial_structure_value = 0
 #ifdef MOVING_SUB_MAP
 	filler_turf = "/turf/space/fluid/manta"
-
-	New()
-		..()
-		initial_structure_value = calculate_structure_value()
-		START_TRACKING
 #else
 	filler_turf = null
+#endif
 
 	New()
 		..()
-		initial_structure_value = calculate_structure_value()
 		START_TRACKING
-#endif
+		SPAWN(5 SECONDS) // wait until world is actually loaded in lmao // ZEWAKA/INIT
+			initial_structure_value = calculate_structure_value()
 
 	Del()
 		STOP_TRACKING
@@ -1559,7 +1691,8 @@ ABSTRACT_TYPE(/area/station/atmos)
 	do_not_irradiate = 1
 
 /area/station/atmos/highcap_storage
-  name = "High-Capacity Atmospherics Storage"
+	name = "High-Capacity Atmospherics Storage"
+	do_not_irradiate = 0
 
 ABSTRACT_TYPE(/area/station/atmos/hookups)
 /area/station/atmos/hookups
@@ -1598,12 +1731,15 @@ ABSTRACT_TYPE(/area/station/communications)
 		name = "Communications Office Bedroom"
 		icon_state = "communicationsoffice-bedroom"
 ABSTRACT_TYPE(/area/station/maintenance)
+TYPEINFO(/area/station/maintenance)
+	valid_bounty_area = FALSE
 /area/station/maintenance/
 	name = "Maintenance"
 	icon_state = "maintcentral"
 	sound_environment = 12
 	workplace = 1
 	do_not_irradiate = 1
+	station_map_colour = MAPC_MAINTENANCE
 
 /area/station/maintenance/northwest
 	name = "North West Maintenance"
@@ -1692,13 +1828,16 @@ ABSTRACT_TYPE(/area/shuttle/asylum)
 	icon_state = "asylum_shuttle"
 
 /area/shuttle/asylum/medbay
-		icon_state = "shuttle1"
+	name = "Asylum Shuttle Medbay Dock"
+	icon_state = "shuttle1"
 
 /area/shuttle/asylum/pathology
-		icon_state = "shuttle2"
+	name = "Asylum Shuttle Pathology Dock"
+	icon_state = "shuttle2"
 
 /area/shuttle/asylum/observation
-		icon_state = "shuttle3"
+	name = "Asylum Shuttle Main Dock"
+	icon_state = "shuttle3"
 
 // Medical
 
@@ -1708,6 +1847,8 @@ ABSTRACT_TYPE(/area/shuttle/asylum)
 
 // Asylum
 ABSTRACT_TYPE(/area/station/medical/asylum)
+TYPEINFO(/area/station/medical/asylum)
+	valid_bounty_area = FALSE
 /area/station/medical/asylum
 	name = "Asylum Mini-Station"
 	icon_state = "blue"
@@ -1826,6 +1967,10 @@ ABSTRACT_TYPE(/area/station/maintenance/outer)
 	name = "Waste Disposal"
 	icon_state = "disposal"
 
+/area/station/maintenance/scidisposal
+	name = "Outpost Zeta Waste Disposal"
+	icon_state = "disposal"
+
 /area/station/maintenance/lowerstarboard
 	name = "Lower Starboard Maintenance"
 	icon_state = "lower_starboard_maintenance"
@@ -1850,10 +1995,13 @@ ABSTRACT_TYPE(/area/station/maintenance/outer)
 		name = "Boiler room"
 		icon_state = "orange"
 ABSTRACT_TYPE(/area/station/hallway)
+TYPEINFO(/area/station/hallway)
+	valid_bounty_area = FALSE
 /area/station/hallway/
 	name = "Hallway"
 	icon_state = "hallC"
 	sound_environment = 10
+	station_map_colour = MAPC_HALLWAY
 
 ABSTRACT_TYPE(/area/station/hallway/primary)
 /area/station/hallway/primary
@@ -2004,6 +2152,7 @@ ABSTRACT_TYPE(/area/station/hallway/secondary)
 	name = "Construction"
 	icon_state = "red"
 	sound_environment = 10
+	station_map_colour = MAPC_ENGINEERING
 
 /area/station/construction/under_construction
 		name = "Under Construction"
@@ -2013,6 +2162,7 @@ ABSTRACT_TYPE(/area/station/mining)
 	name = "Mining"
 	icon_state = "mining"
 	sound_environment = 10
+	station_map_colour = MAPC_MINING
 
 /area/station/mining/staff_room
   name = "Mining Staff Room"
@@ -2032,6 +2182,7 @@ ABSTRACT_TYPE(/area/station/mining)
 	name = "Bridge"
 	icon_state = "bridge"
 	sound_environment = 4
+	station_map_colour = MAPC_COMMAND
 #ifdef SUBMARINE_MAP
 	sound_group = "bridge"
 	sound_loop = 'sound/ambience/station/underwater/sub_bridge_ambi1.ogg'
@@ -2049,10 +2200,12 @@ ABSTRACT_TYPE(/area/station/mining)
 /area/station/captain //Three below this one are because Manta uses specific ambience on the bridge
 	name = "Captain's Office"
 	icon_state = "CAPN"
+	station_map_colour = MAPC_COMMAND
 
 /area/station/hos
 	name = "Head of Personnel's Office"
 	icon_state = "HOP"
+	station_map_colour = MAPC_COMMAND
 
 /area/station/hos/quarter
 	name = "Head of Personnel's Personal Quarter"
@@ -2101,16 +2254,19 @@ ABSTRACT_TYPE(/area/station/crew_quarters)
 	icon_state = "HOS"
 	sound_environment = 4
 	spy_secure_area = TRUE
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/md
 	name = "Medical Director's Quarters"
 	icon_state = "MD"
 	sound_environment = 4
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/ce
 	name = "Chief Engineer's Quarters"
 	icon_state = "CE"
 	sound_environment = 4
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/sauna
 	name = "Sauna"
@@ -2209,16 +2365,19 @@ ABSTRACT_TYPE(/area/station/crew_quarters/radio)
 	name = "Captain's Quarters"
 	icon_state = "captain"
 	sound_environment = 4
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/hop
 	name = "Head of Personnel's Quarters"
 	icon_state = "green"
 	sound_environment = 4
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/cafeteria
 	name = "Cafeteria"
 	icon_state = "cafeteria"
 	sound_environment = 0
+	station_map_colour = MAPC_CAFETERIA
 
 /area/station/crew_quarters/cafeteria/the_rising_tide_bar
 		name = "The Rising Tide"
@@ -2228,6 +2387,7 @@ ABSTRACT_TYPE(/area/station/crew_quarters/radio)
 	name = "Kitchen"
 	icon_state = "kitchen"
 	sound_environment = 3
+	station_map_colour = MAPC_KITCHEN
 
 /area/station/crew_quarters/kitchen/freezer
 		name = "Freezer"
@@ -2247,10 +2407,17 @@ ABSTRACT_TYPE(/area/station/crew_quarters/radio)
 /area/station/crew_quarters/catering
 	name = "Catering Storage"
 	icon_state = "storage"
+	station_map_colour = MAPC_KITCHEN
 
 /area/station/crew_quarters/bathroom
 	name = "Bathroom"
 	icon_state = "showers"
+
+	extra1
+		name = "Restroom #1"
+
+	extra2
+		name = "Restroom #2"
 
 /area/station/crew_quarters/jazz
 	name = "Jazz Lounge"
@@ -2264,22 +2431,26 @@ ABSTRACT_TYPE(/area/station/crew_quarters/radio)
 	name= "Bar"
 	icon_state = "bar"
 	sound_environment = 4
+	station_map_colour = MAPC_BAR
 
 /area/station/crew_quarters/baroffice
 	name= "Bar Office"
 	icon_state = "bar_office"
 	sound_environment = 2
+	station_map_colour = MAPC_BAR
 
 /area/station/crew_quarters/heads
 	name = "Head of Personnel's Office"
 	icon_state = "HOP"
 	sound_environment = 4
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/hor
 	name = "Research Director's Office"
 	icon_state = "RD"
 	sound_environment = 4
 	requires_power = 1
+	station_map_colour = MAPC_COMMAND
 
 /area/station/crew_quarters/hor/horprivate
 	name = "Research Director's Private Quarters"
@@ -2321,6 +2492,17 @@ ABSTRACT_TYPE(/area/station/crew_quarters/radio)
 	icon_state = "showers"
 	sound_environment = 3
 
+	New()
+		. = ..()
+
+		// it's capybara time
+		SPAWN(3 SECONDS)
+			var/list/capyturfs = get_area_turfs(src.type, floors_only=TRUE) + get_area_turfs(/area/station/crew_quarters/sauna, floors_only=TRUE)
+			if(!length(capyturfs))
+				capyturfs = get_area_turfs(/area/station/crew_quarters, floors_only=TRUE)
+			if(length(capyturfs))
+				new /mob/living/critter/small_animal/capybara(pick(capyturfs))
+
 /area/station/crew_quarters/observatory
 	name = "Observatory"
 	icon_state = "observatory"
@@ -2345,6 +2527,7 @@ ABSTRACT_TYPE(/area/station/crew_quarters/radio)
 	name = "Public Market"
 	icon_state = "yellow"
 	sound_environment = 0
+	station_map_colour = MAPC_HALLWAY
 
 /area/station/crew_quarters/supplylobby
 	name = "Supply Lobby"
@@ -2373,32 +2556,27 @@ ABSTRACT_TYPE(/area/station/com_dish)
 	name = "Communications Dish"
 	icon_state = "yellow"
 	requires_power = FALSE
+	#ifdef UNDERWATER_MAP
+	ambient_light = OCEAN_LIGHT
+	#endif
 
 /area/station/com_dish/comdish
 	name = "Communications Dish"
 	icon_state = "yellow"
-#ifndef UNDERWATER_MAP
-	force_fullbright = 1 // ????
-#endif
 
 /area/station/com_dish/auxdish
 	name = "Auxilary Communications Dish"
 	icon_state = "yellow"
-#ifndef UNDERWATER_MAP
-	force_fullbright = 1
-#endif
 
 /area/station/com_dish/research_outpost
 	name = "Research Outpost Communications Dish"
 	icon_state = "yellow"
-#ifndef UNDERWATER_MAP
-	force_fullbright = 1
-#endif
 
 ABSTRACT_TYPE(/area/station/engine)
 /area/station/engine
 	sound_environment = 5
 	workplace = 1
+	station_map_colour = MAPC_ENGINEERING
 
 /area/station/engine/engineering
 	name = "Engineering"
@@ -2411,6 +2589,7 @@ ABSTRACT_TYPE(/area/station/engine)
 /area/station/engine/engineering/ce
 	name = "Chief Engineer's Office"
 	icon_state = "CE"
+	station_map_colour = MAPC_COMMAND
 
 /area/station/engine/engineering/ce/private
 	name = "Chief Engineer's Private Quarters"
@@ -2427,6 +2606,9 @@ ABSTRACT_TYPE(/area/station/engine)
 /area/station/engine/engineering/private
 	name = "Engineering Quarters"
 	icon_state = "yellow"
+
+/area/station/engine/core/nuclear
+	name = "Nuclear reactor room"
 
 /area/mining/miningoutpost
 	name = "Mining Outpost"
@@ -2447,6 +2629,7 @@ ABSTRACT_TYPE(/area/station/engine)
 /area/station/engine/elect
 	name = "Mechanic's Lab"
 	icon_state = "mechanics"
+	station_map_colour = MAPC_MECHLAB
 
 /area/station/engine/power
 	name = "Engineering Power Room"
@@ -2457,7 +2640,8 @@ ABSTRACT_TYPE(/area/station/engine)
 	name = "Engineering Control Room"
 	icon_state = "green"
 
-
+TYPEINFO(/area/station/engine/singcore)
+	valid_bounty_area = FALSE
 /area/station/engine/singcore
 	name = "Singularity Core"
 	icon_state = "red"
@@ -2476,6 +2660,8 @@ ABSTRACT_TYPE(/area/station/engine)
 	name = "Hot Loop"
 	icon_state = "red"
 
+TYPEINFO(/area/station/engine/combustion_chamber)
+	valid_bounty_area = FALSE
 /area/station/engine/combustion_chamber
 	name = "Combustion Chamber"
 	icon_state = "combustion_chamber"
@@ -2495,6 +2681,8 @@ ABSTRACT_TYPE(/area/station/engine)
 	icon_state = "yellow"
 
 ABSTRACT_TYPE(/area/station/engine/substation)
+TYPEINFO(/area/station/engine/substation)
+	valid_bounty_area = FALSE
 /area/station/engine/substation
 	icon_state = "purple"
 	sound_environment = 3
@@ -2520,7 +2708,7 @@ ABSTRACT_TYPE(/area/station/engine/substation)
 	icon_state = "prototype_engine"
 
 /area/station/engine/thermo
-	name = "Thermoelectric generator"
+	name = "Thermoelectric Generator"
 	icon_state = "prototype_engine"
 
 /area/station/engine/proto_gangway
@@ -2532,23 +2720,18 @@ ABSTRACT_TYPE(/area/station/engine/substation)
 
 
 /area/station/teleporter
-	name = "Teleporter"
+	name = "Command Teleporter"
 	icon_state = "teleporter"
 	sound_environment = 3
 	workplace = 1
-
-/area/syndicate_teleporter
-	name = "Syndicate Teleporter"
-	icon_state = "teleporter"
-	requires_power = 0
-	teleport_blocked = 1
-	do_not_irradiate = 1
+	station_map_colour = MAPC_COMMAND
 
 ABSTRACT_TYPE(/area/station/medical)
 /area/station/medical
 	name = "Medical area"
 	icon_state = "medbay"
 	workplace = 1
+	station_map_colour = MAPC_MEDICAL
 
 /area/station/medical/medbay
 	name = "Medbay"
@@ -2558,6 +2741,7 @@ ABSTRACT_TYPE(/area/station/medical)
 /area/station/medical/medbay/lobby
 	name = "Medbay Lobby"
 	icon_state = "medbay_lobby"
+	station_map_colour = MAPC_MEDLOBBY
 
 /area/station/medical/medbay/cloner
 	name = "Cloning"
@@ -2594,16 +2778,19 @@ ABSTRACT_TYPE(/area/station/medical)
 /area/station/medical/robotics
 	name = "Robotics"
 	icon_state = "medresearch"
+	station_map_colour = MAPC_ROBOTICS
 
 /area/station/medical/research
 	name = "Medical Research"
 	icon_state = "medresearch"
 	sound_environment = 3
+	station_map_colour = MAPC_MEDRESEARCH
 
 /area/station/medical/head
 	name = "Medical Director's Office"
 	icon_state = "MD"
 	sound_environment = 1
+	station_map_colour = MAPC_COMMAND
 
 	private
 		name = "Medical Director's  Private Quarters"
@@ -2612,21 +2799,25 @@ ABSTRACT_TYPE(/area/station/medical)
 	name = "Pathology Research"
 	icon_state = "medcdc"
 	sound_environment = 5
+	station_map_colour = MAPC_PATHOLOGY
 
 /area/station/medical/dome
 	name = "Monkey Dome"
 	icon_state = "green"
 	sound_environment = 3
+	station_map_colour = MAPC_MEDRESEARCH
 
 /area/station/medical/morgue
 	name = "Morgue"
 	icon_state = "morgue"
 	sound_environment = 3
+	station_map_colour = MAPC_MEDICAL
 
 /area/station/medical/crematorium
 	name = "Crematorium"
 	icon_state = "morgue"
 	sound_environment = 3
+	station_map_colour = MAPC_MEDICAL
 
 /area/station/medical/medbooth
 	name = "Medical Booth"
@@ -2654,6 +2845,7 @@ ABSTRACT_TYPE(/area/station/security)
 	teleport_blocked = 1
 	workplace = 1
 	spy_secure_area = TRUE
+	station_map_colour = MAPC_SECURITY
 
 /area/station/security/main
 	name = "Security"
@@ -2676,6 +2868,7 @@ ABSTRACT_TYPE(/area/station/security)
 	sound_environment = 3
 	teleport_blocked = 0
 	do_not_irradiate = 1
+	station_map_colour = MAPC_BRIG
 
 /area/station/security/brig/cell_block_control
 		name = "Cell Block Control"
@@ -2724,11 +2917,6 @@ ABSTRACT_TYPE(/area/station/security)
 		name = "Medical Security Checkpoint"
 /area/station/security/checkpoint/research
 		name = "Research Security Checkpoint"
-
-/area/station/security/armory //what the fuck this is not the real armory???
-	name = "Armory" //ai_monitored/armory is, shitty ass code
-	icon_state = "armory"
-	sound_environment = 2
 
 /area/station/security/prison
 	name = "Prison Station"
@@ -2783,6 +2971,7 @@ ABSTRACT_TYPE(/area/station/security)
 	icon_state = "HOS"
 	sound_environment = 4
 	workplace = 0 //As does the hos
+	station_map_colour = MAPC_COMMAND
 
 /area/station/security/hos/horizon
 	name = "Hovel of Security"
@@ -2822,7 +3011,6 @@ ABSTRACT_TYPE(/area/station/solar)
 /area/station/solar
 	requires_power = 0
 	luminosity = 1
-	force_fullbright = 1
 	workplace = 1
 	do_not_irradiate = 1
 
@@ -2855,11 +3043,20 @@ ABSTRACT_TYPE(/area/station/solar)
 	name = "Emergency Solar Array 3"
 	icon_state = "yellow"
 
+/area/station/solar/aisat
+	name = "AI Satellite Solar Array"
+	icon_state = "yellow"
+
+/area/station/solar/zeta
+	name = "Research Outpost Solar Array"
+	icon_state = "yellow"
+
 ABSTRACT_TYPE(/area/station/quartermaster)
 /area/station/quartermaster
 	name = "Quartermaster's"
 	icon_state = "quart"
 	workplace = 1
+	station_map_colour = MAPC_QUARTERMASTER
 
 /area/station/quartermaster/office
 	name = "Quartermaster's Office"
@@ -2913,6 +3110,7 @@ ABSTRACT_TYPE(/area/station/janitor)
 	icon_state = "chem"
 	sound_environment = 3
 	workplace = 1
+	station_map_colour = MAPC_CHEMISTRY
 
 /area/station/science/testchamber
 	name = "Test Chamber"
@@ -2927,6 +3125,7 @@ ABSTRACT_TYPE(/area/station/science)
 	icon_state = "purple"
 	sound_environment = 3
 	workplace = 1
+	station_map_colour = MAPC_RESEARCH
 
 /area/station/science/lobby
 	name = "Science Lobby"
@@ -2934,6 +3133,10 @@ ABSTRACT_TYPE(/area/station/science)
 
 /area/station/science/tenebrae
 	name = "Tenebrae Primary Zone"
+	icon_state = "science"
+
+/area/station/science/hall
+	name = "Research Hall"
 	icon_state = "science"
 
 /area/station/science/gen_storage
@@ -2952,24 +3155,29 @@ ABSTRACT_TYPE(/area/station/science)
 /area/station/science/teleporter
 	name = "Science Teleporter"
 	icon_state = "telelab"
+	station_map_colour = MAPC_TELESCI
 
 /area/station/science/research_director
 	name = "Research Director's Office"
 	icon_state = "toxlab"
 	workplace = 0
+	station_map_colour = MAPC_COMMAND
 
 /area/station/science/lab
 	name = "Toxin Lab"
 	icon_state = "toxlab"
+	station_map_colour = MAPC_TOXINS
 
 /area/station/science/artifact
 	name = "Artifact Lab"
 	icon_state = "artifact"
+	station_map_colour = MAPC_ARTLAB
 
 /area/station/science/storage
 	name = "Toxin Storage"
 	icon_state = "toxstorage"
 	do_not_irradiate = 1
+	station_map_colour = MAPC_TOXINS
 
 /area/station/science/laser
 	name = "Optics Lab"
@@ -2988,6 +3196,7 @@ ABSTRACT_TYPE(/area/station/chapel)
 /area/station/chapel
 	name = "Chapel"
 	icon_state = "chapel"
+	station_map_colour = MAPC_CHAPEL
 
 /area/station/chapel/sanctuary
 	name = "Chapel"
@@ -3072,6 +3281,10 @@ ABSTRACT_TYPE(/area/station/chapel)
 	name = "Northeast Area"
 	do_not_irradiate = 1;
 
+/area/station/storage/hydroponics
+	name = "Hydroponics Storage"
+	icon_state = "pink"
+
 ABSTRACT_TYPE(/area/station/hangar)
 /area/station/hangar
 	name = "Hangar"
@@ -3088,17 +3301,22 @@ ABSTRACT_TYPE(/area/station/hangar)
 /area/station/hangar/sec
 		name = "Secure Dock"
 		teleport_blocked = 1
+		station_map_colour = MAPC_SECURITY
 /area/station/hangar/engine
 		name = "Engineering Dock"
+		station_map_colour = MAPC_ENGINEERING
 /area/station/hangar/medical
-		name = "Medical Hanger"
+		name = "Medical Hangar"
+		station_map_colour = MAPC_MEDICAL
 /area/station/hangar/qm
 		name = "Cargo Dock"
+		station_map_colour = MAPC_QUARTERMASTER
 /area/station/hangar/escape
 		name = "Escape Dock"
 /area/station/hangar/science
 		name = "Research Dock"
 		teleport_blocked = 1
+		station_map_colour = MAPC_RESEARCH
 /area/station/hangar/port
 		name = "Submarine Bay (Port)"
 		requires_power = 1
@@ -3106,13 +3324,16 @@ ABSTRACT_TYPE(/area/station/hangar)
 		name = "Submarine Bay (Starboard)"
 /area/station/hangar/mining
 		name = "Submarine Bay (Mining)"
+		station_map_colour = MAPC_MINING
 /area/station/hangar/security
 		name = "Submarine Bay (Security)"
+		station_map_colour = MAPC_SECURITY
 
 /area/station/hydroponics
 	name = "Hydroponics"
 	icon_state = "hydro"
 	workplace = 1
+	station_map_colour = MAPC_HYDROPONICS
 
 /area/station/hydroponics/bay
   name = "Hydroponics Bay"
@@ -3124,6 +3345,8 @@ ABSTRACT_TYPE(/area/station/hangar)
 /area/station/ranch
 	name = "Ranch"
 	icon_state = "ranch"
+	workplace = 1
+	station_map_colour = MAPC_RANCH
 
 ABSTRACT_TYPE(/area/station/garden)
 /area/station/garden
@@ -3146,7 +3369,6 @@ ABSTRACT_TYPE(/area/station/garden)
 	name = "Habitat Dome"
 	icon_state = "aviary"
 	sound_environment = 15
-	force_fullbright = 1
 
 /area/station/garden/zen
 	name = "Zen Garden"
@@ -3156,7 +3378,6 @@ ABSTRACT_TYPE(/area/station/garden)
 ABSTRACT_TYPE(/area/station/catwalk)
 /area/station/catwalk
 	icon_state = "yellow"
-	force_fullbright = 1
 	requires_power = FALSE
 
 /area/station/catwalk/north
@@ -3207,6 +3428,8 @@ ABSTRACT_TYPE(/area/station/catwalk)
 	name = "Research Outpost"
 	icon_state = "blue"
 	do_not_irradiate = 1
+	minimaps_to_render_on = MAP_ALL
+	station_map_colour = MAPC_RESEARCH
 
 /area/research_outpost/protest
 	name = "Protest Outpost"
@@ -3243,6 +3466,8 @@ ABSTRACT_TYPE(/area/station/catwalk)
 	icon_state = "brig"
 	teleport_blocked = 1
 	do_not_irradiate = 1
+	minimaps_to_render_on = MAP_SYNDICATE
+	station_map_colour = MAPC_SYNDICATE
 
 /area/listeningpost/syndicateassaultvessel
 		name ="Syndicate Assault Vessel"
@@ -3257,7 +3482,22 @@ ABSTRACT_TYPE(/area/station/catwalk)
 	icon_state = "yellow"
 	requires_power = 0
 	luminosity = 1
-	force_fullbright = 1
+
+/area/listeningpost/syndicate_teleporter
+	name = "Syndicate Teleporter"
+	icon_state = "teleporter"
+	requires_power = 0
+
+// Salvager Spawn
+/area/salvager
+	name = "Salvager Vessel Magpie"
+	icon_state = "red"
+	sanctuary = 1
+	teleport_blocked = 1
+
+/area/salvager/pod
+	name = "Magpie Launch Area"
+	icon_state = "yellow"
 
 /// Nukeops spawn station
 /area/syndicate_station
@@ -3295,20 +3535,21 @@ ABSTRACT_TYPE(/area/station/catwalk)
 	sound_environment = 4
 	teleport_blocked = 1
 
-	CanEnter( var/atom/movable/A )
+	CanEnter(atom/movable/A)
 		var/mob/living/M = A
-		if( istype(M) && M.mind && M.mind.special_role != ROLE_WIZARD && isliving(M) )
+		if(istype(M) && M.mind && !(M.mind.special_role == ROLE_WIZARD || M.mind.assigned_role == "Santa Claus)"))
 			if(M.client && M.client.holder)
-				return 1
-			boutput( M, "<span class='alert'>A magical barrier prevents you from entering!</span>" ) //or something
-			return 0
-		return 1
+				return TRUE
+			boutput(M, "<span class='alert'>A magical barrier prevents you from entering!</span>") //or something
+			return FALSE
+		return TRUE
 
 ABSTRACT_TYPE(/area/station/ai_monitored)
 /area/station/ai_monitored
 	name = "AI Monitored Area"
 	var/obj/machinery/camera/motion/motioncamera = null
 	workplace = 1
+	station_map_colour = MAPC_COMMAND
 
 /area/station/ai_monitored/New()
 	..()
@@ -3356,6 +3597,41 @@ ABSTRACT_TYPE(/area/station/ai_monitored/storage/)
 	sound_environment = 2
 	teleport_blocked = 1
 	spy_secure_area = TRUE
+	station_map_colour = MAPC_ARMOURY
+	var/static/list/entered_ckeys = list()
+	var/armory_auth = FALSE
+
+	proc/authorize()
+		armory_auth = TRUE
+
+	proc/unauthorize()
+		armory_auth = FALSE
+
+	New()
+		..()
+		RegisterSignal(GLOBAL_SIGNAL, COMSIG_GLOBAL_ARMORY_AUTH, .proc/authorize)
+		RegisterSignal(GLOBAL_SIGNAL, COMSIG_GLOBAL_ARMORY_UNAUTH, .proc/unauthorize)
+		SPAWN(5 SECONDS)
+			var/area/A = locate(/area/station/ai_monitored/armory)
+			for(var/obj/item/O in A)
+				O.AddComponent(/datum/component/log_item_pickup, "")
+
+	Entered(atom/movable/A, atom/oldloc)
+		. = ..()
+		if (current_state < GAME_STATE_FINISHED)
+			if(istype(A, /mob/living) && !istype(A, /mob/living/intangible))
+				var/mob/living/M = A
+				if(!M.client)
+					return
+				if(M.client.holder)
+					return
+				if(M.client.ckey in entered_ckeys)
+					return
+				var/ckey = M.client.ckey
+				entered_ckeys += ckey
+				SPAWN(120 SECONDS)
+					entered_ckeys -= ckey
+				logTheThing(LOG_STATION, M, "entered the Armory [log_loc(M)].[armory_auth ? "" : " - Armory unauthorized."]")
 
 // // // // // //
 
@@ -3365,6 +3641,7 @@ ABSTRACT_TYPE(/area/station/turret_protected)
 	name = "Turret Protected Area"
 	expandable = FALSE
 	spy_secure_area = TRUE
+	station_map_colour = MAPC_COMMAND
 	var/list/obj/machinery/turret/turret_list = list()
 	var/obj/machinery/camera/motion/motioncamera = null
 	var/list/obj/blob/blob_list = list() //faster to cache blobs as they enter instead of searching the area for them (For turrets)
@@ -3424,6 +3701,8 @@ ABSTRACT_TYPE(/area/station/turret_protected)
 	icon_state = "ai_foyer"
 	sound_environment = 12
 
+TYPEINFO(/area/station/turret_protected/ai)
+	valid_bounty_area = FALSE
 /area/station/turret_protected/ai
 	name = "AI Chamber"
 	icon_state = "ai_chamber"
@@ -3434,17 +3713,21 @@ ABSTRACT_TYPE(/area/station/turret_protected)
 	icon_state = "AIt"
 	sound_environment = 12
 
+TYPEINFO(/area/station/turret_protected/AIsat)
+	valid_bounty_area = FALSE
 /area/station/turret_protected/AIsat
 	name = "AI Satellite"
 	icon_state = "ai_satellite"
 	sound_environment = 12
 
+TYPEINFO(/area/station/turret_protected/AIbaseoutside)
+	valid_bounty_area = FALSE
 /area/station/turret_protected/AIbaseoutside
 	name = "AI Perimeter Defenses"
 	icon_state = "AIt"
 	requires_power = 0
 	sound_environment = 12
-	force_fullbright = 1
+	minimaps_to_render_on = null
 
 /area/station/turret_protected/AIbasecore2
 	name = "AI Core 2"
@@ -3470,6 +3753,7 @@ ABSTRACT_TYPE(/area/station/turret_protected)
 	name = "Armory Outer Perimeter"
 	icon_state = "secext"
 	requires_power = FALSE
+	minimaps_to_render_on = null
 
 // // // //  OLD AREAS THAT ARE NOT USED BUT ARE IN HERE // // // //
 
@@ -3479,6 +3763,7 @@ ABSTRACT_TYPE(/area/mining)
 	name = "Mining Outpost"
 	icon_state = "engine"
 	workplace = 1
+	station_map_colour = MAPC_MINING
 
 /area/mining/power
 	name = "Outpost Power Room"
@@ -3537,7 +3822,6 @@ ABSTRACT_TYPE(/area/mining)
 /area/mining/mainasteroid
 	name = "Main Asteroid"
 	icon_state = "green"
-	force_fullbright = 1
 
 /area/prefab/tunnelsnake
 	name = "Tunnel Snake Mining Rig"
@@ -3586,6 +3870,7 @@ ABSTRACT_TYPE(/area/mining)
 	name = "Kosmicheskoi Stantsii 13"
 	icon_state = "yellow"
 	permarads = 1
+	irradiated = 1
 
 // // // // // // // // // // // //
 
@@ -3648,7 +3933,22 @@ ABSTRACT_TYPE(/area/mining)
 	name = "Rental Office"
 	icon_state = "purple"
 
+/// new merchant areas
 
+/area/regina
+	name = "Regina Anchorage"
+	requires_power = 0
+	sound_environment = 2
+	teleport_blocked = 1
+
+/// Areas That Walp Uses For Gimmick Maps To Load In
+
+/area/pawnshop
+	name = "Very Legitimate Pawn Shop"
+	requires_power = 0
+	sound_environment = 2
+	teleport_blocked = 1
+	icon_state = "purple"
 
 /* ================================================== */
 
@@ -4525,7 +4825,7 @@ area/station/crewquarters/cryotron
 	sound_environment = 3
 	workplace = 1
 
-/area/syndicate_teleporter
+/area/listeningpost/syndicate_teleporter
 	name = "Syndicate Teleporter"
 	icon_state = "teleporter"
 	requires_power = 0

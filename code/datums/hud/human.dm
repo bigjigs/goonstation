@@ -42,7 +42,6 @@
 	var/list/atom/movable/screen/hud/inventory_bg = list()
 	var/list/obj/item/inventory_items = list()
 	var/show_inventory = 1
-	var/show_genetics_abilities = TRUE
 	var/icon/icon_hud = 'icons/mob/hud_human_new.dmi'
 
 	var/list/statusUiElements = list() //Assoc. List  STATUS EFFECT INSTANCE : UI ELEMENT add_screen(atom/movable/screen/S). Used to hold the ui elements since they shouldnt be on the status effects themselves.
@@ -423,7 +422,7 @@
 				if (icon_y > 16 || master.in_throw_mode)
 					master.toggle_throw_mode()
 				else
-					master.drop_item()
+					master.drop_item(null, TRUE)
 
 			if ("resist")
 				master.resist()
@@ -434,18 +433,13 @@
 				if (icon_x > 16)
 					if (icon_y > 16)
 						master.set_a_intent(INTENT_DISARM)
-						master.check_for_intent_trigger()
 					else
 						master.set_a_intent(INTENT_HARM)
-						master.check_for_intent_trigger()
 				else
 					if (icon_y > 16)
 						master.set_a_intent(INTENT_HELP)
-						master.check_for_intent_trigger()
 					else
 						master.set_a_intent(INTENT_GRAB)
-						master.check_for_intent_trigger()
-				src.update_intent()
 
 			if ("mintent")
 				if (master.m_intent == "run")
@@ -475,9 +469,8 @@
 						boutput(master, "<span class='notice'>There is nothing to pull.</span>")
 					else
 						to_pull = tgui_input_list(master, "Which do you want to pull? You can also Ctrl+Click on things to pull them.", "Which thing to pull?", pullable)
-					if(!isnull(to_pull) && GET_DIST(master, to_pull) <= 1)
-						usr = master // gross
-						to_pull.pull()
+					if(!isnull(to_pull) && BOUNDS_DIST(master, to_pull) == 0)
+						to_pull.pull(master)
 
 			if ("rest")
 				if(ON_COOLDOWN(src.master, "toggle_rest", REST_TOGGLE_COOLDOWN)) return
@@ -497,14 +490,14 @@
 				//src.update_sprinting()
 
 			if ("ability")
-				if(show_genetics_abilities)
-					show_genetics_abilities = FALSE
-					boutput(master, "No longer showing genetic abilities.")
+				if(!master.abilityHolder.hidden)
+					master.abilityHolder.hidden = TRUE
+					boutput(master, "No longer showing abilities.")
 				else
-					show_genetics_abilities = TRUE
-					boutput(master, "Now showing genetic abilities.")
+					master.abilityHolder.hidden = FALSE
+					boutput(master, "Now showing abilities.")
 
-				ability_toggle.icon_state = "[layouts[layout_style]["ability_icon"]][show_genetics_abilities]"
+				ability_toggle.icon_state = "[layouts[layout_style]["ability_icon"]][!master.abilityHolder.hidden]"
 				update_ability_hotbar()
 
 			if ("health")
@@ -778,6 +771,8 @@
 		remove_object(I)
 
 	proc/update_hands()
+		if(QDELETED(master))
+			return
 		if (master.limbs && !master.limbs.l_arm)
 			lhand.icon_state = "handl[master.hand]d"
 		else
@@ -792,8 +787,9 @@
 		var/newDesc = ""
 		newDesc += "<div><img src='[resource("images/tooltips/heat.png")]' alt='' class='icon' /><span>Total Resistance (Heat): [master.get_heat_protection()]%</span></div>"
 		newDesc += "<div><img src='[resource("images/tooltips/cold.png")]' alt='' class='icon' /><span>Total Resistance (Cold): [master.get_cold_protection()]%</span></div>"
-		newDesc += "<div><img src='[resource("images/tooltips/radiation.png")]' alt='' class='icon' /><span>Total Resistance (Radiation): [master.get_rad_protection()]%</span></div>"
+		newDesc += "<div><img src='[resource("images/tooltips/radiation.png")]' alt='' class='icon' /><span>Total Resistance (Radiation): [master.get_rad_protection() * 100]%</span></div>"
 		newDesc += "<div><img src='[resource("images/tooltips/disease.png")]' alt='' class='icon' /><span>Total Resistance (Disease): [master.get_disease_protection()]%</span></div>"
+		newDesc += "<div><img src='[resource("images/tooltips/chemical.png")]' alt='' class='icon' /><span>Total Resistance (Chemical): [master.get_chem_protection()]%</span></div>"
 		newDesc += "<div><img src='[resource("images/tooltips/explosion.png")]' alt='' class='icon' /><span>Total Resistance (Explosion): [master.get_explosion_resistance() * 100]%</span></div>"
 		newDesc += "<div><img src='[resource("images/tooltips/bullet.png")]' alt='' class='icon' /><span>Total Ranged Protection: [master.get_ranged_protection()]</span></div>"
 		newDesc += "<div><img src='[resource("images/tooltips/melee.png")]' alt='' class='icon' /><span>Total Melee Armor (Body): [master.get_melee_protection("chest")]</span></div>"
@@ -853,9 +849,6 @@
 		if(isdead(master))
 			return
 
-		// remove genetics buttons
-		for(var/atom/movable/screen/ability/topBar/genetics/G in src.objects)
-			remove_object(G)
 		for(var/atom/movable/screen/pseudo_overlay/PO in master.client.screen)
 			master.client.screen -= PO
 		for(var/obj/ability_button/B in master.client.screen)
@@ -876,22 +869,6 @@
 			if(pos_x > 15)
 				pos_x = 1
 				pos_y++
-
-		// if toggled off, do not show genetics abilities
-		if (show_genetics_abilities)
-			var/datum/bioEffect/power/P
-			for(var/ID in master.bioHolder.effects)
-				P = master.bioHolder.GetEffect(ID)
-				if (!istype(P, /datum/bioEffect/power/) || !istype(P.ability) || !istype(P.ability.object) || P.removed)
-					continue
-				var/datum/targetable/geneticsAbility/POWER = P.ability
-				var/atom/movable/screen/ability/topBar/genetics/BUTTON = POWER.object
-				BUTTON.update_on_hud(pos_x,pos_y)
-
-				pos_x++
-				if(pos_x > 15)
-					pos_x = 1
-					pos_y++
 
 		if (istype(master.loc,/obj/vehicle/)) //so we always see vehicle buttons
 			var/obj/vehicle/V = master.loc
@@ -1062,7 +1039,8 @@
 			health.tooltipTheme = "healthDam healthDam[stage]"
 
 	proc/update_blood_indicator()
-		if (!bleeding || isdead(master))
+		if (!src.bleeding) return //doesn't have a hud element to update
+		if (isdead(master))
 			bleeding.icon_state = "blood0"
 			bleeding.tooltipTheme = "healthDam healthDam0"
 			return

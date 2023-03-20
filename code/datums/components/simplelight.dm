@@ -1,3 +1,5 @@
+#define NO_CHANGE -1
+
 /datum/component/loctargeting/simple_light
 	dupe_mode = COMPONENT_DUPE_UNIQUE_PASSARGS
 	var/r = 255
@@ -11,11 +13,11 @@
 
 TYPEINFO(/datum/component/loctargeting/simple_light)
 	initialization_args = list(
-		ARG_INFO("r", "num", "Value of red component \[0-255\]", 255),
-		ARG_INFO("g", "num", "Value of green component \[0-255\]", 255),
-		ARG_INFO("b", "num", "Value of blue component \[0-255\]", 255),
-		ARG_INFO("a", "num", "Alpha (brightness) component \[0-255\]", 127),
-		ARG_INFO("enabled", "num", "Initial state of the simplelight (bool)", FALSE)
+		ARG_INFO("r", DATA_INPUT_NUM, "Value of red component \[0-255\]", 255),
+		ARG_INFO("g", DATA_INPUT_NUM, "Value of green component \[0-255\]", 255),
+		ARG_INFO("b", DATA_INPUT_NUM, "Value of blue component \[0-255\]", 255),
+		ARG_INFO("a", DATA_INPUT_NUM, "Alpha (brightness) component \[0-255\]", 127),
+		ARG_INFO("enabled", DATA_INPUT_BOOL, "Initial state of the simplelight (bool)", FALSE)
 	)
 /datum/component/loctargeting/simple_light/Initialize(r = 255, g = 255, b = 255, a = 127, enabled = FALSE)
 	. = ..()
@@ -28,8 +30,11 @@ TYPEINFO(/datum/component/loctargeting/simple_light)
 	src.enabled = enabled
 	src.light_name = "sl_comp_\ref[src]"
 
-/datum/component/loctargeting/simple_light/proc/update(var/new_enabled = -1)
-	if(new_enabled != -1)
+	RegisterSignal(src.parent, COMSIG_LIGHT_ENABLE, .proc/enable)
+	RegisterSignal(src.parent, COMSIG_LIGHT_DISABLE, .proc/disable)
+
+/datum/component/loctargeting/simple_light/proc/update(var/new_enabled = NO_CHANGE)
+	if(new_enabled != NO_CHANGE)
 		src.enabled = new_enabled
 	if(!src.enabled)
 		light_target.remove_simple_light(src.light_name)
@@ -42,23 +47,23 @@ TYPEINFO(/datum/component/loctargeting/simple_light)
 	. = ..()
 
 /datum/component/loctargeting/simple_light/UnregisterFromParent()
-	src.update(0)
+	src.update(FALSE)
 	. = ..()
 
 /datum/component/loctargeting/simple_light/proc/set_color(var/r, var/g, var/b)
 	src.r = r
 	src.g = g
 	src.b = b
-	src.update(0)
+	src.update(FALSE)
 
 /datum/component/loctargeting/simple_light/on_added(datum/source, old_loc)
 	. = ..()
 	if(!src.enabled)
 		src.light_target = current_loc
 		return
-	src.update(0)
+	src.update(FALSE)
 	src.light_target = current_loc
-	src.update(1)
+	src.update(TRUE)
 
 /datum/component/loctargeting/simple_light/on_removed(datum/source, old_loc)
 	. = ..()
@@ -67,9 +72,15 @@ TYPEINFO(/datum/component/loctargeting/simple_light)
 	if(!src.enabled)
 		src.light_target = I
 		return
-	src.update(0)
+	src.update(FALSE)
 	src.light_target = I
-	src.update(1)
+	src.update(TRUE)
+
+/datum/component/loctargeting/simple_light/proc/enable()
+	src.update(TRUE)
+
+/datum/component/loctargeting/simple_light/proc/disable()
+	src.update(FALSE)
 
 
 
@@ -86,11 +97,11 @@ TYPEINFO(/datum/component/loctargeting/simple_light)
 
 TYPEINFO(/datum/component/loctargeting/sm_light)
 	initialization_args = list(
-		ARG_INFO("r", "num", "Value of red component \[0-255\]", 255),
-		ARG_INFO("g", "num", "Value of green component \[0-255\]", 255),
-		ARG_INFO("b", "num", "Value of blue component \[0-255\]", 255),
-		ARG_INFO("a", "num", "Alpha (brightness) component \[0-255\]", 127),
-		ARG_INFO("enabled", "num", "Initial state of the simplelight (bool)", FALSE)
+		ARG_INFO("r", DATA_INPUT_NUM, "Value of red component \[0-255\]", 255),
+		ARG_INFO("g", DATA_INPUT_NUM, "Value of green component \[0-255\]", 255),
+		ARG_INFO("b", DATA_INPUT_NUM, "Value of blue component \[0-255\]", 255),
+		ARG_INFO("a", DATA_INPUT_NUM, "Alpha (brightness) component \[0-255\]", 127),
+		ARG_INFO("enabled", DATA_INPUT_NUM, "Initial state of the simplelight (bool)", FALSE)
 	)
 /datum/component/loctargeting/sm_light/Initialize(r = 255, g = 255, b = 255, a = 127, enabled = FALSE)
 	. = ..()
@@ -103,8 +114,11 @@ TYPEINFO(/datum/component/loctargeting/sm_light)
 	src.enabled = enabled
 	src.light_name = "ml_comp_\ref[src]"
 
-/datum/component/loctargeting/sm_light/proc/update(var/new_enabled = -1)
-	if(new_enabled != -1)
+	RegisterSignal(src.parent, COMSIG_LIGHT_ENABLE, .proc/enable)
+	RegisterSignal(src.parent, COMSIG_LIGHT_DISABLE, .proc/disable)
+
+/datum/component/loctargeting/sm_light/proc/update(var/new_enabled = NO_CHANGE)
+	if(new_enabled != NO_CHANGE)
 		src.enabled = new_enabled
 	if(!src.enabled)
 		light_target.remove_sm_light(src.light_name)
@@ -117,23 +131,23 @@ TYPEINFO(/datum/component/loctargeting/sm_light)
 	. = ..()
 
 /datum/component/loctargeting/sm_light/UnregisterFromParent()
-	src.update(0)
+	src.update(FALSE)
 	. = ..()
 
 /datum/component/loctargeting/sm_light/proc/set_color(var/r, var/g, var/b)
 	src.r = r
 	src.g = g
 	src.b = b
-	src.update(0)
+	src.update(FALSE)
 
 /datum/component/loctargeting/sm_light/on_added(datum/source, old_loc)
 	. = ..()
 	if(!src.enabled)
 		src.light_target = current_loc
 		return
-	src.update(0)
+	src.update(FALSE)
 	src.light_target = current_loc
-	src.update(1)
+	src.update(TRUE)
 
 /datum/component/loctargeting/sm_light/on_removed(datum/source, old_loc)
 	. = ..()
@@ -141,9 +155,15 @@ TYPEINFO(/datum/component/loctargeting/sm_light)
 	if(!src.enabled)
 		src.light_target = I
 		return
-	src.update(0)
+	src.update(FALSE)
 	src.light_target = I
-	src.update(1)
+	src.update(TRUE)
+
+/datum/component/loctargeting/sm_light/proc/enable()
+	src.update(TRUE)
+
+/datum/component/loctargeting/sm_light/proc/disable()
+	src.update(FALSE)
 
 
 
@@ -162,11 +182,11 @@ TYPEINFO(/datum/component/loctargeting/sm_light)
 
 TYPEINFO(/datum/component/loctargeting/medium_directional_light)
 	initialization_args = list(
-		ARG_INFO("r", "num", "Value of red component \[0-255\]", 255),
-		ARG_INFO("g", "num", "Value of green component \[0-255\]", 255),
-		ARG_INFO("b", "num", "Value of blue component \[0-255\]", 255),
-		ARG_INFO("a", "num", "Alpha (brightness) component \[0-255\]", 127),
-		ARG_INFO("enabled", "num", "Initial state of the simplelight (bool)", FALSE)
+		ARG_INFO("r", DATA_INPUT_NUM, "Value of red component \[0-255\]", 255),
+		ARG_INFO("g", DATA_INPUT_NUM, "Value of green component \[0-255\]", 255),
+		ARG_INFO("b", DATA_INPUT_NUM, "Value of blue component \[0-255\]", 255),
+		ARG_INFO("a", DATA_INPUT_NUM, "Alpha (brightness) component \[0-255\]", 127),
+		ARG_INFO("enabled", DATA_INPUT_BOOL, "Initial state of the simplelight", FALSE)
 	)
 /datum/component/loctargeting/medium_directional_light/Initialize(r = 255, g = 255, b = 255, a = 127, enabled = FALSE)
 	. = ..()
@@ -179,8 +199,11 @@ TYPEINFO(/datum/component/loctargeting/medium_directional_light)
 	src.enabled = enabled
 	src.light_name = "dl_comp_\ref[src]"
 
-/datum/component/loctargeting/medium_directional_light/proc/update(var/new_enabled = -1)
-	if(new_enabled != -1)
+	RegisterSignal(src.parent, COMSIG_LIGHT_ENABLE, .proc/enable)
+	RegisterSignal(src.parent, COMSIG_LIGHT_DISABLE, .proc/disable)
+
+/datum/component/loctargeting/medium_directional_light/proc/update(var/new_enabled = NO_CHANGE)
+	if(new_enabled != NO_CHANGE)
 		src.enabled = new_enabled
 	if(!src.enabled)
 		light_target.remove_mdir_light(src.light_name)
@@ -193,7 +216,7 @@ TYPEINFO(/datum/component/loctargeting/medium_directional_light)
 	. = ..()
 
 /datum/component/loctargeting/medium_directional_light/UnregisterFromParent()
-	src.update(0)
+	src.update(FALSE)
 	. = ..()
 
 /datum/component/loctargeting/medium_directional_light/on_added(datum/source, old_loc)
@@ -201,9 +224,9 @@ TYPEINFO(/datum/component/loctargeting/medium_directional_light)
 	if(!src.enabled)
 		src.light_target = current_loc
 		return
-	src.update(0)
+	src.update(FALSE)
 	src.light_target = current_loc
-	src.update(1)
+	src.update(TRUE)
 
 /datum/component/loctargeting/medium_directional_light/on_removed(datum/source, old_loc)
 	. = ..()
@@ -211,7 +234,14 @@ TYPEINFO(/datum/component/loctargeting/medium_directional_light)
 	if(!src.enabled)
 		src.light_target = I
 		return
-	src.update(0)
+	src.update(FALSE)
 	src.light_target = I
-	src.update(1)
+	src.update(TRUE)
 
+/datum/component/loctargeting/medium_directional_light/proc/enable()
+	src.update(TRUE)
+
+/datum/component/loctargeting/medium_directional_light/proc/disable()
+	src.update(FALSE)
+
+#undef NO_CHANGE

@@ -122,7 +122,7 @@
 
 	proc/early_warning()
 		for_by_tcl(C, /obj/machinery/communications_dish)
-			C.add_centcom_report("[command_name()] Update", early_warning_text)
+			C.add_centcom_report(ALERT_GENERAL, early_warning_text)
 
 		if (!early_warning_heading)
 			command_alert(early_warning_text)
@@ -131,7 +131,7 @@
 
 	proc/set_up()
 		for_by_tcl(C, /obj/machinery/communications_dish)
-			C.add_centcom_report("[command_name()] Update", warning_text)
+			C.add_centcom_report(ALERT_GENERAL, warning_text)
 
 		if (!warning_heading)
 			command_alert(warning_text)
@@ -360,7 +360,7 @@
 	name = "Spirit Siege"
 	warning_text = "We are under siege from a dimensional fissure!"
 	attacker_types = list(/obj/critter/spirit)
-	bosses = list(/obj/critter/aberration)
+	bosses = list(/mob/living/critter/aberration)
 	method = METHOD_SPAWN
 	original_size = 15
 	original_bosses = 1
@@ -369,7 +369,7 @@
 /datum/construction_event/siege/animals
 	name = "Animal Siege"
 	warning_text = "A pack of animals have been teleported on board our station!"
-	attacker_types = list(/obj/critter/spacebee, /obj/critter/mouse, /obj/critter/goose, /obj/critter/goose/swan, /obj/critter/owl, /obj/critter/bat/buff, /obj/critter/cat, /obj/critter/nicespider, /obj/critter/spider/spacerachnid)
+	attacker_types = list(/obj/critter/wasp, /mob/living/critter/small_animal/mouse, /obj/critter/goose, /obj/critter/goose/swan, /obj/critter/owl, /obj/critter/bat/buff, /mob/living/critter/small_animal/cat, /mob/living/critter/spider/nice, /mob/living/critter/spider/spacerachnid)
 	bosses = list(/obj/critter/lion, /obj/critter/bear)
 	original_size = 30
 	original_bosses = 5

@@ -177,43 +177,8 @@ var/list/datum/bioEffect/mutini_effects = list()
 
 		body_icon = toCopy.body_icon
 		body_icon_state = toCopy.body_icon_state
-		head_icon = toCopy.head_icon
-		head_icon_state = toCopy.head_icon_state
 
-		customization_icon = toCopy.customization_icon
-
-		customization_first_color_original = toCopy.customization_first_color_original
-		customization_first_color = toCopy.customization_first_color
-		customization_first = toCopy.customization_first
-		customization_first_offset_y = toCopy.customization_first_offset_y
-		customization_first_original = toCopy.customization_first_original
-
-		customization_second_color_original = toCopy.customization_second_color_original
-		customization_second_color = toCopy.customization_second_color
-		customization_second = toCopy.customization_second
-		customization_second_offset_y = toCopy.customization_second_offset_y
-		customization_second_original = toCopy.customization_second_original
-
-		customization_third_color_original = toCopy.customization_third_color_original
-		customization_third_color = toCopy.customization_third_color
-		customization_third = toCopy.customization_third
-		customization_third_offset_y = toCopy.customization_third_offset_y
-		customization_third_original = toCopy.customization_third_original
-
-		special_hair_1_icon = toCopy.special_hair_1_icon
-		special_hair_1_state = toCopy.special_hair_1_state
-		special_hair_1_color_ref = toCopy.special_hair_1_color_ref
-		special_hair_1_offset_y = toCopy.special_hair_1_offset_y
-
-		special_hair_2_icon = toCopy.special_hair_2_icon
-		special_hair_2_state = toCopy.special_hair_2_state
-		special_hair_2_color_ref = toCopy.special_hair_2_color_ref
-		special_hair_2_offset_y = toCopy.special_hair_2_offset_y
-
-		special_hair_3_icon = toCopy.special_hair_3_icon
-		special_hair_3_state = toCopy.special_hair_3_state
-		special_hair_3_color_ref = toCopy.special_hair_3_color_ref
-		special_hair_3_offset_y = toCopy.special_hair_3_offset_y
+		CopyOtherHeadAppearance(toCopy)
 
 		mob_detail_1_icon = toCopy.mob_detail_1_icon
 		mob_detail_1_state = toCopy.mob_detail_1_state
@@ -259,6 +224,45 @@ var/list/datum/bioEffect/mutini_effects = list()
 			var/mob/living/carbon/human/H = owner
 			H.update_colorful_parts()
 		return src
+
+	proc/CopyOtherHeadAppearance(var/datum/appearanceHolder/toCopy)
+		head_icon = toCopy.head_icon
+		head_icon_state = toCopy.head_icon_state
+
+		customization_icon = toCopy.customization_icon
+
+		customization_first_color_original = toCopy.customization_first_color_original
+		customization_first_color = toCopy.customization_first_color
+		customization_first = toCopy.customization_first
+		customization_first_offset_y = toCopy.customization_first_offset_y
+		customization_first_original = toCopy.customization_first_original
+
+		customization_second_color_original = toCopy.customization_second_color_original
+		customization_second_color = toCopy.customization_second_color
+		customization_second = toCopy.customization_second
+		customization_second_offset_y = toCopy.customization_second_offset_y
+		customization_second_original = toCopy.customization_second_original
+
+		customization_third_color_original = toCopy.customization_third_color_original
+		customization_third_color = toCopy.customization_third_color
+		customization_third = toCopy.customization_third
+		customization_third_offset_y = toCopy.customization_third_offset_y
+		customization_third_original = toCopy.customization_third_original
+
+		special_hair_1_icon = toCopy.special_hair_1_icon
+		special_hair_1_state = toCopy.special_hair_1_state
+		special_hair_1_color_ref = toCopy.special_hair_1_color_ref
+		special_hair_1_offset_y = toCopy.special_hair_1_offset_y
+
+		special_hair_2_icon = toCopy.special_hair_2_icon
+		special_hair_2_state = toCopy.special_hair_2_state
+		special_hair_2_color_ref = toCopy.special_hair_2_color_ref
+		special_hair_2_offset_y = toCopy.special_hair_2_offset_y
+
+		special_hair_3_icon = toCopy.special_hair_3_icon
+		special_hair_3_state = toCopy.special_hair_3_state
+		special_hair_3_color_ref = toCopy.special_hair_3_color_ref
+		special_hair_3_offset_y = toCopy.special_hair_3_offset_y
 
 	disposing()
 		owner = null
@@ -339,7 +343,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 		return
 
 /datum/bioHolder
-	//Holds the apperanceholder aswell as the effects. Controls adding and removing of effects.
+	//Holds the appearanceholder aswell as the effects. Controls adding and removing of effects.
 	var/list/effects = new/list()
 	var/list/effectPool = new/list()
 
@@ -348,8 +352,8 @@ var/list/datum/bioEffect/mutini_effects = list()
 
 	var/bloodType = "AB+-"
 	var/bloodColor = null
-	var/age = 30.0
-	var/genetic_stability = 125
+	var/age = 30
+	var/genetic_stability = 100
 	var/clone_generation = 0 //Get this high enough and you can be like Arnold. Maybe. I found that movie fun. Don't judge me.
 
 	var/datum/appearanceHolder/mobAppearance = null
@@ -357,12 +361,13 @@ var/list/datum/bioEffect/mutini_effects = list()
 
 	var/Uid = "not initialized" //Unique id for the mob. Used for fingerprints and whatnot.
 	var/uid_hash
+	var/fingerprints
 
 	New(var/mob/owneri)
 		owner = owneri
 		Uid = CreateUid()
-		uid_hash = md5(Uid)
 		bioUids[Uid] = null
+		build_fingerprints()
 		mobAppearance = new/datum/appearanceHolder()
 
 		mobAppearance.owner = owner
@@ -375,6 +380,15 @@ var/list/datum/bioEffect/mutini_effects = list()
 
 		BuildEffectPool()
 		return ..()
+
+	proc/build_fingerprints()
+		uid_hash = md5(Uid)
+		var/fprint_base = uppertext(md5_to_more_pronouncable(uid_hash))
+		var/list/fprint_parts = list()
+		for(var/i in 1 to length(fprint_base) step 6)
+			if(i + 6 <= length(fprint_base) + 1)
+				fprint_parts += copytext(fprint_base, i, i + 6)
+		fingerprints = jointext(fprint_parts, "-")
 
 	disposing()
 		for(var/D in effects)
@@ -450,7 +464,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 		var/list/filteredList = list()
 
 		if (!bioEffectList || !length(bioEffectList))
-			logTheThing("debug", null, null, {"<b>Genetics:</b> Tried to add new random effect to pool for
+			logTheThing(LOG_DEBUG, null, {"<b>Genetics:</b> Tried to add new random effect to pool for
 			 [owner ? "\ref[owner] [owner.name]" : "*NULL*"], but bioEffectList is empty!"})
 			return 0
 
@@ -463,7 +477,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 			filteredList[instance] = instance.probability
 
 		if(!filteredList.len)
-			logTheThing("debug", null, null, {"<b>Genetics:</b> Unable to get effects for new random effect for
+			logTheThing(LOG_DEBUG, null, {"<b>Genetics:</b> Unable to get effects for new random effect for
 			 [owner ? "\ref[owner] [owner.name]" : "*NULL*"]. (filteredList.len = [filteredList.len])"})
 			return 0
 
@@ -490,7 +504,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 		effectPool.Cut()
 
 		if (!bioEffectList || !length(bioEffectList))
-			logTheThing("debug", null, null, {"<b>Genetics:</b> Tried to build effect pool for
+			logTheThing(LOG_DEBUG, null, {"<b>Genetics:</b> Tried to build effect pool for
 			 [owner ? "\ref[owner] [owner.name]" : "*NULL*"], but bioEffectList is empty!"})
 
 		for(var/T in bioEffectList)
@@ -510,7 +524,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 					filteredGood[instance] = instance.probability
 
 		if(!filteredGood.len || !length(filteredBad))
-			logTheThing("debug", null, null, {"<b>Genetics:</b> Unable to build effect pool for
+			logTheThing(LOG_DEBUG, null, {"<b>Genetics:</b> Unable to build effect pool for
 			 [owner ? "\ref[owner] [owner.name]" : "*NULL*"]. (filteredGood.len = [filteredGood.len],
 			  filteredBad.len = [filteredBad.len])"})
 			return
@@ -595,6 +609,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 			ownerName = toCopy.ownerName
 			Uid = toCopy.Uid
 			uid_hash = md5(Uid)
+			build_fingerprints()
 
 		if (copyPool)
 			src.RemoveAllPoolEffects()
@@ -640,7 +655,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 
 		age += (toCopy.age - age) / (11 - progress)
 
-	proc/AddEffect(var/idToAdd, var/power = 0, var/timeleft = 0, var/do_stability = 1, var/magical = 0)
+	proc/AddEffect(var/idToAdd, var/power = 0, var/timeleft = 0, var/do_stability = 1, var/magical = 0, var/safety = 0)
 		//Adds an effect to this holder. Returns the newly created effect if succesful else 0.
 
 		if(HasEffect(idToAdd))
@@ -669,24 +684,31 @@ var/list/datum/bioEffect/mutini_effects = list()
 				newEffect.degrade_to = null
 				newEffect.can_copy = 0
 
+			if(safety && istype(newEffect, /datum/bioEffect/power))
+				// Only powers have safety ("synced" i.e. safe for user)
+				var/datum/bioEffect/power/TEMP = newEffect
+				TEMP.safety = safety
+
 			effects[newEffect.id] = newEffect
 			newEffect.owner = owner
 			newEffect.holder = src
 			if(owner)
 				newEffect.OnAdd()
+
 			if (do_stability)
-				src.genetic_stability -= newEffect.stability_loss
-				src.genetic_stability = max(0,src.genetic_stability)
-				if(newEffect.degrade_to && !prob(lerp(clamp(src.genetic_stability, 0, 100), 100, 0.5)))
+				if(newEffect.degrade_to && !prob(lerp(clamp(src.genetic_stability+10, 0, 100), 100, 0.5)))
 					newEffect.timeLeft = rand(20, 60)
 					newEffect.degrade_after = TRUE
+
+				src.genetic_stability -= newEffect.stability_loss
+				src.genetic_stability = max(0,src.genetic_stability)
 			if(owner && length(newEffect.msgGain) > 0)
 				if (newEffect.isBad)
 					boutput(owner, "<span class='alert'>[newEffect.msgGain]</span>")
 				else
 					boutput(owner, "<span class='notice'>[newEffect.msgGain]</span>")
 			mobAppearance.UpdateMob()
-			logTheThing("combat", owner, null, "gains the [newEffect] mutation at [log_loc(owner)].")
+			logTheThing(LOG_COMBAT, owner, "gains the [newEffect] mutation at [log_loc(owner)].")
 			return newEffect
 
 		return 0
@@ -717,12 +739,12 @@ var/list/datum/bioEffect/mutini_effects = list()
 		BE.OnAdd()
 
 		if (do_stability)
-			src.genetic_stability -= BE.stability_loss
-			src.genetic_stability = max(0,src.genetic_stability)
-
-			if(BE.degrade_to && !prob(lerp(clamp(src.genetic_stability, 0, 100), 100, 0.5)))
+			if(BE.degrade_to && !prob(lerp(clamp(src.genetic_stability+10, 0, 100), 100, 0.5)))
 				BE.timeLeft = rand(20, 60)
 				BE.degrade_after = TRUE
+
+			src.genetic_stability -= BE.stability_loss
+			src.genetic_stability = max(0,src.genetic_stability)
 
 		if(length(BE.msgGain) > 0)
 			if (BE.isBad)
@@ -730,7 +752,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 			else
 				boutput(owner, "<span class='notice'>[BE.msgGain]</span>")
 		mobAppearance.UpdateMob()
-		logTheThing("combat", owner, null, "gains the [BE] mutation at [log_loc(owner)].")
+		logTheThing(LOG_COMBAT, owner, "gains the [BE] mutation at [log_loc(owner)].")
 		return BE
 
 	proc/RemoveEffect(var/id)
@@ -755,7 +777,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 					boutput(owner, "<span class='alert'>[D.msgLose]</span>")
 			if (mobAppearance)
 				mobAppearance.UpdateMob()
-			logTheThing("combat", owner, null, "loses the [D] mutation at [log_loc(owner)].")
+			logTheThing(LOG_COMBAT, owner, "loses the [D] mutation at [log_loc(owner)].")
 			return effects.Remove(D.id)
 
 		return 0
@@ -769,7 +791,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 				BE.holder = null
 				if(istype(BE, /datum/bioEffect/power))
 					var/datum/bioEffect/power/BEP = BE
-					BEP?.ability.owner = null
+					BEP?.ability?.owner = null
 				//qdel(BE)
 		return 1
 
@@ -782,7 +804,7 @@ var/list/datum/bioEffect/mutini_effects = list()
 				BE.holder = null
 				if(istype(BE, /datum/bioEffect/power))
 					var/datum/bioEffect/power/BEP = BE
-					BEP?.ability.owner = null
+					BEP?.ability?.owner = null
 				//qdel(BE)
 		return 1
 

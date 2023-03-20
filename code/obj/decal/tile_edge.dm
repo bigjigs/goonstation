@@ -18,7 +18,7 @@
 			var/image/I = image(src.icon, T, src.icon_state, src.layer, src.dir)
 			I.pixel_x = src.pixel_x
 			I.pixel_y = src.pixel_y
-			I.appearance_flags = RESET_COLOR
+			I.appearance_flags = RESET_COLOR | PIXEL_SCALE
 			if (src.color)
 				I.color = src.color
 			var/md5hasho = "tile_edge_[md5("[rand(1,10000)]_[rand(1,10000)]")]"
@@ -31,7 +31,8 @@
 			return ..()
 
 	Move()
-		return 0
+		SHOULD_CALL_PARENT(FALSE)
+		return FALSE
 
 /obj/decal/tile_edge/stripe
 	name = "hazard stripe"
@@ -170,7 +171,8 @@
 	density = 1
 	anchored = 1
 	dir = NORTH
-	event_handler_flags = USE_FLUID_ENTER | USE_CHECKEXIT
+	event_handler_flags = USE_FLUID_ENTER
+	pass_unstable = TRUE
 
 	Cross(atom/movable/mover)
 		if (istype(mover, /obj/projectile))
@@ -180,14 +182,16 @@
 		else
 			return 1
 
-	CheckExit(atom/movable/O as mob|obj, target as turf)
+	Uncross(atom/movable/O, do_bump = TRUE)
 		if (!src.density)
-			return 1
-		if (istype(O, /obj/projectile))
-			return 1
-		if (get_dir(O.loc, target) & src.dir)
-			return 0
-		return 1
+			. = 1
+		else if (istype(O, /obj/projectile))
+			. = 1
+		else if (get_dir(O.loc, O.movement_newloc) & src.dir)
+			. = !density
+		else
+			. = 1
+		UNCROSS_BUMP_CHECK(O)
 
 /obj/decal/stage_edge/alt
 	name = "edge"

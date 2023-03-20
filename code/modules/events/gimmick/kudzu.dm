@@ -9,13 +9,11 @@
 	attack(mob/M, mob/user)
 		if(ishuman( M ))
 			if( user == M )
-				boutput( user, "You feed yourself the [src]. <span class='alert'>Oh god!</span>" )
-				logTheThing( "combat", user, null, "fed themself a [src]." )
+				boutput(user, "You feed yourself the [src]. <span class='alert'>Oh god!</span>")
 			else
-				boutput( user, "You feed [M] the [src]. <span class='alert'>Oh god!</span>" )
-				logTheThing( "combat", user, M, "fed [constructTarget(M,"combat")] a [src]." )
-			animate( M, color = "#0F0", time = 300 )//TODO: See below.
-			qdel( src )
+				boutput(user, "You feed [M] the [src]. <span class='alert'>Oh god!</span>")
+			animate(M, color = "#0F0", time = 300)//TODO: See below.
+			qdel(src)
 			return
 
 	afterattack(var/atom/A as mob|turf, var/mob/user as mob, reach, params)
@@ -26,11 +24,12 @@
 				new /obj/spacevine/alien/living(A, src.to_spread)
 			else
 				new /obj/spacevine/living(A, src.to_spread)
-			boutput( user, "You plant the [src] on the [A]." )
-			logTheThing( "combat", user, null, "plants [src] (kudzu) at [log_loc(src)]." )
+
+			boutput(user, "You plant the [src] on the [A].")
+			logTheThing(LOG_STATION, user, "plants [src] (kudzu) at [log_loc(src)].")
 			message_admins("[key_name(user)] planted kudzu at [log_loc(src)].")
 			user.u_equip(src)
-			qdel( src )
+			qdel(src)
 
 		else
 			return ..()
@@ -39,6 +38,7 @@
 	name = "Kudzu Outbreak"
 	centcom_headline = "Plant Outbreak"
 	centcom_message = "Rapidly expanding plant organism detected aboard the station. All personnel must contain the outbreak."
+	centcom_origin = ALERT_STATION
 	message_delay = 2 MINUTES
 	wont_occur_past_this_time = 40 MINUTES
 	customization_available = 1
@@ -52,10 +52,12 @@
 		var/kudzloc = isturf(startturf) ? startturf : pick_landmark(LANDMARK_KUDZUSTART)
 		if (prob(1) || aggressive)
 			var/obj/spacevine/alien/living/L = new /obj/spacevine/alien/living(kudzloc, KUDZU_TO_SPREAD_INITIAL)
-			L.set_loc(kudzloc)
+			if(!QDELETED(L))
+				L.set_loc(kudzloc)
 		else
 			var/obj/spacevine/living/L = new /obj/spacevine/living(kudzloc, KUDZU_TO_SPREAD_INITIAL)
-			L.set_loc(kudzloc)
+			if(!QDELETED(L))
+				L.set_loc(kudzloc)
 
 	admin_call(var/source)
 		if (..())
@@ -168,7 +170,7 @@
 			D.locked = 0
 		..()
 
-	attackby(obj/item/W as obj, mob/user as mob)
+	attackby(obj/item/W, mob/user)
 		if (!W) return
 		if (!user) return
 		var/dmg = 1
@@ -228,7 +230,7 @@
 	else
 		Vspread = locate(src.x,src.y + rand(-1, 1),src.z)
 	var/dogrowth = 1
-	if (!istype(Vspread, /turf/simulated/floor))
+	if (!istype(Vspread, /turf/simulated/floor) || isfeathertile(Vspread))
 		dogrowth = 0
 	for (var/obj/O in Vspread)
 
@@ -257,7 +259,8 @@
 
 	if (dogrowth == 1)
 		var/obj/V = new src.vinepath(loc=Vspread, to_spread=to_spread-1)
-		V.set_loc(Vspread)
+		if(!QDELETED(V))
+			V.set_loc(Vspread)
 	if (src.growth < 20 && !stunted)
 		src.growth++
 		src.update_self()
@@ -294,14 +297,14 @@
 
 /obj/spacevine/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(1)
 			qdel(src)
 			return
-		if(2.0)
+		if(2)
 			if (prob(66))
 				qdel(src)
 				return
-		if(3.0)
+		if(3)
 			if (prob(33))
 				qdel(src)
 				return
@@ -339,7 +342,7 @@
 								 0.00,  0.00,  0.00,  0.70,\
 								 0.00,  0.00,  0.00,  0.00)
 			//Add damage texture to create dark banding
-			setTexture()
+			setTexture("damaged")
 			animate(src,time=2 SECONDS,color=new_color)
 			src.growth -= 10
 			src.to_spread = round(log(max(src.to_spread,1))*2)
@@ -363,7 +366,8 @@
 		SPAWN(0)
 			if (prob(20) && !locate(/obj/spacevine/alien/flower) in get_turf(src))
 				var/obj/spacevine/alien/flower/F = new /obj/spacevine/alien/flower()
-				F.set_loc(src.loc)
+				if(!QDELETED(F))
+					F.set_loc(src.loc)
 
 	herbicide()
 		return
@@ -418,7 +422,7 @@
 
 				sleep(bulb_complete)
 
-				if(!isalive(M) && M.ghost?.mind?.dnr)
+				if(!isalive(M) && M.ghost?.mind?.get_player()?.dnr)
 					src.visible_message("<span class='alert'>The [src] opens, having drained all the nutrients from [M]!</span>")
 					M.gib()
 					flick("bulb-open-animation", src)
@@ -432,8 +436,8 @@
 					new/obj/decal/opened_kudzu_bulb(get_turf(src.loc))
 
 					H.full_heal()
-					if (!H.ckey && H.last_client && !H.last_client.mob.mind.dnr)
-						if ((!istype(H.last_client.mob,/mob/living) && !istype(H.last_client.mob,/mob/wraith)) || inafterlifebar(H.last_client.mob))
+					if (!H.ckey && H.last_client && !H.last_client.mob.mind.get_player()?.dnr)
+						if (!istype(H.last_client.mob,/mob/living) || inafterlifebar(H.last_client.mob))
 							H.ckey = H.last_client.ckey
 					if (istype(H.abilityHolder, /datum/abilityHolder/composite))
 						var/datum/abilityHolder/composite/Comp = H.abilityHolder
@@ -443,7 +447,7 @@
 						H.abilityHolder = null
 					H.set_mutantrace(/datum/mutantrace/kudzu)
 					natural_opening = 1
-					SHOW_KUDZU_TIPS(H)
+					H.show_antag_popup("kudzu")
 					qdel(src)
 		else
 			qdel(src)
@@ -469,7 +473,7 @@
 	pixel_x = -16
 	layer = MOB_LAYER - 1
 
-	attackby(obj/item/W as obj, mob/user as mob)
+	attackby(obj/item/W, mob/user)
 		if (iscuttingtool(W))
 			src.visible_message("<span class='alert'>[user] cuts [src] to bits!</span>")
 			qdel(src)

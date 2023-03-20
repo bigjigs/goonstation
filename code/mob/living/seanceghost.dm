@@ -1,4 +1,5 @@
-/mob/living/seanceghost
+// TODO make this mob/living/intangible. the fuck is it doing here?
+/mob/living/intangible/seanceghost
 	name = "Seance Ghost"
 	desc = "Ominous hooded figure!"
 	icon = 'icons/obj/zoldorf.dmi'
@@ -15,6 +16,7 @@
 
 	New(var/mob/M)
 		..()
+		invisibility = INVIS_NONE
 
 	is_spacefaring()
 		return 1
@@ -84,6 +86,8 @@
 		if((direct & WEST) && src.x > 1)
 			src.x--
 
+		return ..()
+
 	is_active()
 		return 0
 
@@ -101,13 +105,14 @@
 		if (dd_hasprefix(message, "*"))
 			return src.emote(copytext(message, 2),1)
 
-		logTheThing("diary", src, null, "[src.name] - [src.real_name]: [message]", "say")
+		logTheThing(LOG_DIARY, src, "[src.name] - [src.real_name]: [message]", "say")
 
 		if (src.client && src.client.ismuted())
 			boutput(src, "You are currently muted and may not speak.")
 			return
 
 	emote(var/act, var/voluntary)
+		..()
 		var/message
 		switch (lowertext(act))
 			if("flip")
@@ -127,6 +132,7 @@
 			src.visible_message("<span><b>[src.name]</b> [message]</span>")
 
 	death(gibbed)
+		. = ..()
 		if(originalmob)
 			if (src.client)
 				src.removeOverlaysClient(src.client)
@@ -156,7 +162,7 @@
 	if(originalz) //theres different handling for if that previous mob was a zoldorf or not
 		originalg = originalz
 	if (src.mind || src.client)
-		var/mob/living/seanceghost/Z = new/mob/living/seanceghost(src)
+		var/mob/living/intangible/seanceghost/Z = new/mob/living/intangible/seanceghost(src)
 
 		var/turf/T = get_turf(src)
 		if (!(T && isturf(T)) || ((isrestrictedz(T.z) || T.z != 1) && !(src.client && src.client.holder)))

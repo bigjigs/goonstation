@@ -39,6 +39,7 @@
 	New()
 		..()
 		src.create_reagents(60)
+		AddComponent(/datum/component/loctargeting/simple_light, 255, 110, 135, 90, src.on)
 
 		if (src.on) //if we spawned lit, do something about it!
 			src.on = 0
@@ -120,6 +121,8 @@
 
 			hit_type = DAMAGE_BURN
 
+			SEND_SIGNAL(src, COMSIG_LIGHT_ENABLE)
+
 	proc/put_out(var/mob/user as mob, var/message as text)
 		if (src.on == 1)
 			src.on = -1
@@ -139,7 +142,9 @@
 
 			hit_type = DAMAGE_BLUNT
 
-			playsound(src, "sound/impact_sounds/burn_sizzle.ogg", 50, 1)
+			SEND_SIGNAL(src, COMSIG_LIGHT_DISABLE)
+
+			playsound(src, 'sound/impact_sounds/burn_sizzle.ogg', 50, 1)
 
 	temperature_expose(datum/gas_mixture/air, temperature, volume)
 		if (src.on == 0)
@@ -153,7 +158,7 @@
 			src.visible_message("<span class='alert'>The [src] ignites!</span>", group = "cig_ignite")
 			src.light()
 
-	attackby(obj/item/W as obj, mob/user as mob)
+	attackby(obj/item/W, mob/user)
 		if (src.on == 0)
 			if (isweldingtool(W) && W:try_weld(user,0,-1,0,0))
 				src.light(user, "<span class='alert'><b>[user]</b> casually lights [src] with [W], what a badass.</span>")
@@ -185,7 +190,7 @@
 		else
 			return ..() // CALL your GODDAMN PARENTS
 
-	attack(atom/target, mob/user as mob)
+	attack(atom/target, mob/user)
 		if (isliving(target))
 			var/mob/living/M = target
 
@@ -217,7 +222,7 @@
 			else
 				return ..(target, user)
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		if (!user) return
 		var/can_blow_smoke = (user.wear_mask == src && src.on && src.reagents.total_volume > 0 && src.puff_ready)
 		var/success = ( ..() )
@@ -341,14 +346,14 @@
 			explosion(src, tlocation, 0, 1, 1, 2)
 		else
 			elecflash(src,power = 2)
-			playsound(src.loc, "sound/effects/Explosion1.ogg", 75, 1)
+			playsound(src.loc, 'sound/effects/Explosion1.ogg', 75, 1)
 		src.visible_message("<span class='alert'>The [src] explodes!</span>")
 
 		// Added (Convair880).
 		if (ismob(src.loc))
-			logTheThing("bombing", null, src.loc, "A trick cigarette (held/equipped by [constructTarget(src.loc,"bombing")]) explodes at [log_loc(src)].")
+			logTheThing(LOG_BOMBING, null, "A trick cigarette (held/equipped by [constructTarget(src.loc,"bombing")]) explodes at [log_loc(src)].")
 		else
-			logTheThing("bombing", src.fingerprintslast, null, "A trick cigarette explodes at [log_loc(src)]. Last touched by [src.fingerprintslast ? "[src.fingerprintslast]" : "*null*"].")
+			logTheThing(LOG_BOMBING, src.fingerprintslast, "A trick cigarette explodes at [log_loc(src)]. Last touched by [src.fingerprintslast ? "[src.fingerprintslast]" : "*null*"].")
 
 		if (istype(src.loc,/obj/item/device/pda2))
 			var/obj/item/device/pda2/pda = src.loc
@@ -386,13 +391,6 @@
 		else
 			src.flavor = "nicotine"
 		..()
-
-
-/obj/item/clothing/mask/cigarette/dryjoint
-	name = "dried up joint"
-	desc = "An ancient joint, it's paper now resembles the burial shroud of an egyptian king. There's no telling what the roller could have twisted up in here."
-	nic_free = 1
-	flavor = "THC"
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "cigar"
@@ -444,7 +442,7 @@
 	buttdesc = "Tarry, smelly."
 	buttname = "cigarillo roach"
 
-	attackby(obj/item/W as obj, mob/user as mob)
+	attackby(obj/item/W, mob/user)
 		if((W.tool_flags & TOOL_CUTTING) || (W.hit_type & DAMAGE_CUT) || (W.hit_type & DAMAGE_STAB))
 			var/obj/item/bluntwrap/B = new(user.loc)
 			if(src.flavor)
@@ -539,13 +537,16 @@
 	var/max_cigs = 6
 	var/cigtype = /obj/item/clothing/mask/cigarette
 	var/package_style = "cigpacket"
-	flags = ONBELT | TABLEPASS | FPRINT
+	flags = TABLEPASS | FPRINT
+	c_flags = ONBELT
 	stamina_damage = 3
 	stamina_cost = 3
 	rand_pos = 1
 
 	New()
 		..()
+		if (!cigtype)
+			return
 		for(var/i in 1 to src.max_cigs)
 			new src.cigtype(src)
 
@@ -571,6 +572,13 @@
 	icon_state = "cigpacket-r"
 	package_style = "cigpacket-r"
 
+/obj/item/cigpacket/paperpack
+	name = "paper cigarette packet"
+	desc = "A flavor surprise in each cigarette, lovingly wrapped in the finest papers."
+	cigtype = null
+	icon_state = "cigpacket-wo"
+	package_style = "cigpacket-w"
+
 /obj/item/cigpacket/random
 	name = "odd cigarette packet"
 	desc = "These don't seem to have a brand name on them."
@@ -592,7 +600,7 @@
 		src.overlays += "cig[length(src.contents)]"
 	return
 
-/obj/item/cigpacket/attack_hand(mob/user as mob)
+/obj/item/cigpacket/attack_hand(mob/user)
 	if (user.find_in_hand(src))//r_hand == src || user.l_hand == src)
 		if (length(src.contents) == 0)
 			user.show_text("You're out of cigs, shit! How you gonna get through the rest of the day?", "red")
@@ -621,7 +629,7 @@
 
 	src.UpdateIcon()
 
-/obj/item/cigpacket/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/cigpacket/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/clothing/mask/cigarette))
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if (cig.on)
@@ -662,7 +670,8 @@
 	var/cigcount = 5
 	var/cigtype = /obj/item/clothing/mask/cigarette/cigar
 	var/package_style = "cigarbox"
-	flags = ONBELT | TABLEPASS | FPRINT
+	flags = TABLEPASS | FPRINT
+	c_flags = ONBELT
 	stamina_damage = 3
 	stamina_cost = 3
 	rand_pos = 1
@@ -681,7 +690,7 @@
 		src.overlays += "cigar[src.cigcount]"
 	return
 
-/obj/item/cigarbox/attack_hand(mob/user as mob)
+/obj/item/cigarbox/attack_hand(mob/user)
 	if (user.find_in_hand(src))//r_hand == src || user.l_hand == src)
 		if (src.cigcount == 0)
 			user.show_text("You're out of cigars! How you gonna get through the rest of the day?", "red")
@@ -726,7 +735,8 @@
 	cigcount = 5
 	cigtype = /obj/item/clothing/mask/cigarette/cigar/gold
 	package_style = "cigarbox"
-	flags = ONBELT | TABLEPASS | FPRINT
+	flags = TABLEPASS | FPRINT
+	c_flags = ONBELT
 	stamina_damage = 3
 	stamina_cost = 3
 	rand_pos = 1
@@ -742,7 +752,7 @@
 		src.overlays += "goldcigar[src.cigcount]"
 	return
 
-/obj/item/cigarbox/gold/attack_hand(mob/user as mob)
+/obj/item/cigarbox/gold/attack_hand(mob/user)
 	if (user.find_in_hand(src))//r_hand == src || user.l_hand == src)
 		if (src.cigcount == 0)
 			user.show_text("You're out of cigars! How you gonna get through the rest of the day?", "red")
@@ -815,7 +825,7 @@
 	burn_point = 220
 	burn_output = 900
 	burn_possible = 1
-	health = 20
+	health = 4
 	var/match_amt = 6 // -1 for infinite
 	rand_pos = 1
 
@@ -827,7 +837,7 @@
 		else
 			. += "It's empty."
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		if (user.find_in_hand(src))
 			if (src.match_amt == 0)
 				user.show_text("Looks like there's no matches left.", "red")
@@ -894,7 +904,6 @@
 	burn_point = 220
 	burn_output = 600
 	burn_possible = 1
-	health = 10
 
 	/// 0 = unlit, 1 = lit, -1 is burnt out/broken or otherwise unable to be lit
 	var/on = 0
@@ -954,7 +963,7 @@
 		src.firesource = FIRESOURCE_OPEN_FLAME
 		src.icon_state = "match-lit"
 
-		playsound(user, "sound/items/matchstick_light.ogg", 50, 1)
+		playsound(user, 'sound/items/matchstick_light.ogg', 50, 1)
 		light.enable()
 
 		processing_items |= src
@@ -967,11 +976,11 @@
 			src.icon_state = "match-broken"
 			src.name = "broken match"
 			if (user)
-				playsound(user, "sound/impact_sounds/Flesh_Crush_1.ogg", 60, 1, 0, 2)
+				playsound(user, 'sound/impact_sounds/Flesh_Crush_1.ogg', 60, 1, 0, 2)
 		else
 			src.icon_state = "match-burnt"
 			src.name = "burnt-out match"
-			playsound(src, "sound/impact_sounds/burn_sizzle.ogg", 50, 1)
+			playsound(src, 'sound/impact_sounds/burn_sizzle.ogg', 50, 1)
 
 		light.disable()
 
@@ -1062,7 +1071,7 @@
 					playsound(user.loc, 'sound/items/matchstick_hit.ogg', 50, 1)
 					return
 
-	attack(mob/M as mob, mob/user as mob)
+	attack(mob/M, mob/user)
 		if (ishuman(M))
 			if (src.on > 0)
 				var/mob/living/carbon/human/fella = M
@@ -1104,7 +1113,9 @@
 	inhand_image_icon = 'icons/mob/inhand/hand_general.dmi'
 	w_class = W_CLASS_TINY
 	throwforce = 4
-	flags = FPRINT | ONBELT | TABLEPASS | CONDUCT | ATTACK_SELF_DELAY
+	flags = FPRINT | TABLEPASS | CONDUCT | ATTACK_SELF_DELAY
+	c_flags = ONBELT
+	object_flags = NO_GHOSTCRITTER
 	click_delay = 0.7 SECONDS
 	stamina_damage = 5
 	stamina_cost = 5
@@ -1116,6 +1127,10 @@
 	col_g = 0.69
 	col_b = 0.27
 	var/infinite_fuel = 0 //1 is infinite fuel. Borgs use this apparently.
+	/// exposure temp when heating reagents
+	var/reagent_expose_temp = 4000
+	/// exposure temp of passive enviromental heating
+	var/enviromental_expose_temp = 700
 
 	New()
 		..()
@@ -1170,7 +1185,7 @@
 			playsound(user, 'sound/items/zippo_close.ogg', 30, 1)
 			user.update_inhands()
 
-	attack(mob/target, mob/user as mob)
+	attack(mob/target, mob/user)
 		if (ishuman(target))
 			var/mob/living/carbon/human/fella = target
 
@@ -1225,7 +1240,7 @@
 				if (O.reagents.has_reagent("fuel"))
 					O.reagents.trans_to(src, src.reagents.maximum_volume - src.reagents.get_reagent_amount("fuel"), 1, 1, O.reagents.reagent_list.Find("fuel"))
 					boutput(user, "<span class='notice'>[src] has been refueled.</span>")
-					playsound(src.loc, "sound/effects/zzzt.ogg", 50, 1, -6)
+					playsound(src.loc, 'sound/effects/zzzt.ogg', 50, 1, -6)
 				else
 					user.show_text("[src] can only be refilled with fuel.", "red")
 			else
@@ -1234,7 +1249,7 @@
 
 		else if (!ismob(O) && src.on && O.reagents)
 			user.show_text("You heat [O].", "blue")
-			O.reagents.temperature_reagents(4000,10)
+			O.reagents.temperature_reagents(reagent_expose_temp,10)
 		else
 			return ..()
 
@@ -1247,7 +1262,7 @@
 					location = M.loc
 			var/turf/T = get_turf(src.loc)
 			if (T)
-				T.hotspot_expose(700,5)
+				T.hotspot_expose(enviromental_expose_temp,5)
 
 			if (infinite_fuel) //skip all fuel checks
 				return
@@ -1267,7 +1282,7 @@
 			//sleep(1 SECOND)
 
 	temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-		if (exposed_temperature > 1000)
+		if (exposed_temperature > enviromental_expose_temp)
 			return ..()
 		return
 
@@ -1301,7 +1316,7 @@
 /obj/item/device/light/zippo/brighter
 	name = "\improper Zippo brighter"
 	desc = "Are you feeling blinded by the light?"
-	brightness = 4.0
+	brightness = 4
 	col_r = 0.69
 	col_g = 0.27
 	col_b = 1
@@ -1320,7 +1335,7 @@
 	infinite_fuel = 1
 
 /obj/item/device/light/zippo/syndicate
-	desc = "A sleek black lighter with a red stripe."
+	desc = "A sleek black lighter with a red stripe and an incredibly hot flame."
 	icon_state = "syndie_zippo"
 	icon_off = "syndie_zippo"
 	icon_on = "syndie_zippoon"
@@ -1331,10 +1346,12 @@
 	col_g = 0.658
 	col_b = 0
 	is_syndicate = 1
+	reagent_expose_temp = 20000
+	enviromental_expose_temp = 3500
 
 	New()
 		. = ..()
-		RegisterSignal(src, list(COMSIG_MOVABLE_SET_LOC, COMSIG_MOVABLE_MOVED), .proc/update_hotbox_flag)
+		RegisterSignals(src, list(COMSIG_MOVABLE_SET_LOC, COMSIG_MOVABLE_MOVED), .proc/update_hotbox_flag)
 
 	proc/update_hotbox_flag(thing, previous_loc, direction)
 		if (!firesource) return

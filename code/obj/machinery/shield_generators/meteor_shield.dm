@@ -3,6 +3,10 @@
 	desc = "Generates a force field that stops meteors."
 	icon = 'icons/obj/meteor_shield.dmi'
 	icon_state = "shieldgen"
+	density = FALSE
+
+	nocell
+		starts_with_cell = FALSE
 
 	shield_on()
 		if (!PCEL)
@@ -20,7 +24,7 @@
 
 	proc/generate_shield()
 		for(var/turf/space/T in orange(src.range,src))
-			if (get_dist(T,src) != src.range)
+			if (GET_DIST(T,src) != src.range)
 				continue
 			var/obj/forcefield/meteorshield/S = new /obj/forcefield/meteorshield(T)
 			S.deployer = src

@@ -360,12 +360,14 @@
 	dir = 4;
 	icon_state = "line1"
 	},
-/obj/machinery/atmospherics/portables_connector/west,
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
 /obj/decal/fakeobjects{
 	density = 1;
 	icon = 'icons/obj/atmospherics/atmos.dmi';
 	icon_state = "orange";
-	name = "Canister [Plasma]"
+	name = "Canister \[Plasma\]"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
@@ -422,12 +424,14 @@
 /turf/unsimulated/floor/plating,
 /area/shuttle/escape/centcom)
 "mY" = (
-/obj/machinery/atmospherics/portables_connector/west,
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
 /obj/decal/fakeobjects{
 	density = 1;
 	icon = 'icons/obj/atmospherics/atmos.dmi';
 	icon_state = "orange";
-	name = "Canister [Plasma]"
+	name = "Canister \[Plasma\]"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
@@ -1176,12 +1180,14 @@
 /turf/unsimulated/floor/plating,
 /area/shuttle/escape/centcom)
 "NR" = (
-/obj/machinery/atmospherics/portables_connector/east,
+/obj/machinery/atmospherics/portables_connector{
+	dir = 4
+	},
 /obj/decal/fakeobjects{
 	density = 1;
 	icon = 'icons/obj/atmospherics/atmos.dmi';
 	icon_state = "orange";
-	name = "Canister [Plasma]"
+	name = "Canister \[Plasma\]"
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
@@ -1352,7 +1358,7 @@
 	pixel_x = -1;
 	pixel_y = 2
 	},
-/obj/mug_rack{
+/obj/drink_rack/mug{
 	pixel_x = -26;
 	pixel_y = 4
 	},

@@ -10,6 +10,7 @@
 	invisibility = INVIS_CLOAK
 	density = 0
 	machine_registry_idx = MACHINES_TURRETS
+	power_usage = 50
 	var/lasers = 0
 	var/health = 100
 	var/obj/machinery/turretcover/cover = null
@@ -19,7 +20,7 @@
 	var/shot_delay = 15 //1.5 seconds between shots (previously 3, way too much to be useful)
 	var/shot_type = 0
 	var/override_area_bullshit = 0
-	var/datum/projectile/lethal = new/datum/projectile/laser/heavy
+	var/datum/projectile/lethal = new/datum/projectile/laser/heavy/law_safe
 	var/datum/projectile/stun = new/datum/projectile/energy_bolt/robust
 	var/list/mob/target_list = null
 
@@ -37,6 +38,10 @@
 	if(istype(TP))
 		TP.turret_list += src
 	START_TRACKING
+
+	#ifdef LOW_SECURITY
+	START_TRACKING_CAT(TR_CAT_DELETE_ME)
+	#endif
 
 /obj/machinery/turret/disposing()
 	var/area/station/turret_protected/TP = get_area(src)
@@ -84,7 +89,6 @@
 
 	if (src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)
-	use_power(50)
 	var/area/area = get_area(loc)
 	if (istype(area))
 		if(!target_list)
@@ -120,11 +124,11 @@
 			continue
 		if (!iscarbon(C) && !ismobcritter(C))
 			continue
-		if (isdead(C))
+		if (isdead(C) || isghostcritter(C))
 			continue
-		if (!istype(C.loc,/turf))
+		if (!(istype(C.loc,/turf) || istype(C.loc, /obj/vehicle)))
 			continue
-		if (!istype(C.loc.loc,A))
+		if (!(get_area(C) == A))
 			continue
 		if ((src.req_access || src.req_access_txt) && src.allowed(C))
 			continue //optional access whitelist
@@ -336,6 +340,7 @@
 
 		src.link.post_signal(src, signal)
 
+ADMIN_INTERACT_PROCS(/obj/machinery/turretid, proc/toggle_active, proc/toggle_lethal)
 /obj/machinery/turretid
 	name = "Turret deactivation control"
 	icon = 'icons/obj/items/device.dmi'
@@ -350,7 +355,7 @@
 	var/turretArea = null
 
 	req_access = list(access_ai_upload)
-	object_flags = CAN_REPROGRAM_ACCESS
+	object_flags = CAN_REPROGRAM_ACCESS | NO_GHOSTCRITTER
 
 	New()
 		..()
@@ -379,74 +384,61 @@
 /obj/machinery/turretid/attack_ai(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/turretid/attack_hand(mob/user as mob)
-	if (user.getStatusDuration("stunned") || user.getStatusDuration("weakened") || user.stat)
-		return
+/obj/machinery/turretid/ui_interact(mob/user, datum/tgui/ui)
+	ui = tgui_process.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "TurretControl")
+		ui.open()
 
-	if(!in_interact_range(src, user))
-		boutput(user, text("Too far away."))
-		src.remove_dialog(user)
-		user.Browse(null, "window=turretid")
-		return
+/obj/machinery/turretid/ui_data(mob/user)
+	. = list(
+		"enabled" = src.enabled,
+		"lethal" = src.lethal,
+		"emagged" = src.emagged
+	)
+	if (issilicon(user) || isAI(user))
+		.["locked"] = FALSE
+	else
+		.["locked"] = src.locked
 
-	src.add_dialog(user)
+/obj/machinery/turretid/ui_static_data(mob/user)
 	var/area/area = get_area(src)
 	if (!istype(area))
-		logTheThing("debug", null, null, "Turret badly positioned.")
+		logTheThing(LOG_DEBUG, null, "Turret badly positioned.")
+	. = list(
+		"area" = istype(area) ? area.name : "Somewhere"
+	)
+
+
+/obj/machinery/turretid/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	if (..())
 		return
-	var/t = "<TT><B>Turret Control Panel</B> ([area.name])<HR>"
 
-	if(!src.emagged)
-		if(src.locked && (!issilicon(user) && !isAI(user)))
-			t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"
-		else
-			t += text("Turrets [] - <A href='?src=\ref[];toggleOn=1'>[]?</a><br><br>", src.enabled?"activated":"deactivated", src, src.enabled?"Disable":"Enable")
-			t += text("Currently set for [] - <A href='?src=\ref[];toggleLethal=1'>Change to []?</a><br><br>", src.lethal?"lethal":"stun repeatedly", src,  src.lethal?"Stun repeatedly":"Lethal")
-	else if(src.emagged)
-		var/o = ""
-		for(var/i=rand(4,50), i > 0, i--)
-			o += "kill[prob(50)?" ":null]"
-
-
-		for(var/i=1, i <= length(o), i++)
-			var/mod = rand(-5, 5)
-			t += text("<font size=[][]>[]</font>",mod>=0?"+":"-" ,mod , copytext(o, i, i+1))
-		t = "<B><font color=#FF0000>[t]</font></B>"
-		t += "<br><br>"
-
-
-	else
-		t += "!ALERT! Unable to connect to a turret!<br><br>"
-
-	user.Browse(t, "window=turretid")
-	onclose(user, "turretid")
-
-/obj/machinery/turretid/Topic(href, href_list)
-	..()
-	if ((!isliving(usr) && !isAIeye(usr)) || usr.getStatusDuration("stunned") || usr.getStatusDuration("weakened") || usr.stat)
-		return
 	if (src.locked)
 		if (!issilicon(usr) && !isAI(usr))
 			boutput(usr, "Control panel is locked!")
 			return
 
-	if ((!issilicon(usr) && !isAIeye(usr)) && get_dist(usr, src) > 1)
-		return
-
-	if (href_list["toggleOn"])
-		src.enabled = !src.enabled
-		logTheThing("combat", usr, null, "turned [enabled ? "ON" : "OFF"] turrets from control \[[log_loc(src)]].")
-		src.updateTurrets()
-	else if (href_list["toggleLethal"])
-		src.lethal = !src.lethal
-		if(src.lethal)
-			logTheThing("combat", usr, null, "set turrets to LETHAL from control \[[log_loc(src)]].")
-			message_admins("[key_name(usr)] set turrets to LETHAL from control \[[log_loc(src)]].")
-		else
-			logTheThing("combat", usr, null, "set turrets to STUN from control \[[log_loc(src)]].")
-			message_admins("[key_name(usr)] set turrets to STUN from control \[[log_loc(src)]].")
-		src.updateTurrets()
-	src.Attackhand(usr)
+	switch (action)
+		if ("setEnabled")
+			if (src.enabled == params["enabled"])
+				return
+			src.enabled = params["enabled"]
+			logTheThing(LOG_COMBAT, usr, "turned [enabled ? "ON" : "OFF"] turrets from control \[[log_loc(src)]].")
+			src.updateTurrets()
+			. = TRUE
+		if ("setLethal")
+			if (src.lethal == params["lethal"])
+				return
+			src.lethal = params["lethal"]
+			if(src.lethal)
+				logTheThing(LOG_COMBAT, usr, "set turrets to LETHAL from control \[[log_loc(src)]].")
+				message_admins("[key_name(usr)] set turrets to LETHAL from control \[[log_loc(src)]].")
+			else
+				logTheThing(LOG_COMBAT, usr, "set turrets to STUN from control \[[log_loc(src)]].")
+				message_admins("[key_name(usr)] set turrets to STUN from control \[[log_loc(src)]].")
+			src.updateTurrets()
+			. = TRUE
 
 /obj/machinery/turretid/receive_silicon_hotkey(var/mob/user)
 	..()
@@ -456,22 +448,27 @@
 
 	if(user.client.check_key(KEY_OPEN))
 		. = 1
-		src.enabled = !src.enabled
-		boutput(user, "You have <B>[src.enabled ? "en" : "dis"]abled</B> the turrets.")
-		logTheThing("combat", user, null, "turned [enabled ? "ON" : "OFF"] turrets from control \[[log_loc(src)]].")
-		src.updateTurrets()
+		src.toggle_active()
 	else if(user.client.check_key(KEY_BOLT))
 		. = 1
-		src.lethal = !src.lethal
-		boutput(user, "You have set the turrets to <B>[src.lethal ? "laser" : "stun"]</B> mode.")
-		if(src.lethal)
-			logTheThing("combat", user, null, "set turrets to LETHAL from control \[[log_loc(src)]].")
-			message_admins("[key_name(user)] set turrets to LETHAL from control \[[log_loc(src)]].")
-		else
-			logTheThing("combat", user, null, "set turrets to STUN from control \[[log_loc(src)]].")
-			message_admins("[key_name(user)] set turrets to STUN from control \[[log_loc(src)]].")
-		src.updateTurrets()
+		src.toggle_lethal()
 
+/obj/machinery/turretid/proc/toggle_active(mob/user)
+	src.enabled = !src.enabled
+	boutput(user, "You have <B>[src.enabled ? "en" : "dis"]abled</B> the turrets.")
+	logTheThing(LOG_COMBAT, user || usr, "turned [enabled ? "ON" : "OFF"] turrets from control \[[log_loc(src)]].")
+	src.updateTurrets()
+
+/obj/machinery/turretid/proc/toggle_lethal(mob/user)
+	src.lethal = !src.lethal
+	boutput(user, "You have set the turrets to <B>[src.lethal ? "laser" : "stun"]</B> mode.")
+	if(src.lethal)
+		logTheThing(LOG_COMBAT, user || usr, "set turrets to LETHAL from control \[[log_loc(src)]].")
+		message_admins("[key_name(user || usr)] set turrets to LETHAL from control \[[log_loc(src)]].")
+	else
+		logTheThing(LOG_COMBAT, user || usr, "set turrets to STUN from control \[[log_loc(src)]].")
+		message_admins("[key_name(user || usr)] set turrets to STUN from control \[[log_loc(src)]].")
+	src.updateTurrets()
 
 /obj/machinery/turretid/proc/updateTurrets()
 	for_by_tcl(turret, /obj/machinery/turret)
@@ -493,8 +490,8 @@
 	if(!emagged)
 		if(user)
 			user.show_text("You short out the control circuit on [src]!", "blue")
-			logTheThing("combat", user, null, "emagged the turret control in [loc.name] \[[log_loc(src)]]")
-			logTheThing("admin", user, null, "emagged the turret control in [loc.name] \[[log_loc(src)]]")
+			logTheThing(LOG_COMBAT, user, "emagged the turret control in [loc.name] \[[log_loc(src)]]")
+			logTheThing(LOG_ADMIN, user, "emagged the turret control in [loc.name] \[[log_loc(src)]]")
 		emagged = 1
 		enabled = 0
 		updateTurrets()

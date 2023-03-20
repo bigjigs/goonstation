@@ -5,6 +5,7 @@
 	icon_state = "bookshelf_small"
 	anchored = 1
 	density = 1
+	mat_appearances_to_ignore = list("wood")
 	var/capacity = 30 //how many books can it hold?
 	var/list/obj/item/paper/bookshelf_contents = list() //ordered list of books
 
@@ -45,7 +46,7 @@
 	I.set_loc(get_turf(src))
 	src.UpdateIcon()
 
-/obj/bookshelf/attackby(obj/item/W as obj, mob/user as mob)
+/obj/bookshelf/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/storage/bible))
 		boutput(user, "\The [W] is too holy to be put on a shelf with non-holy books.")
 		return
@@ -60,7 +61,7 @@
 			boutput(user, "\The [src] is too full!")
 			return
 
-	else if (istype(W, /obj/item/wrench))
+	else if (iswrenchingtool(W))
 		if (length(src.bookshelf_contents) > 0)
 			boutput(user, "You can't take apart \the [src] if there's still books on it.")
 			return
@@ -74,7 +75,7 @@
 		boutput(user, "You can't shelf that!")
 		return
 
-/obj/bookshelf/attack_hand(mob/user as mob)
+/obj/bookshelf/attack_hand(mob/user)
 	if (length(src.bookshelf_contents) > 0)
 		var/book_sel = input("What book would you like to take off \the [src]?", "[src]") as null|anything in src.bookshelf_contents
 		if (!book_sel)
@@ -87,7 +88,7 @@
 		boutput(user, "There's nothing to take off the shelf!")
 
 /obj/bookshelf/proc/deconstruct()
-	playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
+	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 	var/obj/parts = new /obj/item/furniture_parts/bookshelf
 	parts.set_loc(src.loc)
 	qdel(src)
@@ -188,3 +189,4 @@
 	icon_state = "bookshelf_parts"
 	furniture_type = /obj/bookshelf
 	furniture_name = "bookshelf"
+	mat_appearances_to_ignore = list("wood")

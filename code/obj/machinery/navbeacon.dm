@@ -1,6 +1,9 @@
 // Navigation beacon for AI robots
 // Functions as a transponder: looks for incoming signal matching
 
+TYPEINFO(/obj/machinery/navbeacon)
+	mats = 4
+
 /obj/machinery/navbeacon
 
 	icon = 'icons/obj/objects.dmi'
@@ -22,11 +25,11 @@
 	var/datum/component/packet_connected/radio/code_component
 
 	req_access = list(access_engineering,access_engineering_mechanic,access_research_director)
-	object_flags = CAN_REPROGRAM_ACCESS
-	mats = 4
+	object_flags = CAN_REPROGRAM_ACCESS | NO_GHOSTCRITTER
 	mechanics_type_override = /obj/machinery/navbeacon
 
 	New()
+		START_TRACKING
 		..()
 
 		UnsubscribeProcess()
@@ -41,6 +44,10 @@
 			net_id = generate_net_id(src)
 
 		set_codes()
+
+	disposing()
+		STOP_TRACKING
+		. = ..()
 
 	// set the transponder codes assoc list from codes_txt
 	proc/set_codes()
@@ -334,6 +341,9 @@ Transponder Codes:<UL>"}
 		get_radio_connection_by_id(src, "navbeacon").update_frequency(freq)
 
 //Wired nav device
+TYPEINFO(/obj/machinery/wirenav)
+	mats = 8
+
 /obj/machinery/wirenav
 	name = "Wired Nav Beacon"
 	icon = 'icons/obj/objects.dmi'
@@ -341,7 +351,6 @@ Transponder Codes:<UL>"}
 	level = 1		// underfloor
 	layer = OBJ_LAYER
 	anchored = 1
-	mats = 8
 	var/nav_tag = null
 	var/net_id = null
 	var/obj/machinery/power/data_terminal/link = null
@@ -737,6 +746,16 @@ Transponder Codes:<UL>"}
 			codes_txt = "delivery;dir=8"
 	news_office
 		location = "News Office"
+		codes_txt = "delivery;dir=1"
+
+		east
+			codes_txt = "delivery;dir=4"
+		south
+			codes_txt = "delivery;dir=2"
+		west
+			codes_txt = "delivery;dir=8"
+	mining_north
+		location = "Mining"
 		codes_txt = "delivery;dir=1"
 
 		east

@@ -17,7 +17,7 @@
 	var/obj/item/bloodslide/process_source
 	var/counter = 15
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		var/output_text = "<B>Centrifuge</B><BR><BR>"
 		if (src.on)
 			output_text = "The centrifuge is currently working.<br><a href='?src=\ref[src];shutdown=1'>Emergency shutdown</a>"
@@ -129,7 +129,7 @@
 					counter = 25
 		src.Attackhand(usr)
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)
+	attackby(var/obj/item/O, var/mob/user)
 		if (istype(O, /obj/item/bloodslide))
 			if (src.source)
 				boutput(user, "<span class='alert'>There is already a blood slide in the machine.</span>")
@@ -216,10 +216,10 @@
 		else
 			return null
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		if (src.target)
 			var/action = input("What would you like to do with the microscope?", "Microscope", "View [target]") in list("View [target]", "[src.zoom ? "Zoom Out" : "Zoom In"]", "Remove [target]", "Cancel")
-			if (get_dist(user.loc, src.loc) <= 1)
+			if (BOUNDS_DIST(user.loc, src.loc) == 0)
 				if (action == "View [target]")
 					if (zoom)
 						user.show_message("<span class='notice'>You look at the [target] through the microscope.</span>")
@@ -323,7 +323,7 @@
 					src.contents -= src.target
 					src.target = null
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)
+	attackby(var/obj/item/O, var/mob/user)
 		if (istype(O, /obj/item/reagent_containers/glass/petridish) || istype(O, /obj/item/bloodslide))
 			if (src.target)
 				boutput(user, "<span class='alert'>There is already a [target] on the microscope.</span>")
@@ -402,7 +402,9 @@
 	var/datum/pathobank/db = new
 	var/predictive_data = ""
 	var/datum/spyGUI/gui = null
-	var/manipulating = false //are we currently irradiating the pathogen?
+	/// Are we currently irradiating the pathogen?
+	var/manipulating = FALSE
+
 	New()
 		..()
 		gui = new("html/pathoComp.html", "pathology", "size=715x685", src)
@@ -416,7 +418,7 @@
 			P.comp = src
 			break
 
-	attack_hand(var/mob/user as mob)
+	attack_hand(var/mob/user)
 		if(status & (BROKEN|NOPOWER))
 			return
 		..()
@@ -561,7 +563,7 @@
 					if (bit != "|")
 						src.manip.analysis_list += bit
 				src.manip.analysis_list -= src.manip.analysis_list[1]
-				src.manip.analysis_list = sortList(src.manip.analysis_list)
+				sortList(src.manip.analysis_list, /proc/cmp_text_asc)
 				qdel(src.manip.loaded)
 				src.manip.loaded = null
 				visible_message("<span class='notice'>The manipulator ejects the empty vial.</span>")
@@ -954,7 +956,7 @@
 						src.manip.loaded.reference.cdc_announce(usr)
 
 					var/datum/pathogendna/source = src.manip.slots[src.manip.splicesource]
-					logTheThing("pathology", usr, null, "splices pathogen [source.reference.name] into [oldname] creating [src.manip.loaded.reference.name].")
+					logTheThing(LOG_PATHOLOGY, usr, "splices pathogen [source.reference.name] into [oldname] creating [src.manip.loaded.reference.name].")
 				else
 					// how about some more feedback for what went wrong? :)
 					var/reason = ""
@@ -1067,7 +1069,7 @@
 		..()
 		flags |= NOSPLASH
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)
+	attackby(var/obj/item/O, var/mob/user)
 		var/firstFreeSlot = -1 // -1 means no free slot, -2 means the active slot is free
 		if(!loaded)
 			firstFreeSlot = -2
@@ -1103,8 +1105,8 @@
 		//boutput(user, "Valid. Contains pathogen ([P.volume] units with pathogen [PT.name]. Slot is [exposed]. DNA: [PT.dnasample]")
 		if (!PT.dnasample)
 			PT.dnasample = new(PT) // damage control
-			stack_trace("Pathogen [PT.name] (\ref[PT]) had no DNA.")
-			logTheThing("pathology", user, null, "Pathogen [PT.name] (\ref[PT]) had no DNA. (this is a bug)")
+			stack_trace("Pathogen [identify_object(PT)] had no DNA.")
+			logTheThing(LOG_PATHOLOGY, user, "Pathogen [PT.name] (\ref[PT]) had no DNA. (this is a bug)")
 		if(firstFreeSlot == -2)
 			loaded = PT.dnasample.clone()
 		else
@@ -1241,7 +1243,7 @@
 		src.add_module(new /obj/item/synthmodule/radiation())
 
 
-	attack_hand(var/mob/user as mob)
+	attack_hand(var/mob/user)
 		if(status & (BROKEN|NOPOWER))
 			return
 		..()
@@ -1262,7 +1264,7 @@
 			return 1
 		return 0
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)
+	attackby(var/obj/item/O, var/mob/user)
 		if(status & (BROKEN|NOPOWER))
 			boutput(user,  "<span class='alert'>You can't insert things while the machine is out of power!</span>")
 			return
@@ -1654,7 +1656,7 @@
 	var/machine_state = 0
 	var/santime = 3 // 15
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)
+	attackby(var/obj/item/O, var/mob/user)
 		if (istype(O, /obj/item/reagent_containers/glass))
 			if (!sanitizing)
 				boutput(user, "<span class='notice'>You place the [O] inside the machine.</span>")
@@ -1693,7 +1695,7 @@
 				sanitizing = null
 				icon_state = "autoclave"
 
-	attack_hand(var/mob/user as mob)
+	attack_hand(var/mob/user)
 		if (machine_state || (status & (BROKEN|NOPOWER)))
 			return
 		if (sanitizing)
@@ -1746,11 +1748,12 @@
 		flags |= NOSPLASH
 
 	update_icon()
-		src.overlays -= src.icon_beaker
 		if (src.target)
-			src.overlays += src.icon_beaker
+			icon_state = "incubator_on"
+		else
+			icon_state = "incubator"
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		if(isnull(user.equipped()))
 			if (src.target)
 				src.target.set_loc(src.loc)
@@ -1759,7 +1762,7 @@
 				src.UpdateIcon()
 		return
 
-	attackby(var/obj/item/O as obj, var/mob/user as mob)
+	attackby(var/obj/item/O, var/mob/user)
 		if (istype(O, /obj/item/reagent_containers/glass/petridish))
 			if (src.target)
 				boutput(user, "<span class='alert'>There is already a petri dish in the machine.</span>")

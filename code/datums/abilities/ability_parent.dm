@@ -6,6 +6,8 @@
 
 	var/topBarRendered = 1
 	var/rendered = 1
+	///Is this holder temporarily hidden
+	var/hidden = FALSE
 	var/datum/targetable/shiftPower = null
 	var/datum/targetable/ctrlPower = null
 	var/datum/targetable/altPower = null
@@ -24,7 +26,7 @@
 
 	var/x_occupied = 0
 	var/y_occupied = 0
-	var/datum/abilityHolder/composite_owner = 0
+	var/datum/abilityHolder/composite_owner = null
 	var/any_abilities_displayed = 0
 
 	var/cast_while_dead = 0
@@ -91,12 +93,6 @@
 				A.update_cooldown_cost()
 				num++
 
-		if (ishuman(owner))
-			var/mob/living/carbon/human/H = owner
-			for(var/atom/movable/screen/ability/topBar/genetics/G in H.hud.objects)
-				G.update_cooldown_cost()
-				num++
-
 		return num
 
 
@@ -111,7 +107,7 @@
 		y_occupied = 0
 		any_abilities_displayed = 0
 
-		if (src.topBarRendered && src.rendered)
+		if (src.topBarRendered && src.rendered && !src.hidden)
 
 			if (!called_by_owner)
 				for(var/atom/movable/screen/ability/A in src.hud.objects)
@@ -161,13 +157,26 @@
 			abilitystat = new
 			abilitystat.owner = src
 
-		var/msg = ""
-		//var/style = "font-size: 7px;"
+		var/list/lines = list()
+
+		var/i = 0
+		var/longest_line = 0
 		var/list/stats = onAbilityStat()
 		for (var/x in stats)
-			msg += "[x] [stats[x]]<br>"
+			var/line_length = length(x) + 1 + max(length(num2text(stats[x])), length(stats[x]))
+			longest_line = max(longest_line, line_length)
+			lines += "[x] [stats[x]]"
+			i++
 
-		abilitystat.maptext = "<span class='vga l vt ol'>[msg] </span>"
+		abilitystat.maptext = "<span class='vga l vt ol'>[lines.Join("<br>")]</span>"
+		abilitystat.maptext_width = longest_line * 9 //font size is 9px
+
+		if (i >= 2)
+			abilitystat.maptext_height = i * 15
+			abilitystat.maptext_y = -abilitystat.maptext_height + 32
+		else
+			abilitystat.maptext_height = initial(abilitystat.maptext_height)
+			abilitystat.maptext_y = initial(abilitystat.maptext_y)
 
 	proc/deepCopy()
 		var/datum/abilityHolder/copy = new src.type
@@ -196,13 +205,6 @@
 		owner = newbody
 		if(owner)
 			owner.attach_hud(hud)
-
-	proc/Stat()
-		if (usesPoints && pointName != "" && rendered)
-			stat(null, " ")
-			stat("[src.pointName]:", src.points)
-			if (src.regenRate || src.lastBonus)
-				stat("Generation Rate:", "[src.regenRate] + [src.lastBonus]")
 
 	proc/StatAbilities()
 		if (!rendered)
@@ -292,6 +294,7 @@
 		src.updateButtons()
 
 	proc/getAbility(var/abilityType)
+		RETURN_TYPE(/datum/targetable)
 		if (!ispath(abilityType))
 			return null
 		for (var/datum/targetable/A in src.abilities)
@@ -303,7 +306,7 @@
 		if (!usesPoints)
 			return 1
 		if (src.points < 0) // Just-in-case fallback.
-			logTheThing("debug", usr, null, "'s ability holder ([src.type]) was set to an invalid value (points less than 0), resetting.")
+			logTheThing(LOG_DEBUG, usr, "'s ability holder ([src.type]) was set to an invalid value (points less than 0), resetting.")
 			src.points = 0
 		if (cost > points)
 			boutput(owner, notEnoughPointsMessage)
@@ -395,10 +398,17 @@
 		return 0
 
 	proc/remove_unlocks()
+		for (var/datum/targetable/geneticsAbility/ability in src.abilities)
+			if (!ability.linked_power)
+				src.removeAbilityInstance(ability)
 		return 0
 
 	proc/set_loc_callback(var/newloc)
 		.=0
+
+	///Returns the actual mob currently controlling this holder, in case src.owner and composite_owner.owner differ (eg flockmind in a drone)
+	proc/get_controlling_mob()
+		return src.composite_owner?.owner || src.owner
 
 /atom/movable/screen/ability
 	var/datum/targetable/owner
@@ -522,7 +532,7 @@
 		..()
 
 	proc/get_controlling_mob()
-		var/mob/M = owner.owner
+		var/mob/M = owner.get_controlling_mob()
 		if (!istype(M) || !M.client)
 			return null
 		return M
@@ -636,7 +646,7 @@
 		return
 
 	proc/get_controlling_mob()
-		var/mob/M = owner.holder.owner
+		var/mob/M = owner.holder.get_controlling_mob()
 		if (!istype(M) || !M.client)
 			return null
 		return M
@@ -692,7 +702,7 @@
 		var/datum/hud/abilityHud
 		if(owner.holder)
 			// for nice, well-behaved abilities that live in a holder
-			abilityHud = owner.holder.hud
+			abilityHud = owner.holder.composite_owner?.hud || owner.holder.hud
 		else
 			// for fucking deviant genetics abilities that know neither ethics nor morality
 			var/mob/M = get_controlling_mob()
@@ -723,11 +733,11 @@
 		last_y = pos_y
 
 	clicked(parameters)
-		if (!owner.holder || !owner.holder.owner || usr != owner.holder.owner)
+		if (!owner.holder || !owner.holder.owner || usr != owner.holder.get_controlling_mob())
 			boutput(usr, "<span class='alert'>You do not own this ability.</span>")
 			return
 		var/datum/abilityHolder/holder = owner.holder
-		var/mob/user = holder.owner
+		var/mob/user = holder.composite_owner?.owner || holder.owner
 
 		if(parameters["left"])
 			if (owner.targeted && user.targeting_ability == owner)
@@ -850,7 +860,7 @@
 		action_key_number = -1 //Number hotkey assigned to this ability. Only used if > 0
 		waiting_for_hotkey = 0 //If 1, the next number hotkey pressed will be bound to this.
 
-		preferred_holder_type = /datum/abilityHolder
+		preferred_holder_type = /datum/abilityHolder/generic
 
 		icon = 'icons/mob/spell_buttons.dmi'
 		icon_state = "blob-template"
@@ -885,6 +895,9 @@
 		handleCast(atom/target, params)
 			var/datum/abilityHolder/localholder = src.holder
 			var/result = tryCast(target, params)
+#ifdef NO_COOLDOWNS
+			result = TRUE
+#endif
 			if (result && result != 999)
 				last_cast = 0 // reset cooldown
 			else if (result != 999)
@@ -894,20 +907,22 @@
 				localholder.updateButtons()
 
 		cast(atom/target)
-			if(interrupt_action_bars) actions.interrupt(holder.owner, INTERRUPT_ACT)
-			return
+			if(interrupt_action_bars)
+				actions.interrupt(holder.owner, INTERRUPT_ACT)
 
 		//Use this when you need to do something at the start of the ability where you need the holder or the mob owner of the holder. DO NOT change New()
 		onAttach(var/datum/abilityHolder/H)
+#ifndef NO_COOLDOWNS
 			if (src.start_on_cooldown)
 				doCooldown()
+#endif
 			return
 
 		// Don't remove the holder.locked checks, as lots of people used lag and click-spamming
 		// to execute one ability multiple times. The checks hopefully make it a bit more difficult.
 		tryCast(atom/target, params)
 			if (!holder || !holder.owner)
-				logTheThing("debug", usr, null, "orphaned ability clicked: [name]. ([holder ? "no owner" : "no holder"])")
+				logTheThing(LOG_DEBUG, usr, "orphaned ability clicked: [name]. ([holder ? "no owner" : "no holder"])")
 				return 1
 			if (src.holder.locked == 1 && src.ignore_holder_lock != 1)
 				boutput(holder.owner, "<span class='alert'>You're already casting an ability.</span>")
@@ -993,7 +1008,7 @@
 				var/obj/item/grab/GD = M.equipped()
 
 				if (!GD || !istype(GD) || (!GD.affecting || !ismob(GD.affecting)))
-					boutput(M, __red("You need to grab hold of the target with your active hand first!"))
+					boutput(M, "<span class='alert'>You need to grab hold of the target with your active hand first!</span>")
 					return 0
 
 				var/mob/living/L = GD.affecting
@@ -1001,9 +1016,9 @@
 					if (GD.state >= state)
 						G = GD
 					else
-						boutput(M, __red("You need a tighter grip!"))
+						boutput(M, "<span class='alert'>You need a tighter grip!</span>")
 				else
-					boutput(M, __red("You need to grab hold of the target with your active hand first!"))
+					boutput(M, "<span class='alert'>You need to grab hold of the target with your active hand first!</span>")
 
 				return G
 
@@ -1022,10 +1037,10 @@
 								G = G2
 								break
 							else
-								boutput(M, __red("You need a tighter grip!"))
+								boutput(M, "<span class='alert'>You need a tighter grip!</span>")
 								return 0
 					if (isnull(G) || !istype(G))
-						boutput(M, __red("You need to grab hold of [target] first!"))
+						boutput(M, "<span class='alert'>You need to grab hold of [target] first!</span>")
 						return 0
 					else
 						return G
@@ -1094,12 +1109,13 @@
 		return holders[holders.len]
 
 	//return holder on success, null on fail
-	proc/addHolderInstance(var/datum/abilityHolder/N)
+	proc/addHolderInstance(var/datum/abilityHolder/N, keep_owner = FALSE)
 		for (var/datum/abilityHolder/H in holders)
 			if (H == N)
 				return
 		holders += N
-		if (N.owner != owner)
+		N.composite_owner = src
+		if (N.owner != owner && !keep_owner)
 			N.owner = owner
 		N.onAbilityHolderInstanceAdd()
 		updateButtons()
@@ -1112,7 +1128,7 @@
 	proc/removeHolder(holderType)
 		for (var/datum/abilityHolder/H in holders)
 			if (H.type == holderType)
-				H.composite_owner = 0
+				H.composite_owner = null
 				holders -= H
 		updateButtons()
 
@@ -1160,47 +1176,29 @@
 	updateButtons(var/called_by_owner = 0, var/start_x = 1, var/start_y = 0)
 		if (src.topBarRendered && src.rendered && src.hud)
 			for(var/atom/movable/screen/ability/A in src.hud.objects)
-				src.hud.objects -= A
+				src.hud.remove_object(A)
 
 		x_occupied = 1
 		y_occupied = 0
 		any_abilities_displayed = 0
-		for (var/datum/abilityHolder/H in holders)
-			if (H.topBarRendered || H.rendered)
-				H.updateButtons(called_by_owner = 1, start_x = x_occupied, start_y = y_occupied)
-				x_occupied = H.x_occupied
-				y_occupied = H.y_occupied
-				any_abilities_displayed = any_abilities_displayed || H.any_abilities_displayed
+		if (!src.hidden)
+			for (var/datum/abilityHolder/H in holders)
+				if (H.topBarRendered || H.rendered)
+					H.updateButtons(called_by_owner = 1, start_x = x_occupied, start_y = y_occupied)
+					x_occupied = H.x_occupied
+					y_occupied = H.y_occupied
+					any_abilities_displayed = any_abilities_displayed || H.any_abilities_displayed
 
 
 		if (src.topBarRendered)
 			src.updateText(0, x_occupied, y_occupied)
 			src.abilitystat?.update_on_hud(x_occupied,y_occupied)
 
-	updateText(var/called_by_owner = 0)
-		if (!abilitystat)
-			abilitystat = new
-			abilitystat.owner = src
-
-		var/msg = ""
-		//var/style = "font-size: 7px;"
-
-		var/i = 0
+	onAbilityStat()
+		. = list()
 		for (var/datum/abilityHolder/H in holders)
 			if (H.topBarRendered && H.rendered)
-				var/list/stats = H.onAbilityStat()
-				for (var/x in stats)
-					msg += "[x] [stats[x]]<br>"
-					i++
-
-		abilitystat.maptext = "<span class='vga l vt ol'>[msg] </span>"
-
-		if (i > 2)
-			abilitystat.maptext_height = ((i+1) % 2) * 32
-			abilitystat.maptext_y = -abilitystat.maptext_height + 16
-		else if (abilitystat.maptext_height > 32)
-			abilitystat.maptext_height = initial(abilitystat.maptext_height)
-			abilitystat.maptext_y = initial(abilitystat.maptext_y)
+				. += H.onAbilityStat()
 
 	click(atom/target, params)
 		// ok, this is not ideal since each ability holder has its own keybinds. That sucks and should be reworked
@@ -1215,10 +1213,6 @@
 	generatePoints(var/mult = 1)
 		for (var/datum/abilityHolder/H in holders)
 			H.generatePoints(mult)
-
-	Stat()
-		for (var/datum/abilityHolder/H in holders)
-			H.Stat()
 
 	StatAbilities()
 		for (var/datum/abilityHolder/H in holders)
@@ -1245,31 +1239,27 @@
 			H.resumeAllAbilities()
 
 	addAbility(var/abilityType)
-		//why was this? Weird
-		// if (!holders.len)
-		// 	return
 		if (istext(abilityType))
 			abilityType = text2path(abilityType)
 		if (!ispath(abilityType))
 			return
 
-		var/datum/targetable/tmp_A = new abilityType(src)
-
+		var/datum/targetable/tmp_A = abilityType
+		var/preferred_holder_type = initial(tmp_A.preferred_holder_type)
 		if (holders.len)
 			for (var/datum/abilityHolder/H in holders)
-				if (istype(H, tmp_A.preferred_holder_type))
+				if (istype(H, preferred_holder_type))
 					return H.addAbility(abilityType)
 
-		var/datum/targetable/A = new abilityType(src)
-		var/datum/abilityHolder/X
-		if (holders.len)
-			X = holders[1]
+		var/datum/abilityHolder/holder
+		if (length(src.holders) && (!istype(src.holders[1], /datum/abilityHolder/hidden) || ispath(preferred_holder_type, /datum/abilityHolder/hidden)))
+			holder = holders[1]
 		else
-			X = src.addHolder(A.preferred_holder_type)
-		A = X.addAbility(abilityType)
+			holder = src.addHolder(preferred_holder_type)
+		var/datum/targetable/ability = holder.addAbility(abilityType)
 
 		src.updateButtons()
-		return A
+		return ability
 
 	removeAbility(var/abilityType)
 		if (istext(abilityType))
@@ -1308,7 +1298,7 @@
 	transferOwnership(var/newbody)
 		for (var/datum/abilityHolder/H in holders)
 			H.transferOwnership(newbody)
-		owner = newbody
+		..()
 
 	remove_unlocks()
 		for (var/datum/abilityHolder/H in holders)

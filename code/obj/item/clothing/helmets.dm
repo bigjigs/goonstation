@@ -7,6 +7,7 @@
 	item_state = "helmet"
 	desc = "Somewhat protects your head from being bashed in."
 	protective_temperature = 500
+	duration_remove = 5 SECONDS
 
 	setupProperties()
 		..()
@@ -18,21 +19,23 @@
 	name = "space helmet"
 	icon_state = "space"
 	c_flags = SPACEWEAR | COVERSEYES | COVERSMOUTH | BLOCKCHOKE
-	see_face = 0.0
+	see_face = 0
 	item_state = "s_helmet"
 	desc = "Helps protect against vacuum."
+	hides_from_examine = C_EARS|C_MASK|C_GLASSES
 	seal_hair = 1
 	path_prot = 0
-	permeability_coefficient = 0.2
 
 	setupProperties()
 		..()
 		setProperty("coldprot", 20)
 		setProperty("heatprot", 5)
 		setProperty("viralprot", 50)
+		setProperty("chemprot", 20)
 		setProperty("disorient_resist_eye", 8)
 		setProperty("disorient_resist_ear", 8)
 		setProperty("space_movespeed", 0.2)
+		setProperty("radprot", 5)
 
 	oldish
 		icon_state = "space-OLD"
@@ -45,7 +48,7 @@
 	icon_state = "espace0"
 	uses_multiple_icon_states = 1
 	c_flags = SPACEWEAR | COVERSEYES | COVERSMOUTH
-	see_face = 0.0
+	see_face = 0
 	item_state = "s_helmet"
 	var/on = 0
 
@@ -59,10 +62,10 @@
 		light_dir.update(0)
 
 	attack_self(mob/user)
-		src.flashlight_toggle(user)
+		src.flashlight_toggle(user, activated_inhand = TRUE)
 		return
 
-	proc/flashlight_toggle(var/mob/user, var/force_on = 0)
+	proc/flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 		on = !on
 		src.icon_state = "espace[on]"
 		if (on)
@@ -70,12 +73,15 @@
 		else
 			light_dir.update(0)
 		user.update_clothing()
+		if (activated_inhand)
+			var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+			flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 		return
 
 /obj/item/clothing/head/helmet/space/engineer/april_fools
 	icon_state = "espace0-alt"
 
-	flashlight_toggle(var/mob/user, var/force_on = 0)
+	flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 		on = !on
 		src.icon_state = "espace[on]-alt"
 		if (on)
@@ -83,6 +89,9 @@
 		else
 			light_dir.update(0)
 		user.update_clothing()
+		if (activated_inhand)
+			var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+			flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 		return
 
 /obj/item/clothing/head/helmet/space/engineer/abilities = list(/obj/ability_button/flashlight_engiehelm)
@@ -117,28 +126,54 @@
 
 /obj/item/clothing/head/helmet/space/custom
 	name = "bespoke space helmet"
-	desc = "Helps protect against vacuum, and is custom-made just for you!"
-	onMaterialChanged()
-		if(src.material)
-			if(material.hasProperty("thermal"))
-				var/prot = round((100 - material.getProperty("thermal")) / 2)
-				setProperty("coldprot", 10+prot)
-				setProperty("heatprot", 1+round(prot/2))
-			else
-				setProperty("coldprot", 10)
-				setProperty("heatprot", 2)
+	desc = "A custom built helmet with a fancy visor!"
+	icon_state = "spacemat"
 
-			if(material.hasProperty("permeable"))
-				var/prot = 100 - material.getProperty("permeable")
-				setProperty("viralprot", prot)
-			else
-				setProperty("viralprot", 40)
+	var/image/fabrItemImg = null
+	var/image/fabrWornImg = null
+	var/image/visrItemImg = null
+	var/image/visrWornImg = null
 
-			if(material.hasProperty("density"))
-				var/prot = round(material.getProperty("density") / 20)
-				setProperty("meleeprot_head", 2+prot)
-			else
-				setProperty("meleeprot_head", 2)
+	New()
+		..()
+		// Prep the item overlays
+		fabrItemImg = SafeGetOverlayImage("item-helmet", src.icon, "spacemat")
+		visrItemImg = SafeGetOverlayImage("item-visor", src.icon, "spacemat-vis")
+		// Prep the worn overlays
+		fabrWornImg = SafeGetOverlayImage("worn-helmet", src.wear_image_icon, "spacemat")
+		visrWornImg = SafeGetOverlayImage("worn-visor", src.wear_image_icon, "spacemat-vis")
+
+	proc/set_custom_mats(datum/material/helmMat, datum/material/visrMat)
+		src.setMaterial(
+			helmMat,
+			FALSE, // We want to purely rely on the overlay colours
+		)
+		name = "[visrMat]-visored [helmMat] helmet"
+
+		// Setup the clothing stats based on material properties
+		var/prot = max(0, (5 - visrMat.getProperty("thermal")) * 5)
+		setProperty("coldprot", 10+prot)
+		setProperty("heatprot", 2+round(prot/2))
+		// All crystals (assuming default chem value) will give 20 chemprot, same as normal helm
+		prot =  clamp(((visrMat.getProperty("chemical") - 4) * 10), 0, 35)
+		setProperty("chemprot", prot)
+		 // Even if soft visor, still gives some value
+		prot = max(0, visrMat.getProperty("density") - 3) / 2
+		setProperty("meleeprot_head", 3 + prot)
+
+		// Setup item overlays
+		fabrItemImg.color = helmMat.color
+		visrItemImg.color = visrMat.color
+		UpdateOverlays(visrItemImg, "item-visor")
+		UpdateOverlays(fabrItemImg, "item-helmet")
+		// Setup worn overlays
+		fabrWornImg.color = helmMat.color
+		visrWornImg.color = visrMat.color
+		src.wear_image.overlays += fabrWornImg
+		src.wear_image.overlays += visrWornImg
+		// Add back the helmet texture since we overide the material apparance
+		if (helmMat.texture)
+			src.setTexture(helmMat.texture, helmMat.texture_blend, "material")
 
 // Sealab helmets
 
@@ -146,8 +181,9 @@
 	name = "diving helmet"
 	desc = "Comes equipped with a builtin flashlight."
 	icon_state = "diving0"
+	acid_survival_time = 8 MINUTES
 
-	flashlight_toggle(var/mob/user, var/force_on = 0)
+	flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 		on = !on
 		src.icon_state = "diving[on]"
 		if (on)
@@ -155,13 +191,16 @@
 		else
 			light_dir.update(0)
 		user.update_clothing()
+		if (activated_inhand)
+			var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+			flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 		return
 
 	security
 		name = "security diving helmet"
 		icon_state = "diving-sec0"
 
-		flashlight_toggle(var/mob/user, var/force_on = 0)
+		flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 			on = !on
 			src.icon_state = "diving-sec[on]"
 			if (on)
@@ -169,13 +208,16 @@
 			else
 				light_dir.update(0)
 			user.update_clothing()
+			if (activated_inhand)
+				var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+				flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 			return
 
 	civilian
 		name = "civilian diving helmet"
 		icon_state = "diving-civ0"
 
-		flashlight_toggle(var/mob/user, var/force_on = 0)
+		flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 			on = !on
 			src.icon_state = "diving-civ[on]"
 			if (on)
@@ -183,13 +225,16 @@
 			else
 				light_dir.update(0)
 			user.update_clothing()
+			if (activated_inhand)
+				var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+				flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 			return
 
 	command
 		name = "command diving helmet"
 		icon_state = "diving-com0"
 
-		flashlight_toggle(var/mob/user, var/force_on = 0)
+		flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 			on = !on
 			src.icon_state = "diving-com[on]"
 			if (on)
@@ -197,13 +242,16 @@
 			else
 				light_dir.update(0)
 			user.update_clothing()
+			if (activated_inhand)
+				var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+				flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 			return
 
 	engineering
 		name = "engineering diving helmet"
 		icon_state = "diving-eng0"
 
-		flashlight_toggle(var/mob/user, var/force_on = 0)
+		flashlight_toggle(var/mob/user, var/force_on = 0, activated_inhand = FALSE)
 			on = !on
 			src.icon_state = "diving-eng[on]"
 			if (on)
@@ -211,6 +259,9 @@
 			else
 				light_dir.update(0)
 			user.update_clothing()
+			if (activated_inhand)
+				var/obj/ability_button/flashlight_engiehelm/flashlight_button = locate(/obj/ability_button/flashlight_engiehelm) in src.ability_buttons
+				flashlight_button.icon_state = src.on ? "lighton" : "lightoff"
 			return
 
 /obj/item/clothing/head/helmet/space/engineer/diving/abilities = list(/obj/ability_button/flashlight_engiehelm)
@@ -226,6 +277,8 @@
 
 	New()
 		..()
+		setProperty("chemprot",30)
+		setProperty("heatprot", 15)
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 
 	#ifdef MAP_OVERRIDE_POD_WARS
@@ -260,6 +313,11 @@
 		seal_hair = 0
 		see_face = 1
 		team_num = TEAM_SYNDICATE
+
+		setupProperties()
+			..()
+			setProperty("exploprot", 10)
+
 		#ifdef MAP_OVERRIDE_POD_WARS
 		attack_hand(mob/user)
 			if (get_pod_wars_team_num(user) == team_num)
@@ -277,6 +335,11 @@
 		desc = "A modified combat helmet for syndicate operative specialists."
 		icon_state = "syndie_specialist"
 		item_state = "syndie_specialist"
+
+		setupProperties()
+			..()
+			setProperty("exploprot", 10)
+			setProperty("radprot", 50)
 
 		infiltrator
 			name = "specialist combat helmet"
@@ -298,7 +361,7 @@
 			icon_state = "syndie_specialist"
 			item_state = "syndie_specialist"
 			c_flags = SPACEWEAR | COVERSEYES
-			see_face = 0.0
+			see_face = 0
 			protective_temperature = 1300
 			abilities = list(/obj/ability_button/nukie_meson_toggle)
 			var/on = 0
@@ -308,7 +371,7 @@
 
 			proc/toggle(var/mob/toggler)
 				src.on = !src.on
-				playsound(src, "sound/items/mesonactivate.ogg", 30, 1)
+				playsound(src, 'sound/items/mesonactivate.ogg', 30, 1)
 				if (ishuman(toggler))
 					var/mob/living/carbon/human/H = toggler
 					if (istype(H.head, /obj/item/clothing/head/helmet/space/syndicate/specialist/engineer)) //handling of the rest is done in life.dm
@@ -338,7 +401,6 @@
 			name = "specialist health monitor"
 			icon_state = "syndie_specialist"
 			item_state = "syndie_specialist"
-			permeability_coefficient = 0.01
 			c_flags = SPACEWEAR | COVERSEYES | COVERSMOUTH | BLOCKCHOKE
 
 			setupProperties()
@@ -348,10 +410,12 @@
 			equipped(var/mob/user, var/slot)
 				..()
 				if (slot == SLOT_HEAD)
+					APPLY_ATOM_PROPERTY(user,PROP_MOB_EXAMINE_HEALTH_SYNDICATE,src)
 					get_image_group(CLIENT_IMAGE_GROUP_HEALTH_MON_ICONS).add_mob(user)
 
 			unequipped(var/mob/user)
 				if(src.equipped_in_slot == SLOT_HEAD)
+					REMOVE_ATOM_PROPERTY(user,PROP_MOB_EXAMINE_HEALTH_SYNDICATE,src)
 					get_image_group(CLIENT_IMAGE_GROUP_HEALTH_MON_ICONS).remove_mob(user)
 				..()
 
@@ -370,7 +434,6 @@
 				..()
 				setProperty("meleeprot_head", 6)
 				setProperty("rangedprot", 1)
-				setProperty("exploprot", 10)
 				setProperty("disorient_resist_eye", 50)
 				setProperty("disorient_resist_ear", 50)
 				setProperty("space_movespeed", 0.3)
@@ -383,10 +446,11 @@
 
 
 /obj/item/clothing/head/helmet/space/ntso //recoloured nuke class suits for ntso vs syndicate specialist
-	name = "NT-SO combat helmet"
-	desc = "A modified combat helmet for Nanotrasen special forces"
+	name = "NT combat helmet"
+	desc = "A modified combat helmet for Nanotrasen security forces."
 	icon_state = "ntso_specialist"
 	item_state = "ntso_specialist"
+	acid_survival_time = 6 MINUTES
 
 	setupProperties()
 		..()
@@ -423,6 +487,7 @@
 
 	setupProperties()
 		..()
+		setProperty("chemprot",30)
 		setProperty("space_movespeed", 0)
 
 /obj/item/clothing/head/helmet/swat
@@ -438,6 +503,7 @@
 	name = "T.U.R.D.S. helmet"
 	icon_state = "turdhelm"
 	c_flags = COVERSEYES | BLOCKCHOKE
+	hides_from_examine = C_EARS
 	item_state = "turdhelm"
 	setupProperties()
 		..()
@@ -556,11 +622,13 @@
 
 /obj/item/clothing/head/helmet/hardhat/abilities = list(/obj/ability_button/flashlight_hardhat)
 
+TYPEINFO(/obj/item/clothing/head/helmet/camera)
+	mats = list("MET-1"=4, "CRY-1"=2, "CON-1"=2)
+
 /obj/item/clothing/head/helmet/camera
 	name = "camera helmet"
 	desc = "A helmet with a built in camera."
 	icon_state = "camhat"
-	mats = list("MET-1"=4, "CRY-1"=2, "CON-1"=2)
 	item_state = "camhat"
 	var/obj/machinery/camera/camera = null
 	var/camera_tag = "Helmet Cam"
@@ -598,48 +666,75 @@
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. Can be flipped up for clearer vision."
 	icon_state = "welding"
 	c_flags = COVERSEYES | BLOCKCHOKE
+	hides_from_examine = C_EARS|C_MASK|C_GLASSES
 	see_face = FALSE
 	item_state = "welding"
 	protective_temperature = 1300
 	m_amt = 3000
 	g_amt = 1000
 	var/up = FALSE // The helmet's current position
-	color_r = 0.3 // darken
-	color_g = 0.3
-	color_b = 0.3
 
 	setupProperties()
 		..()
 		setProperty("meleeprot_head", 1)
 		setProperty("disorient_resist_eye", 100)
 
-	proc/flip_down(mob/user)
+	show_buttons()	//Hide the button from non-human mobs
+		if (ishuman(the_mob))
+			..()
+
+	proc/obscure(mob/user)
+		user.addOverlayComposition(/datum/overlayComposition/weldingmask)
+		user.updateOverlaysClient(user.client)
+
+	proc/reveal(mob/user)
+		user.removeOverlayComposition(/datum/overlayComposition/weldingmask)
+		user.updateOverlaysClient(user.client)
+
+	proc/flip_down(var/mob/living/carbon/human/user)
 		up = FALSE
 		see_face = FALSE
 		icon_state = "welding"
-		boutput(user, "You flip the mask down. The mask is now protecting you from eye damage.")
-		color_r = initial(color_r) // darken
-		color_g = initial(color_g)
-		color_b = initial(color_b)
-		user.set_clothing_icon_dirty()
-
+		boutput(user, "You flip the mask down. The mask now provides protection from eye damage.")
 		src.c_flags |= (COVERSEYES | BLOCKCHOKE)
+		src.hides_from_examine |= (C_EARS|C_MASK|C_GLASSES)
 		setProperty("meleeprot_head", 1)
 		setProperty("disorient_resist_eye", 100)
+		if (ishuman(user))
+			if (user.head == src)
+				src.obscure(user)
+				user.update_clothing()
 
-	proc/flip_up(mob/user)
+
+	proc/flip_up(var/mob/living/carbon/human/user)
 		up = TRUE
 		see_face = TRUE
 		icon_state = "welding-up"
-		boutput(user, "You flip the mask up. The mask is now providing greater armor to your head.")
-		color_r = 1 // no effect
-		color_g = 1
-		color_b = 1
-		user.set_clothing_icon_dirty()
-
+		boutput(user, "You flip the mask up. The mask now provides higher armor to the head.")
 		src.c_flags &= ~(COVERSEYES | BLOCKCHOKE)
+		src.hides_from_examine &= ~(C_EARS|C_MASK|C_GLASSES)
 		setProperty("meleeprot_head", 4)
 		setProperty("disorient_resist_eye", 0)
+		if (ishuman(user))
+			if (user.head == src)
+				src.reveal(user)
+				user.update_clothing()
+
+	equipped(mob/user, slot)
+		. = ..()
+		if (!src.up)
+			src.obscure(user)
+
+	unequipped(mob/user)
+		. = ..()
+		src.reveal(user)
+
+	disposing()
+		. = ..()
+		if (ishuman(src.loc))
+			var/mob/living/carbon/human/owner = src.loc
+			if (owner.head == src) //human is actually wearing it
+				src.reveal(owner)
 
 	attack_self(mob/user) //let people toggle these inhand too
 		for(var/obj/ability_button/mask_toggle/toggle in ability_buttons)
@@ -655,6 +750,7 @@
 	icon_state = "EOD"
 	item_state = "tdhelm"
 	c_flags = COVERSEYES | BLOCKCHOKE
+	hides_from_examine = C_EARS
 	setupProperties()
 		..()
 		setProperty("meleeprot_head", 9)
@@ -662,13 +758,15 @@
 		setProperty("exploprot", 20)
 		setProperty("movespeed", 0.15)
 
+TYPEINFO(/obj/item/clothing/head/helmet/siren)
+	mats = 8
+
 /obj/item/clothing/head/helmet/siren
 	name = "siren helmet"
 	desc = "A big flashing light that you put on your head. It also plays a siren for when you need to arrest someone!"
 	icon_state = "siren0"
 	uses_multiple_icon_states = 1
 	item_state = "siren"
-	mats = 8
 	abilities = list(/obj/ability_button/weeoo) // is near segway code in vehicle.dm
 	var/weeoo_in_progress = 0
 	var/datum/light/light
@@ -692,7 +790,7 @@
 			return
 		weeoo_in_progress = 10
 		SPAWN(0)
-			playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
+			playsound(src.loc, 'sound/machines/siren_police.ogg', 50, 1)
 			light.enable()
 			src.icon_state = "siren1"
 			for (weeoo_in_progress, weeoo_in_progress > 0, weeoo_in_progress--)
@@ -745,14 +843,17 @@
 	icon_state = "nthelm"
 	item_state = "nthelm"
 	c_flags = SPACEWEAR | COVERSEYES | COVERSMOUTH | BLOCKCHOKE
-	see_face = 0.0
+	hides_from_examine = C_EARS|C_MASK|C_GLASSES
+	see_face = 0
 	setupProperties()
 		..()
 		setProperty("meleeprot_head", 8)
 		setProperty("disorient_resist_eye", 15)
 
-/obj/item/clothing/head/helmet/space/industrial
+TYPEINFO(/obj/item/clothing/head/helmet/space/industrial)
 	mats = 7
+
+/obj/item/clothing/head/helmet/space/industrial
 #ifdef UNDERWATER_MAP
 	icon_state = "diving_suit-industrial"
 	item_state = "diving_suit-industrial"
@@ -765,6 +866,19 @@
 	name = "industrial space helmet"
 	desc = "Goes with Industrial Space Armor. Now with zesty citrus-scented visor!"
 #endif
+	acid_survival_time = 8 MINUTES
+	var/has_visor = FALSE
+	var/visor_color_lst = list(
+		"color_r" = 1,
+		"color_g" = 1,
+		"color_b" = 1,
+	)
+	var/visor_enabled = FALSE
+
+	New()
+		if (src.has_visor)
+			src.abilities = list(/obj/ability_button/helmet_thermal_toggle)
+		..()
 
 	setupProperties()
 		..()
@@ -772,23 +886,107 @@
 		setProperty("exploprot", 10)
 		setProperty("space_movespeed", 0)
 
-	syndicate
-		name = "Syndicate Command Helmet"
-		desc = "Ooh, fancy."
-		icon_state = "indusred"
-		item_state = "indusred"
-		is_syndicate = 1
+	attack_self(var/mob/user)
+		if(src.has_visor)
+			src.toggle_visor(user)
+		..()
 
-		setupProperties()
-			..()
-			setProperty("meleeprot_head", 7)
+	proc/toggle_visor(var/mob/user)
+		src.visor_enabled = !src.visor_enabled
+		boutput(user, "<span class='notice'>You [src.visor_enabled ? "lower" : "raise"] the helmet's thermal vision visor.</span>")
+
+		// Update the item & icon states
+		src.item_state = "[initial(src.item_state)][src.visor_enabled ? "-on" : null]"
+		set_icon_state("[initial(src.icon_state)][src.visor_enabled ? "-on" : null]")
+		user.update_clothing()
+		playsound(src, 'sound/items/mesonactivate.ogg', 30, 1)
+
+		// Check that the user is human & the helmet is worn
+		if (!ishuman(user))
+			return
+		var/mob/living/carbon/human/human_user = user
+		if (!istype(human_user.head, src.type))
+			return
+
+		// User is human & helmet is worn, apply the properties
+		if (src.visor_enabled)
+			src.apply_visor(human_user)
+		else
+			src.remove_visor(human_user)
+
+	proc/apply_visor(var/mob/living/user)
+		src.color_r = src.visor_color_lst["color_r"]
+		src.color_g = src.visor_color_lst["color_g"]
+		src.color_b = src.visor_color_lst["color_b"]
+		src.apply_visor_effect(user)
+
+	proc/remove_visor(var/mob/living/user)
+		src.color_r = 1
+		src.color_g = 1
+		src.color_b = 1
+		src.remove_visor_effect(user)
+
+	proc/apply_visor_effect(var/mob/living/user)
+		user.vision.set_scan(TRUE)
+		APPLY_ATOM_PROPERTY(user, PROP_MOB_THERMALVISION_MK2, src)
+
+	proc/remove_visor_effect(var/mob/living/user)
+		user.vision.set_scan(FALSE)
+		REMOVE_ATOM_PROPERTY(user, PROP_MOB_THERMALVISION_MK2, src)
+
+	equipped(var/mob/living/user, var/slot)
+		..()
+		if(!isliving(user) || !src.has_visor)
+			return
+		if (slot == SLOT_HEAD && src.visor_enabled)
+			src.apply_visor(user)
+
+	unequipped(var/mob/living/user)
+		..()
+		if(!isliving(user) || !src.has_visor)
+			return
+		src.remove_visor(user)
+
+/obj/item/clothing/head/helmet/space/industrial/syndicate
+	name = "\improper Syndicate Command Helmet"
+	desc = "Ooh, fancy."
+	icon_state = "indusred"
+	item_state = "indusred"
+	is_syndicate = 1
+	blocked_from_petasusaphilic = TRUE
+
+	setupProperties()
+		..()
+		setProperty("meleeprot_head", 7)
+
+TYPEINFO(/obj/item/clothing/head/helmet/space/industrial/salvager)
+	mats = list("MET-3"=20, "uqil"=10, "CON-2" = 10, "POW-2" = 10)
+
+/obj/item/clothing/head/helmet/space/industrial/salvager
+	name = "\improper Salvager juggernaut combat helmet"
+	desc = "A heavily modified industrial mining helmet, it's been retrofitted for combat use."
+	icon_state = "salvager-heavy"
+	item_state = "salvager-heavy"
+	blocked_from_petasusaphilic = TRUE
+	has_visor = TRUE
+	visor_color_lst = list(
+		"color_r" = 1.0,
+		"color_g" = 0.9,
+		"color_b" = 0.8,
+	)
+
+	setupProperties()
+		..()
+		setProperty("meleeprot_head", 7)
+
+TYPEINFO(/obj/item/clothing/head/helmet/space/mining_combat)
+	mats = 10
 
 /obj/item/clothing/head/helmet/space/mining_combat
 	name = "mining combat helmet"
 	desc = "Goes with Mining Combat Armor. Now with sweet strawberry-scented visor!"
 	icon_state = "mining_combat"
 	item_state = "mining_combat"
-	mats = 10
 
 	setupProperties()
 		..()
@@ -805,6 +1003,7 @@
 	item_state = "buckethelm"
 	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
 	c_flags = COVERSEYES | BLOCKCHOKE
+	hides_from_examine = C_EARS
 
 	setupProperties()
 		..()
@@ -834,6 +1033,7 @@
 	block_vision = 1
 	seal_hair = 1
 	var/bucket_type = /obj/item/reagent_containers/glass/bucket
+	hides_from_examine = C_EARS|C_MASK|C_GLASSES
 
 	attack_self(mob/user as mob)
 		boutput(user, "<span class='notice'>You turn the bucket right side up.</span>")
@@ -887,3 +1087,26 @@
 		setProperty("heatprot", 15)
 		setProperty("disorient_resist_eye", 8)
 		setProperty("disorient_resist_ear", 8)
+
+/obj/item/clothing/head/helmet/captain
+	name = "captain's helmet"
+	desc = "Somewhat protects an important person's head from being bashed in. Comes in a intriqueing shade of green befitting of a captain"
+	c_flags = COVERSEYES | BLOCKCHOKE
+	icon_state = "helmet-captain"
+	item_state = "helmet-captain"
+
+	setupProperties()
+		..()
+		setProperty("meleeprot_head", 7)
+
+	blue
+		name = "commander's helmet"
+		desc = "Somewhat protects an important person's head from being bashed in. Comes in a stylish shade of blue befitting of a commander"
+		icon_state = "helmet-captain-blue"
+		item_state = "helmet-captain-blue"
+
+	red
+		name = "\improper CentCom helmet"
+		desc = "Somewhat protects an important person's head from being bashed in. Comes in a stylish shade of red befitting of an executive"
+		icon_state = "helmet-captain-red"
+		item_state = "helmet-captain-red"

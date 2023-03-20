@@ -1,5 +1,5 @@
 // Added an option to send them to the arrival shuttle. Also runtime checks (Convair880).
-/mob/proc/humanize(var/tele_to_arrival_shuttle = 0, var/equip_rank = 1)
+/mob/proc/humanize(var/tele_to_arrival_shuttle = FALSE, var/equip_rank = TRUE, var/random_human = TRUE)
 	if (src.transforming)
 		return
 
@@ -13,7 +13,11 @@
 		else
 			tele_to_arrival_shuttle = 1
 
-	var/mob/living/carbon/human/normal/character = new /mob/living/carbon/human/normal(currentLoc)
+	var/mob/living/carbon/human/character
+	if (random_human)
+		character = new /mob/living/carbon/human/normal(currentLoc)
+	else
+		character = new /mob/living/carbon/human(currentLoc, src.client.preferences.AH, src.client.preferences)
 
 	if (character && istype(character))
 
@@ -57,7 +61,7 @@
 
 		qdel(src)
 
-		logTheThing("debug", respawned, null, "Humanize() failed. Player was respawned instead.")
+		logTheThing(LOG_DEBUG, respawned, "Humanize() failed. Player was respawned instead.")
 		message_admins("Humanize() failed. [key_name(respawned)] was respawned instead.")
 		respawned.show_text("Humanize: an error occurred and you have been respawned instead. Please report this to a coder.", "red")
 
@@ -85,9 +89,6 @@
 	src.canmove = 0
 	src.icon = null
 	APPLY_ATOM_PROPERTY(src, PROP_MOB_INVISIBILITY, "transform", INVIS_ALWAYS)
-	for(var/t in src.organs)
-		qdel(src.organs[t])
-		src.organs[t] = null
 
 	return ..()
 
@@ -114,13 +115,10 @@
 	boutput(O, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
 	boutput(O, "<B>To look at other parts of the station, double-click yourself to get a camera menu.</B>")
 	boutput(O, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
-	boutput(O, "To use something, simply double-click it.")
-	boutput(O, "Currently right-click functions will not work for the AI (except examine), and will either be replaced with dialogs or won't be usable by the AI.")
+	boutput(O, "To use something, simply click it.")
+	boutput(O, "Use the prefix <B>:s</B> to speak to fellow silicons through binary.")
 
-//	O.laws_object = new /datum/ai_laws/asimov
-//	O.laws_object = ticker.centralized_ai_laws
-//	O.current_law_set = O.laws_object
-	ticker.centralized_ai_laws.show_laws(O)
+	O.show_laws()
 	boutput(O, "<b>These laws may be changed by other players.</b>")
 
 	O.verbs += /mob/living/silicon/ai/proc/ai_call_shuttle
@@ -151,6 +149,7 @@
 	O.verbs += /mob/living/silicon/ai/proc/ai_colorchange
 	O.verbs += /mob/living/silicon/ai/proc/ai_station_announcement
 	O.verbs += /mob/living/silicon/ai/proc/view_messageLog
+	O.verbs += /mob/living/silicon/ai/verb/rename_self
 	O.job = "AI"
 
 	SPAWN(0)
@@ -164,7 +163,7 @@
 /mob/proc/critterize(var/CT)
 	if (src.mind || src.client)
 		message_admins("[key_name(usr)] made [key_name(src)] a critter ([CT]).")
-		logTheThing("admin", usr, src, "made [constructTarget(src,"admin")] a critter ([CT]).")
+		logTheThing(LOG_ADMIN, usr, "made [constructTarget(src,"admin")] a critter ([CT]).")
 
 		return make_critter(CT, get_turf(src))
 	return 0
@@ -173,6 +172,9 @@
 	var/mob/living/critter/newmob = new critter_type()
 	if(ghost_spawned)
 		newmob.ghost_spawned = ghost_spawned
+		if(!istype(newmob, /mob/living/critter/small_animal/mouse/weak/mentor))
+			newmob.name_prefix("ethereal")
+			newmob.UpdateName()
 	if (!T || !isturf(T))
 		T = get_turf(src)
 	newmob.set_loc(T)
@@ -209,7 +211,6 @@
 	src.canmove = 0
 	src.icon = null
 	APPLY_ATOM_PROPERTY(src, PROP_MOB_INVISIBILITY, "transform", INVIS_ALWAYS)
-	for(var/t in src.organs) qdel(src.organs[text("[t]")])
 
 	var/mob/living/silicon/robot/cyborg = new /mob/living/silicon/robot/(src.loc, null, 1, syndie = syndicate)
 
@@ -232,7 +233,7 @@
 			src.mind.transfer_to(cyborg)
 	cyborg.set_loc(get_turf(src.loc))
 	if (syndicate)
-		cyborg.handle_robot_antagonist_status("converted")
+		cyborg.make_syndicate("Robotize_MK2 (probably cyborg converter)")
 		boutput(cyborg, "<B>You have been transformed into a <i>syndicate</i> Cyborg. Cyborgs can interact with most electronic objects in their view.</B>")
 		boutput(cyborg, "<B>You must follow your laws and assist syndicate agents, who are identifiable by their icon.</B>")
 	else
@@ -241,7 +242,7 @@
 	boutput(cyborg, "<B>Use \"say :s (message)\" to speak to fellow cyborgs and the AI through binary.</B>")
 
 	if(cyborg.mind && (ticker?.mode && istype(ticker.mode, /datum/game_mode/revolution)))
-		if ((cyborg.mind in ticker.mode:revolutionaries) || (cyborg.mind in ticker.mode:head_revolutionaries))
+		if ((cyborg.mind.get_antagonist(ROLE_REVOLUTIONARY)) || (cyborg.mind.get_antagonist(ROLE_HEAD_REVOLUTIONARY)))
 			ticker.mode:update_all_rev_icons() //So the icon actually appears
 
 	if(gory)
@@ -263,8 +264,6 @@
 	src.canmove = 0
 	src.icon = null
 	APPLY_ATOM_PROPERTY(src, PROP_MOB_INVISIBILITY, "transform", INVIS_ALWAYS)
-	for(var/t in src.organs)
-		qdel(src.organs[text("[t]")])
 
 	if(!mainframe)
 		var/mob/living/silicon/hivebot/O = new /mob/living/silicon/hivebot( src.loc )
@@ -309,47 +308,19 @@
 /mob/proc/blobize()
 	if (src.mind || src.client)
 		message_admins("[key_name(usr)] made [key_name(src)] a blob.")
-		logTheThing("admin", usr, src, "made [constructTarget(src,"admin")] a blob.")
-
-		return make_blob()
+		logTheThing(LOG_ADMIN, usr, "made [constructTarget(src,"admin")] a blob.")
+		src.mind.add_antagonist(ROLE_BLOB)
+		return
 	return 0
-
-/mob/proc/slasherize()
-	if(src.mind || src.client)
-		var/mob/living/carbon/human/slasher/W = new/mob/living/carbon/human/slasher(src)
-		var/turf/T = get_turf(src)
-		if(!(T && isturf(T)) || (isrestrictedz(T.z) && !(src.client && src.client.holder)))
-			var/ASLoc = pick_landmark(LANDMARK_LATEJOIN)
-			if (ASLoc)
-				W.set_loc(ASLoc)
-			else
-				W.set_loc(locate(1, 1, 1))
-		else
-			W.set_loc(T)
-		SHOW_SLASHER_TIPS(src)
-		if(src.mind)
-			src.mind.transfer_to(W)
-			src.mind.special_role = "slasher"
-		else
-			var/key = src.client.key
-			if (src.client)
-				src.client.mob = W
-			W.mind = new /datum/mind()
-			ticker.minds += W.mind
-			W.mind.ckey = ckey
-			W.mind.key = key
-			W.mind.current = W
-		ticker.mode.Agimmicks += W.mind
-		qdel(src)
 
 /mob/proc/machoize(var/shitty = 0)
 	if (src.mind || src.client)
 		if (shitty)
 			message_admins("[key_name(src)] has been made a faustian macho man.")
-			logTheThing("admin", null, src, "[constructTarget(src,"admin")] has been made a faustian macho man.")
+			logTheThing(LOG_ADMIN, null, "[constructTarget(src,"admin")] has been made a faustian macho man.")
 		else
 			message_admins("[key_name(usr)] made [key_name(src)] a macho man.")
-			logTheThing("admin", usr, src, "made [constructTarget(src,"admin")] a macho man.")
+			logTheThing(LOG_ADMIN, usr, "made [constructTarget(src,"admin")] a macho man.")
 		var/mob/living/carbon/human/machoman/W = new/mob/living/carbon/human/machoman(src, shitty)
 
 		var/turf/T = get_turf(src)
@@ -426,7 +397,7 @@
 
 	if (src.mind || src.client)
 		message_admins("[key_name(usr)] made [key_name(src)] a cube ([CT]) with a lifetime of [life].")
-		logTheThing("admin", usr, src, "made [constructTarget(src,"admin")] a cube ([CT]) with a lifetime of [life].")
+		logTheThing(LOG_ADMIN, usr, "made [constructTarget(src,"admin")] a cube ([CT]) with a lifetime of [life].")
 
 		return make_cube(CT, life)
 	return 0
@@ -475,9 +446,8 @@
 	src.canmove = 0
 	src.icon = null
 	APPLY_ATOM_PROPERTY(src, PROP_MOB_INVISIBILITY, "transform", INVIS_ALWAYS)
-	for(var/t in src.organs) qdel(src.organs[text("[t]")])
 
-	var/mob/living/critter/mechmonstrosity/suffering/O = new /mob/living/critter/mechmonstrosity/suffering/(src.loc,null,1)
+	var/mob/living/critter/mechmonstrosity/suffering/O = new /mob/living/critter/mechmonstrosity/suffering/(src.loc,null,null,1)
 
 
 	O.gender = src.gender
@@ -553,22 +523,18 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 
 	// get the mind
 	var/datum/mind/mind = src.mind
+	// get the player datum
+	var/datum/player/P = find_player(src.key)
 	if(isnull(src.mind))
-		// ok i don't know how this happened but make them a new mind
-		if (src.client)
-			src.mind = new /datum/mind(src)
-			ticker.minds += src.mind
-			mind = src.mind
-		else
-			// why is this happening aaaaa
-			return
+		// uh oh
+		CRASH("Checking if [identify_object(src)] can respawn as a ghost critter, but they don't have a mind!")
 
 	// determine if they're allowed to respawn
 	var/min_time_passed = initial_time_passed
 	if(mind.assigned_role == "Animal" || mind.assigned_role == "Ghostdrone")
 		// no you get to wait for longer
 		min_time_passed = second_time_around
-	var/time_elapsed = (world.timeofday + ((world.timeofday < mind.last_death_time) ? 864000 : 0)) - mind.last_death_time // Offset the time of day in case of midnight rollover
+	var/time_elapsed = (world.timeofday + ((world.timeofday < P.last_death_time) ? 864000 : 0)) - P.last_death_time // Offset the time of day in case of midnight rollover
 	var/time_left = min_time_passed - time_elapsed
 	if(time_left > 0)
 		var/time_left_message = ""
@@ -589,7 +555,7 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	if (!src.can_respawn_as_ghost_critter())
 		return
 
-	if (alert(src, "Are you sure you want to respawn as an animal?", "Respawn as Animal", "Yes", "No") != "Yes")
+	if (tgui_alert(src, "Are you sure you want to respawn as an animal?", "Respawn as Animal", list("Yes", "No")) != "Yes")
 		return
 
 	var/turf/spawnpoint = pick_landmark(LANDMARK_PESTSTART)
@@ -625,11 +591,12 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	C.say_language = "animal"
 	C.literate = 0
 	C.original_name = selfmob.real_name
+	C.is_npc = FALSE
 
 	if (traitor)
-		C.Browse(grabResource("html/ghostcritter.html"),"window=ghostcritter_antag;size=600x400;title=Ghost Critter Help")
+		C.show_antag_popup("ghostcritter_antag")
 	else
-		C.Browse(grabResource("html/ghostcritter.html"),"window=ghostcritter;size=600x400;title=Ghost Critter Help")
+		C.show_antag_popup("ghostcritter")
 
 	//hacky fix : qdel brain to prevent reviving
 	if (C.organHolder)
@@ -649,7 +616,7 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	if (!can_respawn_as_ghost_critter(0 MINUTES, 2 MINUTES))
 		return
 
-	if (alert(src, "Are you sure you want to respawn as a mentor mouse? You won't be able to come back as a human or cyborg!", "Respawn as Animal", "Yes", "No") != "Yes")
+	if (tgui_alert(src, "Are you sure you want to respawn as a mentor mouse? You won't be able to come back as a human or cyborg!", "Respawn as Animal", list("Yes", "No")) != "Yes")
 		return
 
 	// you can be an animal
@@ -667,9 +634,10 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	C.say_language = "animal"
 	C.literate = 0
 	C.original_name = selfmob.real_name
+	C.is_npc = FALSE
 
-	C.Browse(grabResource("html/ghostcritter_mentor.html"),"window=ghostcritter_mentor;size=600x400;title=Ghost Critter Help")
-	logTheThing("admin", C, null, "respawned as a mentor mouse at [log_loc(C)].")
+	C.show_antag_popup("ghostcritter_mentor")
+	logTheThing(LOG_ADMIN, C, "respawned as a mentor mouse at [log_loc(C)].")
 
 	//hacky fix : qdel brain to prevent reviving
 	if (C.organHolder)
@@ -691,7 +659,7 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 		boutput(src, "<span class='alert'>The game hasn't started yet, silly!</span>")
 		return
 
-	if (alert(src, "Are you sure you want to respawn as an admin mouse?", "Respawn as Animal", "Yes", "No") != "Yes")
+	if (tgui_alert(src, "Are you sure you want to respawn as an admin mouse?", "Respawn as Animal", list("Yes", "No")) != "Yes")
 		return
 
 	if(!src || !src.mind || !src.client)
@@ -705,9 +673,9 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	src = null
 	var/mob/living/critter/C = selfmob.make_critter(/mob/living/critter/small_animal/mouse/weak/mentor/admin, spawnpoint, ghost_spawned=TRUE)
 	C.mind.assigned_role = "Animal"
-	// C.say_language = "animal"
 	C.literate = 1
 	C.original_name = selfmob.real_name
+	C.is_npc = FALSE
 
 	//hacky fix : qdel brain to prevent reviving
 	if (C.organHolder)
@@ -720,16 +688,20 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	set desc = "Visit the Afterlife Bar"
 	set category = null
 
+	if (current_state < GAME_STATE_PLAYING)
+		boutput(src, "It's too early to go to the bar!")
+		return
 	if(!isdead(src) || !src.mind || !ticker || !ticker.mode)
 		return
 	if (ticker?.mode && istype(ticker.mode, /datum/game_mode/football))
-		boutput(src, "Sorry, respawn options aren't availbale during football mode.")
+		boutput(src, "Sorry, respawn options aren't available during football mode.")
 		return
 	var/turf/target_turf = pick(get_area_turfs(/area/afterlife/bar/barspawn))
 
 	if (!src.client) return //ZeWaka: fix for null.preferences
-	var/mob/living/carbon/human/newbody = new(null, null, src.client.preferences, TRUE)
+	var/mob/living/carbon/human/newbody = new(target_turf, null, src.client.preferences, TRUE)
 	newbody.real_name = src.real_name
+	newbody.ghost = src //preserve your original ghost
 	if(!src.mind.assigned_role || iswraith(src) || isblob(src) || src.mind.assigned_role == "Cyborg" || src.mind.assigned_role == "AI")
 		src.mind.assigned_role = "Staff Assistant"
 	newbody.JobEquipSpawned(src.mind.assigned_role, no_special_spawn = 1)
@@ -767,10 +739,10 @@ var/list/antag_respawn_critter_types =  list(/mob/living/critter/small_animal/fl
 	// 	newbody.abilityHolder.transferOwnership(newbody)
 	// src.abilityHolder = null
 
+	// There are some traits removed in the afterlife bar, these have afterlife_blacklist set to TRUE.
 
 	newbody.UpdateOverlays(image('icons/misc/32x64.dmi',"halo"), "halo")
 	newbody.set_clothing_icon_dirty()
-	newbody.set_loc(target_turf)
 
 	if (src.mind) //Mind transfer also handles key transfer.
 		src.mind.transfer_to(newbody)
@@ -787,7 +759,7 @@ var/respawn_arena_enabled = 0
 	set desc = "Visit the Respawn Arena to earn a respawn!"
 	set category = "Ghost"
 
-	if(!ASS_JAM && !respawn_arena_enabled)
+	if(!respawn_arena_enabled)
 		boutput(src,"The respawn arena is not open right now. Tough luck!")
 		return
 
@@ -822,60 +794,31 @@ var/respawn_arena_enabled = 0
 	if (src.mind || src.client)
 		if(flock == null)
 			// no flocks given, make flockmind
+			var/datum/mind/flockmind_mind = src.mind
 			message_admins("[key_name(usr)] made [key_name(src)] a flockmind ([src.real_name]).")
-			logTheThing("admin", usr, src, "made [constructTarget(src,"admin")] a flockmind ([src.real_name]).")
-			return make_flockmind()
+			logTheThing(LOG_ADMIN, usr, "made [constructTarget(src,"admin")] a flockmind ([src.real_name]).")
+			flockmind_mind.add_antagonist(ROLE_FLOCKMIND)
+			if (isflockmob(flockmind_mind.current))
+				return flockmind_mind.current
 		else
 			// make flocktrace of existing flock
 			message_admins("[key_name(usr)] made [key_name(src)] a flocktrace of flock [flock.name].")
-			logTheThing("admin", usr, src, "made [constructTarget(src,"admin")] a flocktrace ([flock.name]).")
+			logTheThing(LOG_ADMIN, usr, "made [constructTarget(src,"admin")] a flocktrace ([flock.name]).")
 			return make_flocktrace(get_turf(src), flock)
 	return null
 
-/mob/proc/make_flockmind()
-	if (!src.mind && !src.client)
-		return null
-
-	var/mob/living/intangible/flock/flockmind/O = new/mob/living/intangible/flock/flockmind(src)
-
-	var/turf/T = get_turf(src)
-	if (!(T && isturf(T)) || (isghostrestrictedz(T.z) && !(src.client && src.client.holder)))
-		var/OS = pick_landmark(LANDMARK_OBSERVER, locate(1, 1, 1))
-		if (OS)
-			O.set_loc(OS)
-		else
-			O.z = 1
-	else
-		O.set_loc(pick_landmark(LANDMARK_LATEJOIN))
-
-	if (src.mind)
-		src.mind.transfer_to(O)
-	else
-		var/key = src.client.key
-		if (src.client)
-			src.client.mob = O
-		O.mind = new /datum/mind()
-		O.mind.ckey = ckey
-		O.mind.key = key
-		O.mind.current = O
-		ticker.minds += O.mind
-	qdel(src)
-	boutput(O, "<B>You are a flockmind, the collective machine consciousness of a flock of drones! Your existence is tied to your flock! Ensure that it survives and thrives!</B>")
-	boutput(O, "<B>Silicon units are able to detect your transmissions and messages (with some signal corruption), so exercise caution in what you say.</B>")
-	boutput(O, "<B>On the flipside, you can hear silicon transmissions and all radio signals, but with heavy corruption.</B>")
-	return O
-
 // flocktraces are made by flockminds
-/mob/proc/make_flocktrace(var/atom/spawnloc, var/datum/flock/flock)
+/mob/proc/make_flocktrace(var/atom/spawnloc, var/datum/flock/flock, var/free = FALSE)
 	if (src.mind || src.client)
 		if(!spawnloc)
 			spawnloc = get_turf(src)
 		if(!flock)
 			flock = new/datum/flock()
 
-		var/mob/living/intangible/flock/trace/O = new/mob/living/intangible/flock/trace(spawnloc, flock)
+		var/mob/living/intangible/flock/trace/O = new/mob/living/intangible/flock/trace(spawnloc, flock, free)
 		if (src.mind)
 			src.mind.transfer_to(O)
+			flock.trace_minds[O.name] = O.mind
 		else
 			var/key = src.client.key
 			if (src.client)
@@ -885,12 +828,18 @@ var/respawn_arena_enabled = 0
 			O.mind.key = key
 			O.mind.current = O
 			ticker.minds += O.mind
+		ticker.mode.Agimmicks |= O.mind
+		if (!O.mind.special_role) // Preserve existing antag role (if any).
+			O.mind.special_role = ROLE_FLOCKTRACE
 		qdel(src)
 
-		boutput(O, "<span class='bold'>You are a flocktrace, a partition of the flock's collective computation!</span>")
-		boutput(O, "<span class='bold'>Your loyalty is to the flock and to the flockmind. Spread drones, convert the station, aid in the construction of the Relay.</span>")
+		boutput(O, "<span class='bold'>You are a Flocktrace, a partition of the Flock's collective computation!</span>")
+		boutput(O, "<span class='bold'>Your loyalty is to the Flock of [flock.flockmind.real_name]. Spread drones, convert the station, and aid in the construction of the Relay.</span>")
 		boutput(O, "<span class='bold'>In this form, you cannot be harmed, but you can't do anything to the world at large.</span>")
-		boutput(O, "<span class='italic'>Tip: click-drag yourself onto unoccupied drones to take direct control of them.</span>")
+		boutput(O, "<span class='italic'>Tip: Click-drag yourself onto unoccupied drones to take direct control of them.</span>")
 		boutput(O, "<span class='notice'>You are part of the <span class='bold'>[flock.name]</span> flock.</span>")
+		O.show_antag_popup("flocktrace")
+		flock_speak(null, "Trace partition [O.real_name] has been instantiated.", flock)
+
 		return O
 	return null

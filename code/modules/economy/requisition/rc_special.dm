@@ -1,18 +1,22 @@
 ABSTRACT_TYPE(/datum/req_contract/special)
-//contracts for utilisation by the special order event
-//these are distinguished by the requisition being sent physically, either standalone or in a crate with stuff
-//they are not inspected by the requisitions handler, and do not receive the screwup protection that is afforded to regular contracts
-
+/**
+ * Contracts for utilisation by the special order event.
+ * These are distinguished by the requisition being sent physically, either standalone or in a crate with stuff.
+ * They are not inspected by the requisitions handler, and do not receive the screwup protection that is afforded to regular contracts.
+ * They do not appear in the general market.
+ */
 /datum/req_contract/special
 	req_code = "REQ-THIRDPARTY"
 
-	var/obj/storage/crate/sendingCrate // specify crate to send, if desired
+	///Specify a crate to send the requisition in, if desired.
+	var/obj/storage/crate/sendingCrate
 
-	var/obj/item/paper/req_sheet // physical manifest of requested items. its presence in the crate is required to send order back successfully
-	//these are contained in special_order.dm, along with the event that creates these contracts
+	//Physical manifest of requested items. Its presence in the crate is required to send order back successfully. Automatically set up.
+	var/obj/item/paper/req_sheet
+	//These are contained in special_order.dm, along with the event that creates these contracts
 
 	New()
-		//add entries, then call this
+		//in subtypes, add entries, then call back to this
 		..()
 		update_requisition(req_sheet)
 
@@ -25,7 +29,7 @@ ABSTRACT_TYPE(/datum/req_contract/special)
 			req_sheet.info += get_rewards_list()
 		req_sheet.info += "<BR/><BR/><font face='System' size='1'><span style='color:#666666;'><center>╔ REQHUB: THIRD PARTY REQUISITION ╗<br>TAG SENT CRATE WITH REQ_THIRDPARTY<br>╚ RETURNS AT DISCRETION OF CLIENT ╝</center></span>"
 
-	//formats src.rc_entries for being put onto paper
+	///Formats src.rc_entries for being put onto paper.
 	proc/get_shopping_list()
 		. = "<ul>"
 		for(var/datum/rc_entry/rce in src.rc_entries)
@@ -42,7 +46,7 @@ ABSTRACT_TYPE(/datum/req_contract/special)
 		. += "</ul>"
 		return
 
-	//formats src.item_rewarders for being put on paper
+	///Formats the requisition's item rewarders for being put on paper.
 	proc/get_rewards_list()
 		. += "<br/><ul>"
 		if(src.payout) . += "<li>[src.payout] credits</li>"
@@ -65,7 +69,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/surgery)
 /datum/req_contract/special/surgery/organ_swap
 	name = "Organ Swap"
 	weight = 50
-	payout = 5000
+	payout = 8000
 	var/mob/living/carbon/human/target
 	var/target_organs = list()
 	sendingCrate = new /obj/storage/crate/wooden
@@ -145,7 +149,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/surgery)
 		src.rc_entries += rc_buildentry(/datum/rc_entry/item/megaweed,1)
 		src.rc_entries += rc_buildentry(/datum/rc_entry/item/whiteweed,1)
 		src.rc_entries += rc_buildentry(/datum/rc_entry/item/omegaweed,1)
-		src.rc_entries += rc_buildentry(/datum/rc_entry/stack/pizza/spacer,6)
+		src.rc_entries += rc_buildentry(/datum/rc_entry/food/pizza/spacer,6)
 		..()
 
 /datum/rc_entry/item
@@ -159,7 +163,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/surgery)
 		name = "Omega Weed"
 		typepath = /obj/item/plant/herb/cannabis/omega
 
-/datum/rc_entry/stack/pizza/spacer
+/datum/rc_entry/food/pizza/spacer
 	name = "Pizza Hexa-Subsections (May Be Unseparated)"
 
 
@@ -167,23 +171,24 @@ ABSTRACT_TYPE(/datum/req_contract/special/surgery)
 /datum/req_contract/special/pizza_party
 	name = "Pizza Party"
 	req_sheet = new /obj/item/paper/requisition/pizza_party
-	payout = 1300 //pizza adds from 2400 to 3600
+	payout = 2500 //pizza adds from 2400 to 3600
 
 	nt
 		name = "Pizza Party (NanoTrasen)"
 		req_sheet = new /obj/item/paper/requisition/pizza_party/nt
-		payout = 1800
+		payout = 3300
 
 	New()
-		src.rc_entries += rc_buildentry(/datum/rc_entry/stack/pizza,rand(20,30)*6)
+		src.rc_entries += rc_buildentry(/datum/rc_entry/food/pizza,rand(20,30)*6)
 		..()
 
-
+//contract below defines the details itself based on variety of order - this is just a dummy so as not to use an abstract type
+/datum/rc_entry/food/mealfood
 
 ABSTRACT_TYPE(/datum/req_contract/special/chef)
 /datum/req_contract/special/chef
 	weight = 50
-	payout = 2000
+	payout = 12000
 	req_sheet = new /obj/item/paper/requisition/food_order
 	var/mealflag = MEAL_TIME_BREAKFAST
 	var/list/cornucopia = list()
@@ -195,7 +200,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/chef)
 		New()
 			src.build_foodlist()
 			for(var/i in 1 to rand(3,6))
-				var/datum/rc_entry/item/nom = new /datum/rc_entry/item
+				var/datum/rc_entry/item/nom = new /datum/rc_entry/food/mealfood
 				nom.typepath = pick(src.cornucopia)
 				nom.name = src.name_of_food[nom.typepath]
 				nom.count = pick(60; 1, 30; 2, 10; 3)
@@ -208,7 +213,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/chef)
 		New()
 			src.build_foodlist()
 			for(var/i in 1 to rand(3,6))
-				var/datum/rc_entry/item/nom = new /datum/rc_entry/item
+				var/datum/rc_entry/item/nom = new /datum/rc_entry/food/mealfood
 				nom.typepath = pick(src.cornucopia)
 				nom.name = src.name_of_food[nom.typepath]
 				nom.count = pick(60; 1, 40; 2)
@@ -221,7 +226,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/chef)
 		New()
 			src.build_foodlist()
 			for(var/i in 1 to rand(3,6))
-				var/datum/rc_entry/item/nom = new /datum/rc_entry/item
+				var/datum/rc_entry/item/nom = new /datum/rc_entry/food/mealfood
 				nom.typepath = pick(src.cornucopia)
 				nom.name = src.name_of_food[nom.typepath]
 				nom.count = pick(60; 1, 40; 2)
@@ -234,7 +239,7 @@ ABSTRACT_TYPE(/datum/req_contract/special/chef)
 		New()
 			src.build_foodlist()
 			for(var/i in 1 to rand(3,6))
-				var/datum/rc_entry/item/nom = new /datum/rc_entry/item
+				var/datum/rc_entry/item/nom = new /datum/rc_entry/food/mealfood
 				nom.typepath = pick(src.cornucopia)
 				nom.name = src.name_of_food[nom.typepath]
 				nom.count = pick(40; 1, 40; 2, 20; 3)
@@ -261,5 +266,5 @@ ABSTRACT_TYPE(/datum/req_contract/special/chef)
 
 /datum/rc_entry/reagent/blood
 	name = "blood"
-	chemname = "blood"
+	chem_ids = "blood"
 	feemod = 10

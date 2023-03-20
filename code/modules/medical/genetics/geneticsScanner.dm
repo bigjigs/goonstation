@@ -1,17 +1,19 @@
 var/list/genescanner_addresses = list()
 var/list/genetek_hair_styles = list()
 
+TYPEINFO(/obj/machinery/genetics_scanner)
+	mats = 15
+
 /obj/machinery/genetics_scanner
 	name = "GeneTek scanner"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "scanner_0"
 	density = 1
-	mats = 15
 	deconstruct_flags = DECON_SCREWDRIVER | DECON_WRENCH | DECON_CROWBAR | DECON_WELDER | DECON_WIRECUTTERS | DECON_MULTITOOL
 	var/mob/occupant = null
-	var/datum/character_preview/multiclient/occupant_preview = null
+	var/datum/movable_preview/character/multiclient/occupant_preview = null
 	var/locked = 0
-	anchored = 1.0
+	anchored = 1
 	soundproofing = 10
 
 	var/net_id = null
@@ -62,7 +64,7 @@ var/list/genetek_hair_styles = list()
 		if (!istype(target) || isAI(user))
 			return
 
-		if (get_dist(src,user) > 1 || get_dist(user, target) > 1)
+		if (BOUNDS_DIST(src, user) > 0 || BOUNDS_DIST(user, target) > 0)
 			return
 
 		if (target == user)
@@ -82,7 +84,7 @@ var/list/genetek_hair_styles = list()
 	proc/can_operate(var/mob/M, var/mob/living/target)
 		if (!isalive(M))
 			return 0
-		if (get_dist(src,M) > 1)
+		if (BOUNDS_DIST(src, M) > 0)
 			return 0
 		if (M.getStatusDuration("paralysis") || M.getStatusDuration("stunned") || M.getStatusDuration("weakened"))
 			return 0
@@ -122,7 +124,7 @@ var/list/genetek_hair_styles = list()
 
 		move_mob_inside(usr)
 
-	attack_hand(mob/user as mob)
+	attack_hand(mob/user)
 		..()
 		eject_occupant(user)
 
@@ -150,7 +152,7 @@ var/list/genetek_hair_styles = list()
 		src.go_out()
 		add_fingerprint(user)
 
-	attackby(var/obj/item/grab/G as obj, user as mob)
+	attackby(var/obj/item/grab/G, user)
 		if (!istype(G))
 			return
 
@@ -193,7 +195,7 @@ var/list/genetek_hair_styles = list()
 		return
 
 	proc/togglelock(var/forceunlock = 0)
-		playsound(src.loc, "sound/machines/click.ogg", 50, 1)
+		playsound(src.loc, 'sound/machines/click.ogg', 50, 1)
 		if (src.locked || forceunlock)
 			src.locked = 0
 			usr.visible_message("<b>[usr]</b> unlocks the scanner.")
@@ -207,7 +209,7 @@ var/list/genetek_hair_styles = list()
 
 		// Added (Convair880).
 		if (src.occupant)
-			logTheThing("station", usr, src.occupant, "[src.locked ? "locks" : "unlocks"] the [src.name] with [constructTarget(src.occupant,"station")] inside at [log_loc(src)].")
+			logTheThing(LOG_STATION, usr, "[src.locked ? "locks" : "unlocks"] the [src.name] with [constructTarget(src.occupant,"station")] inside at [log_loc(src)].")
 
 		return
 
@@ -228,7 +230,7 @@ var/list/genetek_hair_styles = list()
 		if (istype(C))
 			C.ui_interact(M, null)
 
-		playsound(src.loc, "sound/machines/sleeper_close.ogg", 50, 1)
+		playsound(src.loc, 'sound/machines/sleeper_close.ogg', 50, 1)
 		return
 
 	proc/go_out()
@@ -239,7 +241,7 @@ var/list/genetek_hair_styles = list()
 			return
 
 		if(!src.occupant.disposed)
-			src.occupant.set_loc(src.loc)
+			src.occupant.set_loc(get_turf(src))
 
 		src.occupant = null
 
@@ -248,7 +250,7 @@ var/list/genetek_hair_styles = list()
 
 		src.icon_state = "scanner_0"
 
-		playsound(src.loc, "sound/machines/sleeper_open.ogg", 50, 1)
+		playsound(src.loc, 'sound/machines/sleeper_open.ogg', 50, 1)
 		return
 
 
@@ -260,6 +262,9 @@ var/list/genetek_hair_styles = list()
 		else
 			qdel(src.occupant_preview)
 			src.occupant_preview = null
+
+	was_deconstructed_to_frame(mob/user)
+		src.go_out()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -278,7 +283,7 @@ var/list/genetek_hair_styles = list()
 
 	var/s_tone = "#FAD7D0"
 
-	var/datum/character_preview/multiclient/preview = null
+	var/datum/movable_preview/character/multiclient/preview = null
 
 	New(mob/target)
 		..()
@@ -288,7 +293,7 @@ var/list/genetek_hair_styles = list()
 
 		src.target_mob = target
 		src.preview = new()
-		src.preview.add_background("#092426")
+		src.preview.add_background("#092426", height_mult = 2)
 		src.load_mob_data(src.target_mob)
 		return
 

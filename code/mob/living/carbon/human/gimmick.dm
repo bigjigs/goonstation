@@ -31,7 +31,7 @@
 		if(prob(5))
 			SPAWN(0)
 				src.say("HANK!")
-				playsound(src.loc, "sound/musical_instruments/Boathorn_1.ogg", 45, 1)
+				playsound(src.loc, 'sound/musical_instruments/Boathorn_1.ogg', 45, 1)
 
 /mob/living/carbon/human/cluwne/floor
 	nodamage = 1
@@ -46,6 +46,7 @@
 			ailments.Cut()
 			real_name = name_override
 			name = name_override
+			APPLY_ATOM_PROPERTY(src, PROP_MOB_HIDE_ICONS, "underfloor")
 
 	cluwnegib()
 		return
@@ -208,6 +209,10 @@ mob/living/carbon/human/cluwne/satan/megasatan //someone can totally use this fo
 		src.real_name = "Father Ted"
 
 /mob/living/carbon/human/fatherjack
+	real_name = "Father Jack"
+	gender = MALE
+	is_npc = TRUE
+
 	New()
 		..()
 		src.equip_new_if_possible(/obj/item/clothing/shoes/red, slot_shoes)
@@ -216,8 +221,6 @@ mob/living/carbon/human/cluwne/satan/megasatan //someone can totally use this fo
 
 	initializeBioholder()
 		. = ..()
-		bioHolder.mobAppearance.gender = "male"
-		src.real_name = "Father Jack"
 		bioHolder.bloodType = "B+"
 
 	Life(datum/controller/process/mobs/parent)
@@ -347,6 +350,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 /mob/living/carbon/human/biker
 	real_name = "Shitty Bill"
 	gender = MALE
+	is_npc = TRUE
 	var/talk_prob = 5
 	var/greeted_murray = 0
 
@@ -388,8 +392,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 		//src.equip_new_if_possible(/obj/item/clothing/suit, slot_wear_suit)
 		//src.equip_new_if_possible(/obj/item/clothing/head/biker_cap, slot_head)
 
-		var/obj/item/implant/access/infinite/shittybill/implant = new /obj/item/implant/access/infinite/shittybill(src)
-		implant.implanted(src, src)
+		new /obj/item/implant/access/infinite/shittybill(src)
 
 		var/obj/item/power_stones/G = new /obj/item/power_stones/Gall
 		G.set_loc(src)
@@ -492,9 +495,9 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 			if(target)
 				if(isdead(target))
 					target = null
-				if(get_dist(src, target) > 1)
+				if(BOUNDS_DIST(src, target) > 0)
 					step_to(src, target, 1)
-				if(get_dist(src, target) <= 1 && !LinkBlocked(src.loc, target.loc))
+				if(BOUNDS_DIST(src, target) == 0 && !LinkBlocked(src.loc, target.loc))
 					var/obj/item/W = src.equipped()
 					if (!src.restrained())
 						if(W)
@@ -527,7 +530,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 		SPAWN(0)
 
 			var/obj/machinery/bot/guardbot/old/tourguide/murray = pick(by_type[/obj/machinery/bot/guardbot/old/tourguide])
-			if (murray && get_dist(src,murray) > 7)
+			if (murray && GET_DIST(src,murray) > 7)
 				murray = null
 			if (istype(murray))
 				if (!findtext(murray.name, "murray"))
@@ -536,7 +539,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 			var/area/A = get_area(src)
 			var/list/alive_mobs = list()
 			var/list/dead_mobs = list()
-			if (A.population && length(A.population))
+			if (length(A?.population))
 				for(var/mob/living/M in oview(5,src))
 					if(!isdead(M))
 						alive_mobs += M
@@ -684,7 +687,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 
 		for (var/mob/JB in by_cat[TR_CAT_JOHNBILLS])
 			var/mob/living/carbon/human/john/J = JB
-			if (get_dist(J,src) <= 7)
+			if (GET_DIST(J,src) <= 7)
 				if((!J.ai_active) || prob(25))
 					J.say("That's my brother, you [pick_string("johnbill.txt", "insults")]!")
 					M.add_karma(-1)
@@ -704,6 +707,8 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 // merchant
 
 /mob/living/carbon/human/merchant
+	is_npc = TRUE
+
 	New()
 		..()
 		SPAWN(0)
@@ -806,6 +811,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 /mob/living/carbon/human/don_glab
 	real_name = "Donald \"Don\" Glabs"
 	gender = MALE
+	is_npc = TRUE
 
 	New()
 		..()
@@ -928,7 +934,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 
 
 /mob/living/carbon/human/spacer
-	is_npc = 1
+	is_npc = TRUE
 	uses_mobai = 1
 	New()
 		..()
@@ -941,7 +947,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 		src.ai = new /datum/aiHolder/human/yank(src)
 		remove_lifeprocess(/datum/lifeprocess/blindness)
 		remove_lifeprocess(/datum/lifeprocess/viruses)
-		src.ai.enabled = 0
+		src.ai.disable()
 
 	initializeBioholder()
 		. = ..()
@@ -958,12 +964,12 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 			say(pick("Oh no you don't - not today, not ever!","Nice try fuckass, but I ain't goin' down so easy!","IMMA SCREAM BUDDY!","You wanna fuck around bucko? You wanna try your luck?"))
 			src.ai.interrupt()
 		src.ai.target = M
-		src.ai.enabled = 1
+		src.ai.enable()
 
 // This is Big Yank, one of John Bill's old buds. Yank owes John a favor. He's a Juicer.
 /mob/living/carbon/human/big_yank
 	gender = MALE
-	is_npc = 1
+	is_npc = TRUE
 	uses_mobai = 1
 
 	New()
@@ -975,7 +981,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 		src.ai = new /datum/aiHolder/human/yank(src)
 		remove_lifeprocess(/datum/lifeprocess/blindness)
 		remove_lifeprocess(/datum/lifeprocess/viruses)
-		src.ai.enabled = 0
+		src.ai.disable()
 
 	initializeBioholder()
 		. = ..()
@@ -995,7 +1001,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 		if (prob(30))
 			say(pick("Hey you better back off [pick_string("johnbill.txt", "insults")]- I'm busy.","You feelin lucky, [pick_string("johnbill.txt", "insults")]?"))
 			src.ai.target = null
-			src.ai.enabled = 0
+			src.ai.disable()
 
 	attackby(obj/item/W, mob/M)
 		if (istype(W, /obj/item/paper/tug/invoice))
@@ -1014,7 +1020,7 @@ proc/empty_mouse_params()//TODO MOVE THIS!!!
 			say(pick("Oh no you don't - not today, not ever!","Nice try asshole, but I ain't goin' down so easy!","Gonna take more than that to take out THIS Juicer!","You wanna fuck around bucko? You wanna try your luck?"))
 			src.ai.interrupt()
 		src.ai.target = M
-		src.ai.enabled = 1
+		src.ai.enable()
 
 
 #undef BILL_PICK

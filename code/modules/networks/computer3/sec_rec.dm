@@ -393,7 +393,7 @@
 
 					if (FIELDNUM_PRINT)
 						if (ckey(inputText))
-							src.active_general["fingerprint"] = copytext(inputText, 1, 33)
+							src.active_general["fingerprint"] = copytext(inputText, 1, 35)
 						else
 							return
 
@@ -428,6 +428,10 @@
 						if (!src.active_secure)
 							src.print_text("No security record loaded!")
 							src.menu = MENU_IN_RECORD
+							return
+
+						if (lowertext(command) == "clown")
+							src.active_secure["criminal"] = "Clown"
 							return
 
 						switch (round( max( text2num_safe(command), 0) ))
@@ -567,7 +571,7 @@
 
 				var/list/datum/db_record/results = list()
 				for(var/datum/db_record/R as anything in data_core.general.records)
-					var/haystack = jointext(list(ckey(R["name"]), ckey(R["id"]), ckey(R["id"]), ckey(R["fingerprint"]), ckey(R["rank"])), " ")
+					var/haystack = jointext(list(ckey(R["name"]), ckey(R["dna"]), ckey(R["id"]), ckey(R["fingerprint"]), ckey(R["rank"])), " ")
 					if(findtext(haystack, searchText))
 						results += R
 
@@ -769,7 +773,7 @@
 				return
 
 			if (usr)
-				logTheThing("station", usr, null, "[perp_name] is set to arrest by [usr] (using the ID card of [src.authenticated]) [log_loc(src.master)]")
+				logTheThing(LOG_STATION, usr, "[perp_name] is set to arrest by [usr] (using the ID card of [src.authenticated]) [log_loc(src.master)]")
 
 			//Unlikely that this would be a problem but OH WELL
 			if(last_arrest_report && world.time < (last_arrest_report + 10))

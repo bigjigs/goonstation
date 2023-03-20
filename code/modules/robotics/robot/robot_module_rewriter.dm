@@ -11,7 +11,7 @@
 	var/list/obj/item/robot_module/modules = null
 	var/obj/item/robot_module/selectedModule = null
 
-/obj/machinery/computer/robot_module_rewriter/attackby(obj/item/I as obj, mob/user as mob)
+/obj/machinery/computer/robot_module_rewriter/attackby(obj/item/I, mob/user)
 	if (istype(I, /obj/item/robot_module))
 		user.drop_item()
 		I.set_loc(src)
@@ -94,8 +94,8 @@
 						switch (moduleId)
 							if ("brobocop")
 								moduleResetType = /obj/item/robot_module/brobocop
-							if ("chemistry")
-								moduleResetType = /obj/item/robot_module/chemistry
+							if ("research")
+								moduleResetType = /obj/item/robot_module/research
 							if ("civilian")
 								moduleResetType = /obj/item/robot_module/civilian
 							if ("engineering")

@@ -6,6 +6,23 @@
 /// built-in isobj returns true for /atom/movable
 #define isobj(A) (istype(A, /obj))
 
+/// This is relevant to atoms so it goes here!!!! do not @ me
+#define opposite_dir_to(dir) (turn(dir, 180))
+
+
+/**
+ * Makes the given procs available for use with the admin interact menu
+ * Example: `ADMIN_INTERACT_PROCS(/obj/machinery/nuclearbomb, proc/arm, proc/disarm)`
+ * would add the `*arm` and `*disarm` options to the admin interact menu for nuclear bombs.
+ * Will display the "name" of the proc if it has one, for example `set name = "foo"` will result in the proc's entry in the interact menu being "Foo".
+**/
+#define ADMIN_INTERACT_PROCS(TYPE, PROCNAME...)\
+	TYPEINFO(TYPE); \
+	TYPEINFO_NEW(TYPE){ \
+		. = ..(); \
+		admin_procs += list(APPLY_PREFIX(TYPE/, PROCNAME)); \
+	}
+
 //temp_flags lol for atoms and im gonna be constantly adding and removing these
 //this doesn't entirely make sense, cause some other flags are temporary too! ok im runnign otu OF FUCKING SPACE
 /// used for removing us from mantapush list when we get deleted
@@ -37,8 +54,6 @@
 #define USE_GRAB_CHOKE				(1 << 2)
 /// Atom implements var/active = XXX and responds to sticker removal methods (burn-off + acetone). this atom MUST have an 'active' var. im sory.
 #define HANDLE_STICKER				(1 << 3)
-/// Atom implements CheckExit() call in some way.
-#define USE_CHECKEXIT				(1 << 4)
 /// cannot be pushed by MANTAwaters
 #define IMMUNE_MANTA_PUSH			(1 << 5)
 #define IMMUNE_SINGULARITY			(1 << 6)
@@ -48,6 +63,7 @@
 #define IS_FARTABLE					(1 << 9)
 /// overrides the click drag mousedrop pickup QOL kinda stuff
 #define NO_MOUSEDROP_QOL			(1 << 10)
+#define MOVE_NOCLIP 				(1 << 11)
 
 
 //THROW flags (what kind of throw, we can have ddifferent kinds of throws ok)
@@ -62,3 +78,6 @@
 #define DESERIALIZE_OK					(1 << 0)
 #define DESERIALIZE_NEED_POSTPROCESS	(1 << 1)
 #define DESERIALIZE_NOT_IMPLEMENTED		(1 << 2)
+
+/// Uncross should call this after setting `.` to make sure Bump gets called if needed
+#define UNCROSS_BUMP_CHECK(AM) if(!. && do_bump) AM.Bump(src)
