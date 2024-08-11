@@ -1,10 +1,10 @@
 
 TYPEINFO(/obj/health_scanner)
-	mats = list("CON-1" = 5, "CRY-1" = 2)
-
+	mats = list("conductive" = 5,
+				"crystal" = 2)
 /obj/health_scanner
 	icon = 'icons/obj/items/device.dmi'
-	anchored = 1
+	anchored = ANCHORED
 	var/id = 0.0 // who are we?
 	var/partner_range = 3 // how far away should we look?
 	var/find_in_range = 1
@@ -86,7 +86,7 @@ TYPEINFO(/obj/health_scanner)
 
 	New()
 		..()
-		MAKE_SENDER_RADIO_PACKET_COMPONENT("pda", FREQ_PDA)
+		MAKE_SENDER_RADIO_PACKET_COMPONENT(null, "pda", FREQ_PDA)
 		AddComponent(/datum/component/mechanics_holder)
 
 	find_partners(var/in_range = 0)

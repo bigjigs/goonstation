@@ -7,15 +7,15 @@
 	icon_state = "backpack"
 	inhand_image_icon = 'icons/mob/inhand/hand_storage.dmi'
 	item_state = "backpack"
-	flags = FPRINT | TABLEPASS | NOSPLASH
 	c_flags = ONBACK
 	w_class = W_CLASS_BULKY
 	max_wclass = W_CLASS_NORMAL
 	wear_image_icon = 'icons/mob/clothing/back.dmi'
-	does_not_open_in_pocket = 0
+	opens_if_worn = TRUE
 	spawn_contents = list(/obj/item/storage/box/starter)
 	duration_remove = 3 SECONDS
 	duration_put = 3 SECONDS
+	var/satchel_compatible = TRUE
 
 	blue
 		icon_state = "backpackb"
@@ -123,6 +123,7 @@
 	name = "tactical assault rucksack"
 	desc = "A military backpack made of high density fabric, designed to fit a wide array of tools for comprehensive storage support."
 	icon_state = "tactical_backpack"
+	satchel_compatible = FALSE
 	spawn_contents = list(/obj/item/storage/box/starter)
 	slots = 10
 
@@ -257,6 +258,80 @@
 	icon_state = "bp_angel"
 	item_state = "bp_angel"
 
+/obj/item/storage/backpack/recharge_bay
+	name = "portable recharge bay"
+	desc = "A rigid, luggable pack capable of passively recharging approved devices using an onboard cell."
+	icon_state = "bp_recharger0"
+	slots = 6
+	spawn_contents = list()
+	var/obj/item/cell/source_cell
+	///Whether the access port is open to allow for swapping of power cell (and tampering with systems)
+	var/cell_port_open = FALSE
+	///Disallows recharging of weaponry
+	var/safety_regulator = TRUE
+
+	New()
+		..()
+		processing_items |= src
+
+	disposing()
+		processing_items -= src
+		..()
+
+	attack_self(mob/user)
+		src.cell_port_open = src.cell_port_open ? FALSE : TRUE
+		boutput(user, SPAN_NOTICE("You [src.cell_port_open ? "open" : "close"] [src]'s cell compartment."))
+		src.icon_state = "bp_recharger[src.cell_port_open ? 1 : 0]"
+
+	attack_hand(mob/user)
+		if(src.cell_port_open && user.find_in_hand(src))
+			if(src.source_cell)
+				user.put_in_hand_or_drop(src.source_cell)
+				src.source_cell = null
+				boutput(user, SPAN_NOTICE("You remove the power cell."))
+			else
+				boutput(user, SPAN_ALERT("[src]'s cell compartment is currently open, and has no cell to remove."))
+		else
+			return ..()
+
+	attackby(obj/item/W, mob/user)
+		if(src.cell_port_open && user.find_in_hand(src))
+			if(istype(W, /obj/item/cell))
+				if(!src.source_cell)
+					boutput(user, SPAN_NOTICE("You install the power cell into [src]."))
+					src.source_cell = W
+					user.u_equip(W)
+					W.set_loc(src)
+				else
+					boutput(user, SPAN_ALERT("[src]'s cell compartment is currently open. It already has a power cell."))
+			else if(istype(W, /obj/item/card/emag) && src.safety_regulator)
+				boutput(user, "You short out [src]'s weapon charging safety regulator.")
+				src.safety_regulator = FALSE
+			else
+				boutput(user, SPAN_ALERT("[src]'s cell compartment is currently open. You can't put [W] in it."))
+		else
+			return ..()
+
+	process()
+		var/do_flash = FALSE
+		if(src.source_cell && !cell_port_open)
+			for(var/obj/item/pack_item in src.storage.stored_items)
+				if(!(SEND_SIGNAL(pack_item, COMSIG_CELL_CAN_CHARGE) & CELL_CHARGEABLE)) //does the item have a chargeable cell?
+					continue
+				else
+					if(istype(pack_item,/obj/item/gun/energy) && src.safety_regulator) //disallow gun charging unless pack is tampered with
+						continue
+					var/list/ret = list()
+					if(SEND_SIGNAL(pack_item, COMSIG_CELL_CHECK_CHARGE, ret) & CELL_RETURNED_LIST) //ensure we can fetch cell data
+						if (ret["charge"] < ret["max_charge"]) //if the item isn't fully charged
+							if (src.source_cell.charge >= 20) //and we can start charging it,
+								src.source_cell.use(min((ret["max_charge"] - ret["charge"])*4,20)) //get that trickle charge goin'
+								//not "efficient" compared to the standard recharger, but cells will last a While
+								SEND_SIGNAL(pack_item, COMSIG_CELL_CHARGE, 5)
+								do_flash = TRUE
+		if(do_flash)
+			flick("bp_recharger_activate", src)
+
 /obj/item/storage/backpack/satchel
 	name = "satchel"
 	desc = "A thick, wearable container made of synthetic fibers, able to carry a number of objects comfortably on a crewmember's shoulder."
@@ -325,8 +400,8 @@
 	spawn_contents = list(/obj/item/storage/box/starter)
 
 	New()
-		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
+		..()
 
 	disposing()
 		STOP_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
@@ -485,7 +560,7 @@
 	desc = "A small leather pouch, suitable for storing ammunition and other essential equipment for the operation of flintlock weaponry. It has room on it's strap to sling a flintlock rifle over."
 	icon_state = "flintlock_satchel"
 	item_state = "flintlock_satchel"
-	in_list_or_max = TRUE
+	check_wclass = TRUE
 	can_hold = list(/obj/item/gun/kinetic/single_action/flintlock/rifle)
 	spawn_contents = list(/obj/item/gun/kinetic/single_action/flintlock/rifle, /obj/item/ammo/bullets/flintlock/rifle)
 	slots = 4
@@ -517,6 +592,7 @@
 				var/mob/parent = src.loc
 				parent.update_clothing()
 
+
 /* -------------------- Fanny Packs -------------------- */
 
 /obj/item/storage/fanny
@@ -525,12 +601,11 @@
 	icon = 'icons/obj/items/belts.dmi'
 	icon_state = "fanny"
 	item_state = "fanny"
-	flags = FPRINT | TABLEPASS | NOSPLASH
 	c_flags = ONBELT
 	w_class = W_CLASS_BULKY
 	slots = 5
 	max_wclass = W_CLASS_NORMAL
-	does_not_open_in_pocket = 0
+	opens_if_worn = TRUE
 	stamina_damage = 0
 	stamina_cost = 0
 	stamina_crit_chance = 5
@@ -559,15 +634,19 @@
 	desc = "It's different than a fanny pack. It's tactical and action-packed!"
 	icon_state = "syndie"
 	item_state = "syndie"
-	slots = 7
 
 	New()
-		..()
 		START_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
+		..()
 
 	disposing()
 		STOP_TRACKING_CAT(TR_CAT_NUKE_OP_STYLE)
 		..()
+
+/obj/item/storage/fanny/syndie/large
+	name = "syndicate tactical espionage belt pack XL"
+	desc = "It's different than a fanny pack. It's bigger, tactical, and action-packed!"
+	slots = 7
 
 /obj/item/storage/fanny/janny
 	name = "janny pack"
@@ -589,10 +668,9 @@
 	icon = 'icons/obj/items/belts.dmi'
 	icon_state = "belt"
 	item_state = "belt"
-	flags = FPRINT | TABLEPASS | NOSPLASH
 	c_flags = ONBELT
-	max_wclass = W_CLASS_SMALL
-	does_not_open_in_pocket = 0
+	max_wclass = W_CLASS_POCKET_SIZED
+	opens_if_worn = TRUE
 	stamina_damage = 10
 	stamina_cost = 5
 	stamina_crit_chance = 5
@@ -616,20 +694,20 @@
 		var/mob/M = usr
 		if (istype(over_object,/obj/item) || istype(over_object,/mob/)) // covers pretty much all the situations we're trying to prevent; namely transferring storage and opening while on ground
 			if(!can_use())
-				boutput(M, "<span class='alert'>You need to wear [src] for that.</span>")
+				boutput(M, SPAN_ALERT("You need to wear [src] for that."))
 				return
 		return ..()
 
 
 	attack_hand(mob/user)
 		if (src.loc == user && !can_use())
-			boutput(user, "<span class='alert'>You need to wear [src] for that.</span>")
+			boutput(user, SPAN_ALERT("You need to wear [src] for that."))
 			return
 		return ..()
 
-	attackby(obj/item/W, mob/user, obj/item/storage/T)
+	attackby(obj/item/W, mob/user)
 		if(!can_use())
-			boutput(user, "<span class='alert'>You need to wear [src] for that.</span>")
+			boutput(user, SPAN_ALERT("You need to wear [src] for that."))
 			return
 		return ..()
 
@@ -639,7 +717,24 @@
 	icon_state = "utilitybelt"
 	item_state = "utility"
 	can_hold = list(/obj/item/deconstructor)
-	in_list_or_max = 1
+	check_wclass = 1
+
+/obj/item/storage/belt/utility/nt_engineer
+	name = "specialist engineering belt"
+	desc = "A high capacity engineering belt."
+	can_hold = list(
+		/obj/item/rcd,
+		/obj/item/rcd_ammo,
+		/obj/item/deconstructor,
+		/obj/item/sheet,
+		/obj/item/tile
+	)
+	spawn_contents = list(
+		/obj/item/rcd/construction,
+		/obj/item/rcd_ammo/medium,
+		/obj/item/tool/omnitool,
+		/obj/item/device/analyzer/atmospheric/upgraded
+	)
 
 /obj/item/storage/belt/utility/prepared/ceshielded
 	name = "aurora MKII utility belt"
@@ -650,12 +745,12 @@
 	can_hold = list(/obj/item/rcd,
 	/obj/item/rcd_ammo,
 	/obj/item/deconstructor)
-	in_list_or_max = 1
+	check_wclass = 1
 	inventory_counter_enabled = 1
 
 	New()
 		..()
-		AddComponent(/datum/component/wearertargeting/energy_shield/ceshield, list(SLOT_BELT), 0.75, 0.2, FALSE, 5) //blocks 3/4 of incoming damage, up to 200 points, on a full charge, but loses charge quickly while active
+		AddComponent(/datum/component/wearertargeting/energy_shield/ceshield, list(SLOT_BELT), 0.75, 0.3, FALSE, 5) //blocks 3/4 of incoming damage, up to 200 points, on a full charge, but loses charge quickly while active
 		var/obj/item/ammo/power_cell/self_charging/cell = new/obj/item/ammo/power_cell/self_charging{recharge_rate = 3; recharge_delay = 10 SECONDS}
 		AddComponent(/datum/component/cell_holder, cell, FALSE, 100, FALSE)
 		cell.set_loc(null) //otherwise it takes a slot in the belt. aaaaa
@@ -710,7 +805,7 @@
 	icon_state = "injectorbelt"
 	item_state = "medical"
 	can_hold = list(/obj/item/robodefibrillator)
-	in_list_or_max = 1
+	check_wclass = 1
 
 /obj/item/storage/belt/medical/prepared
 	spawn_contents = list(/obj/item/reagent_containers/mender/brute,
@@ -727,11 +822,11 @@
 
 /obj/item/storage/belt/roboticist/prepared
 	spawn_contents = list(
-	/obj/item/crowbar,
-	/obj/item/weldingtool,
-	/obj/item/wirecutters,
-	/obj/item/screwdriver,
-	/obj/item/wrench,
+	/obj/item/crowbar/grey,
+	/obj/item/weldingtool/grey,
+	/obj/item/wirecutters/grey,
+	/obj/item/screwdriver/grey,
+	/obj/item/wrench/grey,
 	/obj/item/circular_saw,
 	/obj/item/scalpel
 	)
@@ -743,10 +838,10 @@
 	can_hold = list(
 		/obj/item/mining_tool,
 		/obj/item/mining_tools)
-	in_list_or_max = 1
+	check_wclass = 1
 
 /obj/item/storage/belt/mining/prepared
-	spawn_contents = list(/obj/item/mining_tool/power_pick,
+	spawn_contents = list(/obj/item/mining_tool/powered/pickaxe,
 		/obj/item/ore_scoop/prepared,
 		/obj/item/satchel/mining,
 		/obj/item/device/geiger,
@@ -761,14 +856,14 @@
 	item_state = "rancher"
 	can_hold = list(
 		/obj/item/chicken_carrier,
-		/obj/item/fishing_rod)
-	in_list_or_max = 1
+		/obj/item/fishing_rod/basic)
+	check_wclass = 1
 
 	prepared
 		spawn_contents = list(/obj/item/chicken_carrier,
 		/obj/item/chicken_carrier,
 		/obj/item/chicken_carrier,
-		/obj/item/fishing_rod)
+		/obj/item/fishing_rod/basic)
 
 /obj/item/storage/belt/hunter
 	name = "trophy belt"
@@ -797,8 +892,10 @@
 	/obj/item/gun/energy/signifer2,
 	/obj/item/device/prisoner_scanner,
 	/obj/item/gun/energy/ntgun,
-	/obj/item/gun/energy/cornicen3)
-	in_list_or_max = 1
+	/obj/item/gun/energy/cornicen3,
+	/obj/item/gun/kinetic/missile_launcher,
+	/obj/item/ammo/bullets/pod_seeking_missile)
+	check_wclass = 1
 
 // kiki's detective shoulder (holster)
 // get it? like kiki's delivery service? ah, i'll show myself out.
@@ -833,13 +930,13 @@
 		spawn_contents = list(/obj/item/barrier, /obj/item/device/detective_scanner, /obj/item/device/ticket_writer)
 
 	ntsc
-		spawn_contents = list(/obj/item/gun/energy/signifer2, /obj/item/baton/ntso, /obj/item/instrument/whistle, /obj/item/clothing/mask/gas/NTSO, /obj/item/storage/ntsc_pouch, /obj/item/barrier) //secbelt subtype that only spawns on NTSC, not in vendor
+		spawn_contents = list(/obj/item/gun/energy/signifer2, /obj/item/baton/ntso, /obj/item/instrument/whistle/security, /obj/item/clothing/mask/gas/NTSO, /obj/item/storage/ntsc_pouch, /obj/item/barrier) //secbelt subtype that only spawns on NTSC, not in vendor
 
 	ntso
 		spawn_contents = list(/obj/item/gun/energy/cornicen3, /obj/item/old_grenade/energy_frag = 2, /obj/item/old_grenade/energy_concussion = 2, /obj/item/tank/emergency_oxygen/extended, /obj/item/reagent_containers/food/snacks/donkpocket/warm)
 
 	baton
-		spawn_contents = list(/obj/item/baton, /obj/item/barrier, /obj/item/requisition_token/security/utility)
+		spawn_contents = list(/obj/item/baton, /obj/item/ammo/bullets/stunbaton, /obj/item/barrier, /obj/item/requisition_token/security/utility)
 
 	tasersmg
 		spawn_contents = list(/obj/item/gun/energy/tasersmg, /obj/item/baton, /obj/item/barrier)
@@ -856,11 +953,12 @@
 	icon_state = "minerbelt"
 	item_state = "utility"
 	can_hold = list(/obj/item/ammo/bullets)
-	in_list_or_max = 0
+	check_wclass = 0
 
 ABSTRACT_TYPE(/obj/item/storage/belt/gun)
 /obj/item/storage/belt/gun
 	var/gun_type
+	check_wclass = TRUE
 
 	New()
 		..()
@@ -885,11 +983,9 @@ ABSTRACT_TYPE(/obj/item/storage/belt/gun)
 	desc = "A stylish leather belt for holstering a revolver and it's ammo."
 	icon_state = "revolver_belt"
 	item_state = "revolver_belt"
-	slots = 4
-	in_list_or_max = 0
+	slots = 6
 	gun_type = /obj/item/gun/kinetic/revolver
-	can_hold = list(/obj/item/ammo/bullets/a357)
-	can_hold_exact = list(/obj/item/gun/kinetic/revolver)
+	can_hold = list(/obj/item/gun/kinetic/revolver)
 	spawn_contents = list(/obj/item/gun/kinetic/revolver, /obj/item/ammo/bullets/a357 = 2, /obj/item/ammo/bullets/a357/AP)
 
 /obj/item/storage/belt/gun/pistol
@@ -897,11 +993,9 @@ ABSTRACT_TYPE(/obj/item/storage/belt/gun)
 	desc = "A rugged belt fitted with a pistol holster and some magazine pouches."
 	icon_state = "pistol_belt"
 	item_state = "pistol_belt"
-	slots = 5
-	in_list_or_max = 0
+	slots = 6
 	gun_type = /obj/item/gun/kinetic/pistol
-	can_hold = list(/obj/item/ammo/bullets/bullet_9mm)
-	can_hold_exact = list(/obj/item/gun/kinetic/pistol)
+	can_hold = list(/obj/item/gun/kinetic/pistol)
 	spawn_contents = list(/obj/item/gun/kinetic/pistol, /obj/item/ammo/bullets/bullet_9mm = 4)
 
 /obj/item/storage/belt/gun/smartgun
@@ -909,11 +1003,9 @@ ABSTRACT_TYPE(/obj/item/storage/belt/gun)
 	desc = "A rugged belt fitted with a smart pistol holster and some magazine pouches."
 	icon_state = "smartgun_belt"
 	item_state = "smartgun_belt"
-	slots = 5
-	in_list_or_max = 0
+	slots = 6
 	gun_type = /obj/item/gun/kinetic/pistol/smart/mkII
-	can_hold = list(/obj/item/ammo/bullets/bullet_22/smartgun)
-	can_hold_exact = list(/obj/item/gun/kinetic/pistol/smart/mkII)
+	can_hold = list(/obj/item/gun/kinetic/pistol/smart/mkII)
 	spawn_contents = list(/obj/item/gun/kinetic/pistol/smart/mkII, /obj/item/ammo/bullets/bullet_22/smartgun = 4)
 
 
@@ -928,7 +1020,7 @@ ABSTRACT_TYPE(/obj/item/storage/belt/gun)
 	/obj/item/chem_grenade,
 	/obj/item/storage/grenade_pouch,
 	/obj/item/ammo/bullets/grenade_round)
-	in_list_or_max = 0
+	check_wclass = 0
 
 // combat medic storage 7 slot
 
@@ -956,8 +1048,9 @@ ABSTRACT_TYPE(/obj/item/storage/belt/gun)
 /* -------------------- Wrestling Belt -------------------- */
 
 TYPEINFO(/obj/item/storage/belt/wrestling)
-	mats = list("MET-2"=5, "DEN-2"=10, "FAB-1"=5)
-
+	mats = list("metal_dense" = 5,
+				"dense_super" = 10,
+				"fabric" = 5)
 /obj/item/storage/belt/wrestling
 	name = "championship wrestling belt"
 	desc = "A haunted antique wrestling belt, imbued with the spirits of wrestlers past."
@@ -967,15 +1060,16 @@ TYPEINFO(/obj/item/storage/belt/wrestling)
 	is_syndicate = 1
 	item_function_flags = IMMUNE_TO_ACID
 	var/fake = 0		//So the moves are all fake.
+	HELP_MESSAGE_OVERRIDE({"In addition to granting the wearer wrestler abilities, it also gives them the wrestler passives detailed "} + EXTERNAL_LINK("https://wiki.ss13.co/Wrestler#Passives", "here") + ".")
 
 	equipped(var/mob/user)
 		..()
-		if (!user.mind.get_antagonist(ROLE_WRESTLER))
-			user.add_wrestle_powers(src.fake)
+		if (!user.mind?.get_antagonist(ROLE_WRESTLER))
+			user.add_wrestle_powers(src.fake, TRUE)
 
 	unequipped(var/mob/user)
 		..()
-		if (!user.mind.get_antagonist(ROLE_WRESTLER))
+		if (!user.mind?.get_antagonist(ROLE_WRESTLER))
 			user.remove_wrestle_powers(src.fake)
 
 /obj/item/storage/belt/wrestling/fake
@@ -995,7 +1089,6 @@ TYPEINFO(/obj/item/inner_tube)
 	icon = 'icons/obj/items/belts.dmi'
 	icon_state = "pool_ring"
 	item_state = "pool_ring"
-	flags = FPRINT | TABLEPASS
 	c_flags = ONBELT
 	w_class = W_CLASS_NORMAL
 

@@ -36,7 +36,7 @@
 			message_admins("Setup of previous Antagonist Spawn hasn't finished yet, aborting.")
 			return
 
-		var/type = input(usr, "Select antagonist type.", "Antagonists", "Blob") as null|anything in list("Blob", "Blob (AI)", "Hunter", "Werewolf", "Wizard", "Wraith", "Wrestler", "Wrestler_Doodle", "Vampire", "Changeling", "Headspider", "Salvager", "Arcfiend", "Flockmind")
+		var/type = input(usr, "Select antagonist type.", "Antagonists", "Blob") as null|anything in list("Blob", "Blob (AI)", "Hunter", "Werewolf", "Wizard", "Wraith", "Wrestler", "Wrestle Doodle", "Vampire", "Changeling", "Headspider", "Salvager", "Arcfiend", "Flockmind")
 		if (!type)
 			return
 		else
@@ -66,9 +66,9 @@
 				message_admins("Antagonist Spawn (non-admin) is disabled in this game mode, aborting.")
 				return
 			#ifdef MAP_OVERRIDE_NADIR
-			src.antagonist_type = pick(list("Hunter", "Werewolf", "Wizard", "Wraith", "Wrestler", "Wrestler_Doodle", "Vampire", "Changeling", "Flockmind"))
+			src.antagonist_type = pick(list("Hunter", "Werewolf", "Wizard", "Wraith", "Wrestler", "Wrestle Doodle", "Vampire", "Changeling", "Flockmind"))
 			#else
-			src.antagonist_type = pick(list("Blob", "Hunter", "Werewolf", "Wizard", "Wraith", "Wrestler", "Wrestler_Doodle", "Vampire", "Changeling", "Flockmind"))
+			src.antagonist_type = pick(list("Blob", "Hunter", "Werewolf", "Wizard", "Wraith", "Wrestler", "Wrestle Doodle", "Vampire", "Changeling", "Flockmind"))
 			#endif
 			for(var/mob/living/intangible/wraith/W in ticker.mode.traitors)
 				if(W.deaths < 2)
@@ -87,7 +87,7 @@
 
 		src.message_delay = src.message_delay + src.ghost_confirmation_delay
 
-		message_admins("<span class='internal'>Setting up Antagonist Spawn event ([src.antagonist_type]). Source: [source ? "[source]" : "random"]</span>")
+		message_admins(SPAN_INTERNAL("Setting up Antagonist Spawn event ([src.antagonist_type]). Source: [source ? "[source]" : "random"]"))
 		logTheThing(LOG_ADMIN, null, "Setting up Antagonist Spawn event ([src.antagonist_type]). Source: [source ? "[source]" : "random"]")
 
 		// No need for a fancy setup here.
@@ -123,7 +123,7 @@
 
 		// 1: alert | 2: alert (chatbox) | 3: alert acknowledged (chatbox) | 4: no longer eligible (chatbox) | 5: waited too long (chatbox)
 		var/list/text_messages = list()
-		text_messages.Add("Would you like to respawn as a [src.antagonist_type] antagonist? Your name will be added to the list of eligible candidates and may be selected at random by the game.") // Do disclose which type it is. You know, ghosts can already metagame in a myriad of ways.
+		text_messages.Add("Would you like to respawn as a [src.antagonist_type] antagonist? You will be added to the list of eligible candidates and may be selected at random.") // Do disclose which type it is. You know, ghosts can already metagame in a myriad of ways.
 		text_messages.Add("You are eligible to be respawned as a [src.antagonist_type] antagonist. You have [src.ghost_confirmation_delay / 10] seconds to respond to the offer.")
 		text_messages.Add("You have been added to the list of eligible candidates. The game will pick a player soon. Good luck!")
 
@@ -143,7 +143,7 @@
 			var/attempts = 0
 			var/datum/mind/lucky_dude = null
 
-			while (attempts < 4 && length(candidates) && !(lucky_dude && istype(lucky_dude) && lucky_dude.current))
+			while (attempts < 4 && length(candidates) && !(lucky_dude && istype(lucky_dude) && lucky_dude.current?.client))
 				lucky_dude = candidates[1]
 				attempts++
 				/*
@@ -206,38 +206,37 @@
 			var/ASLoc = pick_landmark(LANDMARK_LATEJOIN)
 			var/failed = 0
 			log_respawn_event(lucky_dude, src.antagonist_type, source)
+			var/datum/mind/mind = M3.mind
+			mind.wipe_antagonists()
+			M3 = mind.current
 			switch (src.antagonist_type)
 				if ("Blob")
-					var/datum/mind/mind = M3.mind
 					if (istype(mind))
 						send_to = 3
-						mind.wipe_antagonists()
 						mind.add_antagonist(ROLE_BLOB, do_relocate = FALSE, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_BLOB
 						M3 = mind.current
+						var/mob/living/intangible/blob_overmind/blob = M3
+						blob.random_event_spawn = TRUE
 					else
 						failed = 1
 
 				if ("Flockmind")
-					var/datum/mind/mind = M3.mind
 					if (istype(mind))
 						send_to = 3
-						mind.wipe_antagonists()
 						mind.add_antagonist(ROLE_FLOCKMIND, do_relocate = FALSE, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_FLOCKMIND
 						M3 = mind.current
 						var/mob/living/intangible/flock/flockmind/F = mind.current
 						if (istype(F) && (alive_player_count() > 40)) // Flockmind can have a free trace, as a treat.
 							SPAWN(1)
-								F.partition(TRUE)
+								F.partition(ANTAGONIST_SOURCE_RANDOM_EVENT)
 					else
 						failed = 1
 
 				if ("Wraith")
-					var/datum/mind/mind = M3.mind
 					if (istype(mind))
 						send_to = 3
-						mind.wipe_antagonists()
 						mind.add_antagonist(ROLE_WRAITH, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_WRAITH
 						M3 = mind.current
@@ -249,7 +248,6 @@
 					if (istype(L))
 						M3 = L
 						send_to = 2
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_WIZARD, do_relocate = FALSE, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_WIZARD
 					else
@@ -259,7 +257,6 @@
 					var/mob/living/L = M3.humanize()
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_WEREWOLF, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_WEREWOLF
 					else
@@ -269,7 +266,6 @@
 					var/mob/living/L = M3.humanize()
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_HUNTER, do_equip = FALSE, do_relocate = TRUE, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_HUNTER
 					else
@@ -279,7 +275,6 @@
 					var/mob/living/L = M3.humanize(equip_rank=FALSE)
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_SALVAGER, do_equip = TRUE, do_relocate = TRUE, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_SALVAGER
 					else
@@ -289,7 +284,6 @@
 					var/mob/living/L = M3.humanize()
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_WRESTLER, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_WRESTLER
 						var/antagonist_role = src.antagonist_type
@@ -298,11 +292,10 @@
 					else
 						failed = 1
 
-				if ("Wrestler_Doodle")
+				if ("Wrestle Doodle")
 					var/mob/living/critter/C = M3.critterize(/mob/living/critter/small_animal/bird/timberdoodle/strong)
 					if (istype(C))
 						M3 = C
-						C.mind?.wipe_antagonists()
 						C.mind?.add_antagonist(ROLE_WRESTLER, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_WRESTLER
 						var/antagonist_role = src.antagonist_type
@@ -315,7 +308,6 @@
 					var/mob/living/L = M3.humanize()
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_VAMPIRE, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_VAMPIRE
 					else
@@ -325,7 +317,6 @@
 					var/mob/living/L = M3.humanize()
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_CHANGELING, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_CHANGELING
 					else
@@ -344,7 +335,6 @@
 					var/mob/living/L = M3.humanize()
 					if (istype(L))
 						M3 = L
-						L.mind?.wipe_antagonists()
 						L.mind?.add_antagonist(ROLE_ARCFIEND, source = ANTAGONIST_SOURCE_RANDOM_EVENT)
 						role = ROLE_ARCFIEND
 					else
@@ -366,7 +356,6 @@
 			lucky_dude.random_event_special_role = 1
 			if (!(lucky_dude in ticker.mode.Agimmicks))
 				ticker.mode.Agimmicks.Add(lucky_dude)
-			M3.antagonist_overlay_refresh(1, 0)
 
 			if (!isnull(objective_path))
 				if (ispath(objective_path, /datum/objective_set))
@@ -391,11 +380,11 @@
 						else
 							M3.set_loc(ASLoc)
 					if (2)
-						if (!job_start_locations["wizard"])
-							boutput(M3, "<B><span class='alert'>A starting location for you could not be found, please report this bug!</span></B>")
+						if (!landmarks[LANDMARK_WIZARD])
+							boutput(M3, SPAN_ALERT("<B>A starting location for you could not be found, please report this bug!</B>"))
 							M3.set_loc(ASLoc)
 						else
-							M3.set_loc(pick(job_start_locations["wizard"]))
+							M3.set_loc(pick_landmark(LANDMARK_WIZARD))
 					if (3)
 						M3.set_loc(ASLoc)
 			//nah
@@ -407,7 +396,7 @@
 
 			if (lucky_dude.current)
 				lucky_dude.current.show_text("<h3>You have been respawned as a random event [src.antagonist_type].</h3>", "blue")
-			message_admins("[key_name(lucky_dude.key)] respawned as a random event [src.antagonist_type]. Source: [source ? "[source]" : "random"]")
+			message_admins("[key_name(lucky_dude)] respawned as a random event [src.antagonist_type]. Source: [source ? "[source]" : "random"]")
 		src.cleanup()
 		return
 

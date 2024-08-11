@@ -2,8 +2,6 @@
 
 [ToC]
 
-{%hackmd @ZeWaka/dark-theme %}
-
 # General
 
 ## Operators
@@ -19,6 +17,8 @@
 * Bitflags (`&`) - Write as `bitfield & bitflag`
 * Use `'foo.ogg'` instead of `"foo.ogg"` for resources unless you need to build a string (e.g. `"foo_[rand(2)].ogg"`).
 * Use `FALSE` and `TRUE` instead of `0` and `1` for booleans.
+* Use `x in y` rather than `y.Find(x)` unless you need the index.
+    * Does not apply to regexes, of course.
 
 # Syntax
 
@@ -116,7 +116,7 @@ It's also faster (~6%), for internal bytecode reasons (which don't really matter
 
 ## Abstract types and typesof
 
-Some types exist just as a parent and should never be created in-game (e.g. `/obj/item`). Mark those using the `ABSTRACT_TYPE(type)` macro. You can check if a type is abstract using the `IS_ABSTRACT(type)` macro.
+Some types exist just as a parent and should never be created in-game (e.g. `/obj/item`). Mark those using the `ABSTRACT_TYPE(/type)` macro. You can check if a type is abstract using the `IS_ABSTRACT(/type)` macro.
 
 To get a list of all concrete (non-abstract) subtypes of a type you should use `concrete_typesof(type)`, the result is cached so no need to store it yourself. (As a consequence please `.Copy` the list if you want to make changes to it locally.) Proper usage of `ABSTRACT_TYPE` + `concrete_typesof` is preferred to using `typesof` and `childrentypesof` *usually* though exceptions apply.
 
@@ -448,10 +448,37 @@ via `atom.verbs += /proc/x`.
 So, be careful when removing `as x` to
 make sure it isn't being used as a verb somewhere else.
 
+## round() sometimes pretends to be floor()
+
+According to the DM docs, using `round(A)` with only one argument is deprecated (not approved). The correct way to use `round()` is to do `round(A,B)`, where B is the nearest multiple. For most cases, this will be `1`, although sometimes you'll need it to the nearest 10 or 5.
+
+What happens if you do `round(A)` then? Guess what? It *floors* the value, and is equivalent to `floor(A)`. It **rounds it down**. Thanks BYOND.
+
+```csharp
+usr << round(1.7)    // outputs 1
+usr << round(1.7, 1) // outputs 2
+```
+
+So in general, use `round(A,1)` for your rounding needs.
+
 # Useful Things
 
 ## VSCode Debugger
-//TODO
+You can check out a guide on using the debugger in the guide located in the [Developer Guide](https://hackmd.io/@goonstation/dev#How-to-use-the-VS-Code-Debugger).
+
+## Local `__build.dm`, and other local code changes
+ 
+If you're tired of having to constantly add & remove `#define IM_REALLY_IN_A_FUCKING_HURRY_HERE` and similar from `__build.dm`, along with stashing and re-stashing your own development tools, there's a solution!
+ 
+Create a file named `__build.local.dm` right next to it. Named exactly that.
+This file will not get picked up by Git, and will let you keep whatever defines you want in there.
+ 
+There is additional support for a file called `__development.local.dm`, which is included in `goonstation.dme` after the build defines so that you can add new testing tools for yourself there. *Be sure to create this file in the right directory!*
+ 
+Specifically, it needs to be created under `code/WorkInProgress/__development.local.dm`. Additionally, there is a build flag, `DISABLE_DEVFILE`, which will stop this from loading. Use this before asking for help if your local development environment is breaking! And on the flip side, if your code changes are *not* showing up from this file, make sure this flag is **disabled**.
+ 
+Most importantly of all, be sure that you remember you put your configs and/or code into those locations! Please don't come to #imcoder asking why your local setup always compiles Nadir 😸, or why your map is full of capybaras.
+
 
 ## Debugging Overlays
 
@@ -486,7 +513,7 @@ If you're on Linux you need to compile both yourself manually, obviously.
 You can spawn in a target dummy (`/mob/living/carbon/human/tdummy`) to more easily test things that do damage - they have the ass day health percent and damage popups visible even if your build isn't set to ass day.
 
 ## Signals and Components
-ninjanomnom from TG has written up a [useful primer](https://tgstation13.org/phpBB/viewtopic.php?f=5&t=22674) on signals and components. Most of the stuff there applies, although elements do not exist in this codebase.
+ninjanomnom from TG has written up a [useful primer](https://hackmd.io/@tgstation/SignalsComponentsElements) on signals and components. Most of the stuff there applies, although elements do not exist in this codebase.
 
 ## Generic Action bar
 Hate coding action bars? Making a new definition for an action bar datum just so you have visual feedback for your construction feel gross? Well fear not! You can now use the SETUP_GENERIC_ACTIONBAR() macro!

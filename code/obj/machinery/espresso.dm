@@ -10,8 +10,8 @@ TYPEINFO(/obj/machinery/espresso_machine)
 	icon = 'icons/obj/foodNdrink/espresso.dmi'
 	icon_state = "espresso_machine"
 	density = 1
-	anchored = 1
-	flags = FPRINT | NOSPLASH | TGUI_INTERACTIVE
+	anchored = ANCHORED
+	flags = NOSPLASH | TGUI_INTERACTIVE
 	event_handler_flags = NO_MOUSEDROP_QOL
 	deconstruct_flags = DECON_SCREWDRIVER | DECON_WRENCH | DECON_WELDER | DECON_WIRECUTTERS
 	var/cupslimit = 2
@@ -134,13 +134,13 @@ TYPEINFO(/obj/machinery/espresso_machine)
 			return
 
 		if (!isliving(user))
-			boutput(user, "<span class='alert'>How are you planning on drinking coffee as a ghost!?</span>")
+			boutput(user, SPAN_ALERT("How are you planning on drinking coffee as a ghost!?"))
 			return
 
 		if (isAI(user) || !can_reach(user, O) || BOUNDS_DIST(user, src) > 1 || !can_act(user) )
 			return
 
-		src.attackby(O, user)
+		src.Attackby(O, user)
 
 	attack_hand(mob/user)
 		if (can_reach(user,src) && !(status & (NOPOWER|BROKEN)))
@@ -196,8 +196,8 @@ TYPEINFO(/obj/machinery/coffeemaker)
 	icon = 'icons/obj/foodNdrink/espresso.dmi'
 	icon_state = "coffeemaker-gen"
 	density = 1
-	anchored = 1
-	flags = FPRINT | NOSPLASH
+	anchored = ANCHORED
+	flags = NOSPLASH
 	deconstruct_flags = DECON_SCREWDRIVER | DECON_WRENCH | DECON_WELDER | DECON_WIRECUTTERS
 	var/carafe_name = "coffee carafe"
 	var/image/image_top = null
@@ -207,6 +207,7 @@ TYPEINFO(/obj/machinery/coffeemaker)
 	var/image/fluid_image
 
 	var/emagged = FALSE
+	var/reagent_id = "coffee_fresh"
 
 	New()
 		..()
@@ -219,14 +220,14 @@ TYPEINFO(/obj/machinery/coffeemaker)
 
 		if(!src.emagged)
 			if (user)
-				boutput(user, "<span class='notice'>You force the machine to brew something else...</span>")
+				boutput(user, SPAN_NOTICE("You force the machine to brew something else..."))
 
 			src.desc = " It's top of the line NanoTrasen tea technology! Featuring 100% Organic Locally-Grown green leaves!"
-			src.emagged = TRUE
+			src.reagent_id = "tea"
 			return TRUE
 		else
 			if (user)
-				boutput(user, "<span class='alert'>This has already been tampered with.</span>")
+				boutput(user, SPAN_ALERT("This has already been tampered with."))
 			return FALSE
 
 	attackby(var/obj/item/W, var/mob/user)
@@ -253,7 +254,7 @@ TYPEINFO(/obj/machinery/coffeemaker)
 					switch (choice)
 						if ("Brew coffee","Brew tea")
 							for(var/obj/item/reagent_containers/food/drinks/carafe/C in src.contents)
-								C.reagents.add_reagent(src.emagged ? "tea" : "coffee_fresh",100)
+								C.reagents.add_reagent(src.reagent_id,100)
 								playsound(src.loc, 'sound/misc/pourdrink.ogg', 50, 1)
 								use_power(10)
 						if ("Remove carafe")
@@ -323,13 +324,17 @@ TYPEINFO(/obj/machinery/coffeemaker)
 	icon_state = "coffeemaker-eng"
 	default_carafe = /obj/item/reagent_containers/food/drinks/carafe/engineering
 
+/obj/machinery/coffeemaker/command
+	icon_state = "coffeemaker-com"
+	default_carafe = /obj/item/reagent_containers/food/drinks/carafe/command
+
 /* ===================================================== */
 /* ---------------------- Racks --------------------- */
 /* ===================================================== */
 
 ABSTRACT_TYPE(/obj/drink_rack)
 /obj/drink_rack
-	anchored = 1
+	anchored = ANCHORED
 	var/amount_on_rack = null
 	var/max_amount = null
 	var/contained = null
